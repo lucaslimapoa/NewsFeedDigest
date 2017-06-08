@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		7DCC33E40F11EE539750807C /* Pods_NewsFeedDigestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D04AE6473CA7D5E15E48AD7 /* Pods_NewsFeedDigestTests.framework */; };
 		C98C5F6D33B48A1971218D07 /* Pods_NewsFeedDigest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148284045FA238F2ED02CF35 /* Pods_NewsFeedDigest.framework */; };
+		D46D2C621EEA1088008C022F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46D2C611EEA1088008C022F /* AppCoordinator.swift */; };
+		D46D2C671EEA12B0008C022F /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46D2C661EEA12B0008C022F /* NewsFeedViewController.swift */; };
+		D46D2C6B1EEA1585008C022F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46D2C6A1EEA1585008C022F /* Constants.swift */; };
 		D48CE8041EE8F46C00256E94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48CE8031EE8F46C00256E94 /* AppDelegate.swift */; };
-		D48CE8061EE8F46C00256E94 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48CE8051EE8F46C00256E94 /* ViewController.swift */; };
-		D48CE8091EE8F46C00256E94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D48CE8071EE8F46C00256E94 /* Main.storyboard */; };
 		D48CE80B1EE8F46C00256E94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D48CE80A1EE8F46C00256E94 /* Assets.xcassets */; };
 		D48CE80E1EE8F46C00256E94 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */; };
 		D48CE8191EE8F46C00256E94 /* NewsFeedDigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48CE8181EE8F46C00256E94 /* NewsFeedDigestTests.swift */; };
+		D4CDBA9D1EE8F77F00C0F628 /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CDBA9C1EE8F77F00C0F628 /* CoordinatorProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,16 +34,18 @@
 		4D04AE6473CA7D5E15E48AD7 /* Pods_NewsFeedDigestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsFeedDigestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		797CBC0F0B4BF4F82D319F4B /* Pods-NewsFeedDigest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedDigest.release.xcconfig"; path = "Pods/Target Support Files/Pods-NewsFeedDigest/Pods-NewsFeedDigest.release.xcconfig"; sourceTree = "<group>"; };
 		9911C6BB6ABF9644F5EF1258 /* Pods-NewsFeedDigestTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedDigestTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NewsFeedDigestTests/Pods-NewsFeedDigestTests.release.xcconfig"; sourceTree = "<group>"; };
+		D46D2C611EEA1088008C022F /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppCoordinator.swift; path = Coordinators/AppCoordinator.swift; sourceTree = "<group>"; };
+		D46D2C661EEA12B0008C022F /* NewsFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsFeedViewController.swift; path = ViewControllers/NewsFeedViewController.swift; sourceTree = "<group>"; };
+		D46D2C6A1EEA1585008C022F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Resources/Constants.swift; sourceTree = "<group>"; };
 		D48CE8001EE8F46C00256E94 /* NewsFeedDigest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsFeedDigest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D48CE8031EE8F46C00256E94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D48CE8051EE8F46C00256E94 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D48CE8081EE8F46C00256E94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D48CE80A1EE8F46C00256E94 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D48CE80D1EE8F46C00256E94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D48CE80F1EE8F46C00256E94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D48CE8141EE8F46C00256E94 /* NewsFeedDigestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsFeedDigestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D48CE8181EE8F46C00256E94 /* NewsFeedDigestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedDigestTests.swift; sourceTree = "<group>"; };
 		D48CE81A1EE8F46C00256E94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4CDBA9C1EE8F77F00C0F628 /* CoordinatorProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoordinatorProtocol.swift; path = Coordinators/CoordinatorProtocol.swift; sourceTree = "<group>"; };
 		DEFC35A2763629F1E311F409 /* Pods-NewsFeedDigestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedDigestTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NewsFeedDigestTests/Pods-NewsFeedDigestTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EDD68DF1C905F90365BDACAD /* Pods-NewsFeedDigest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedDigest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NewsFeedDigest/Pods-NewsFeedDigest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,6 +90,47 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D46D2C631EEA11E6008C022F /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D46D2C661EEA12B0008C022F /* NewsFeedViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D46D2C641EEA11ED008C022F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
+		D46D2C651EEA11F3008C022F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		D46D2C681EEA14DC008C022F /* Resource files */ = {
+			isa = PBXGroup;
+			children = (
+				D48CE80A1EE8F46C00256E94 /* Assets.xcassets */,
+				D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */,
+				D48CE80F1EE8F46C00256E94 /* Info.plist */,
+				D46D2C6A1EEA1585008C022F /* Constants.swift */,
+			);
+			name = "Resource files";
+			sourceTree = "<group>";
+		};
+		D46D2C691EEA14F4008C022F /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				D48CE8031EE8F46C00256E94 /* AppDelegate.swift */,
+			);
+			name = Delegates;
+			sourceTree = "<group>";
+		};
 		D48CE7F71EE8F46C00256E94 = {
 			isa = PBXGroup;
 			children = (
@@ -109,12 +154,12 @@
 		D48CE8021EE8F46C00256E94 /* NewsFeedDigest */ = {
 			isa = PBXGroup;
 			children = (
-				D48CE8031EE8F46C00256E94 /* AppDelegate.swift */,
-				D48CE8051EE8F46C00256E94 /* ViewController.swift */,
-				D48CE8071EE8F46C00256E94 /* Main.storyboard */,
-				D48CE80A1EE8F46C00256E94 /* Assets.xcassets */,
-				D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */,
-				D48CE80F1EE8F46C00256E94 /* Info.plist */,
+				D46D2C651EEA11F3008C022F /* Views */,
+				D46D2C641EEA11ED008C022F /* ViewModels */,
+				D46D2C631EEA11E6008C022F /* ViewControllers */,
+				D4CDBA9B1EE8F76900C0F628 /* Coordinators */,
+				D46D2C691EEA14F4008C022F /* Delegates */,
+				D46D2C681EEA14DC008C022F /* Resource files */,
 			);
 			path = NewsFeedDigest;
 			sourceTree = "<group>";
@@ -126,6 +171,15 @@
 				D48CE81A1EE8F46C00256E94 /* Info.plist */,
 			);
 			path = NewsFeedDigestTests;
+			sourceTree = "<group>";
+		};
+		D4CDBA9B1EE8F76900C0F628 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				D4CDBA9C1EE8F77F00C0F628 /* CoordinatorProtocol.swift */,
+				D46D2C611EEA1088008C022F /* AppCoordinator.swift */,
+			);
+			name = Coordinators;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,7 +273,6 @@
 			files = (
 				D48CE80E1EE8F46C00256E94 /* LaunchScreen.storyboard in Resources */,
 				D48CE80B1EE8F46C00256E94 /* Assets.xcassets in Resources */,
-				D48CE8091EE8F46C00256E94 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,8 +383,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D48CE8061EE8F46C00256E94 /* ViewController.swift in Sources */,
+				D46D2C6B1EEA1585008C022F /* Constants.swift in Sources */,
+				D46D2C621EEA1088008C022F /* AppCoordinator.swift in Sources */,
 				D48CE8041EE8F46C00256E94 /* AppDelegate.swift in Sources */,
+				D4CDBA9D1EE8F77F00C0F628 /* CoordinatorProtocol.swift in Sources */,
+				D46D2C671EEA12B0008C022F /* NewsFeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,14 +410,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D48CE8071EE8F46C00256E94 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D48CE8081EE8F46C00256E94 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -541,6 +589,7 @@
 				D48CE81F1EE8F46C00256E94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D48CE8201EE8F46C00256E94 /* Build configuration list for PBXNativeTarget "NewsFeedDigestTests" */ = {
 			isa = XCConfigurationList;
@@ -549,6 +598,7 @@
 				D48CE8221EE8F46C00256E94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
