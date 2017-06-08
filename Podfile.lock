@@ -1,0 +1,15 @@
+PODS:
+  - NewsAPISwift (0.1.1):
+    - ObjectMapper (~> 2.2)
+  - ObjectMapper (2.2.7)
+
+DEPENDENCIES:
+  - NewsAPISwift (~> 0.1.1)
+
+SPEC CHECKSUMS:
+  NewsAPISwift: 369798075cfb463d2c5f283255cfbe12998e5865
+  ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
+
+PODFILE CHECKSUM: aaa9bd383f511044d060b96bbb47bdfc093033c7
+
+COCOAPODS: 1.2.1
