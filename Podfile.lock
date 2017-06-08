@@ -2,14 +2,29 @@ PODS:
   - NewsAPISwift (0.1.1):
     - ObjectMapper (~> 2.2)
   - ObjectMapper (2.2.7)
+  - RxBlocking (3.5.0):
+    - RxSwift (~> 3.4)
+  - RxCocoa (3.5.0):
+    - RxSwift (~> 3.4)
+  - RxSwift (3.5.0)
+  - RxTest (3.5.0):
+    - RxSwift (~> 3.4)
 
 DEPENDENCIES:
   - NewsAPISwift (~> 0.1.1)
+  - RxBlocking (~> 3.0)
+  - RxCocoa (~> 3.0)
+  - RxSwift (~> 3.0)
+  - RxTest (~> 3.0)
 
 SPEC CHECKSUMS:
   NewsAPISwift: 369798075cfb463d2c5f283255cfbe12998e5865
   ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
+  RxBlocking: 471315e18b87c5ed4b9d0c69a57dfdbca5c01af1
+  RxCocoa: a0a09f45d0e5b48ecb6a4a7b4b4c89c88d3f633f
+  RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
+  RxTest: 1763765fd0e2282b0eb44c9050effdd7fe7156d4
 
-PODFILE CHECKSUM: aaa9bd383f511044d060b96bbb47bdfc093033c7
+PODFILE CHECKSUM: 38db94453f018526836fd9dffba7a3f61170ef41
 
 COCOAPODS: 1.2.1

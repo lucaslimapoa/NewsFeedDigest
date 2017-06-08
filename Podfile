@@ -7,10 +7,14 @@ target 'NewsFeedDigest' do
 
   # Pods for NewsFeedDigest
   pod 'NewsAPISwift', '~> 0.1.1'
-
+  pod 'RxSwift',    '~> 3.0'
+  pod 'RxCocoa',    '~> 3.0'
+  
   target 'NewsFeedDigestTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxBlocking', '~> 3.0'
+    pod 'RxTest',     '~> 3.0'
   end
 
 end

@@ -19,7 +19,12 @@ class AppCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
+        let viewModel = NewsFeedViewModel()
         rootViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        rootViewController.viewModel = viewModel
+        viewModel.viewController = rootViewController
+        
         navigationController = UINavigationController(rootViewController: rootViewController)
     }
     

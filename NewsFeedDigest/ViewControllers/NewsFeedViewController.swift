@@ -8,11 +8,21 @@
 
 import UIKit
 
-class NewsFeedViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+protocol NewsFeedViewControllerProtocol: class {
+    
+}
+
+class NewsFeedViewController: UICollectionViewController, NewsFeedViewControllerProtocol {
+    
+    var viewModel: NewsFeedViewModelProtocol!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = Colors.collectionViewBackgroundColor
     }
+    
+}
+
+extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
 }
