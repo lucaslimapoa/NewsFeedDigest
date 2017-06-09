@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 @objc protocol Coordinator {
-    var children: [Coordinator] { get }
-    
+    var children: [Coordinator] { get }    
     func start()
-    func stop()
 }

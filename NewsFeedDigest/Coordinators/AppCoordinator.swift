@@ -32,8 +32,4 @@ class AppCoordinator: Coordinator {
         self.window.rootViewController = navigationController
         self.window.makeKeyAndVisible()
     }
-    
-    func stop() {
-        
-    }
 }

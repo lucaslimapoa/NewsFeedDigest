@@ -21,6 +21,11 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         collectionView?.backgroundColor = Colors.collectionViewBackgroundColor
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let _ = viewModel.requestArticles()
+    }
+    
 }
 
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
