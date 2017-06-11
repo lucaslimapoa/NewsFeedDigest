@@ -24,8 +24,9 @@ class NewsFeedCell: UICollectionViewCell {
     var contentDescription: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font = UIFont.systemFont(ofSize: 16.0)
+        textView.font = UIFont.systemFont(ofSize: 15.0)
         textView.isEditable = false
+        textView.isSelectable = false
         
         return textView
     }()
@@ -40,7 +41,8 @@ class NewsFeedCell: UICollectionViewCell {
     }
     
     func setupViews() {
-        self.backgroundColor = .red
+        self.layer.cornerRadius = 5.0
+        self.clipsToBounds = true
         
         addSubview(imageView)
         addSubview(contentDescription)
@@ -52,7 +54,7 @@ class NewsFeedCell: UICollectionViewCell {
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         contentDescription.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8).isActive = true
+        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
     }
 }

@@ -39,6 +39,9 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         collectionView?.backgroundColor = Colors.collectionViewBackgroundColor
         collectionView?.register(NewsFeedCell.self, forCellWithReuseIdentifier: newsFeedCellId)
         
+        collectionView?.contentInset.top = 10
+        collectionView?.contentInset.bottom = 10
+        
         refreshControl = UIRefreshControl()
         collectionView?.addSubview(refreshControl)
         
@@ -88,7 +91,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 100)
+        return CGSize(width: view.frame.width - 20, height: 100)
     }
     
 }
