@@ -77,7 +77,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         let article = viewModel.getItem(for: indexPath)
         
         if let title = article.title {
-            cell.articleTitle.text = title
+            cell.contentDescription.text = title
         }
         
         return cell
@@ -88,7 +88,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 64)
+        return CGSize(width: view.frame.width, height: 100)
     }
     
 }

@@ -10,12 +10,24 @@ import UIKit
 
 class NewsFeedCell: UICollectionViewCell {        
     
-    var articleTitle: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 16.0)
+    var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 5.0
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .green
         
-        return label
+        return imageView
+    }()
+    
+    var contentDescription: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font = UIFont.systemFont(ofSize: 16.0)
+        textView.isEditable = false
+        
+        return textView
     }()
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,11 +42,17 @@ class NewsFeedCell: UICollectionViewCell {
     func setupViews() {
         self.backgroundColor = .red
         
-        addSubview(articleTitle)
+        addSubview(imageView)
+        addSubview(contentDescription)
         
-        articleTitle.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        articleTitle.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        articleTitle.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        articleTitle.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        imageView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        
+        contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        contentDescription.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8).isActive = true
+        contentDescription.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
     }
 }
