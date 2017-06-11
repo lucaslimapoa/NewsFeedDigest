@@ -12,7 +12,9 @@ import NewsAPISwift
 
 protocol NewsFeedViewModelProtocol: class {
     var articles: Variable<[NewsAPIArticle]> { get }
+    
     func fetchArticles()
+    func getItem(for indexPath: IndexPath) -> NewsAPIArticle
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
@@ -41,5 +43,9 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .map { self.articles.value.append(contentsOf: $0) }
             .subscribe()
             .addDisposableTo(disposeBag)
+    }
+    
+    func getItem(for indexPath: IndexPath) -> NewsAPIArticle {
+        return articles.value[indexPath.item]
     }
 }

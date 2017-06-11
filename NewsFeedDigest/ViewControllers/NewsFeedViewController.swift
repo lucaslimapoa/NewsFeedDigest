@@ -56,14 +56,49 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
             .observeOn(MainScheduler.instance)
             .filter { $0.count > 0 }
             .map { articles in
-                print(articles)
+                self.collectionView?.reloadData()
             }
             .subscribe()
             .addDisposableTo(disposeBag)
+    }
+    
+    // MARK - UICollectionViewDataSource
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.articles.value.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: newsFeedCellId, for: indexPath) as! NewsFeedCell
+        let article = viewModel.getItem(for: indexPath)
+        
+        if let title = article.title {
+            cell.articleTitle.text = title
+        }
+        
+        return cell
     }
     
 }
 
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 64)
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
