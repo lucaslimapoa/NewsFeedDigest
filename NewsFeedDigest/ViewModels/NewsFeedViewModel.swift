@@ -7,25 +7,39 @@
 //
 
 import RxSwift
+import RxCocoa
 import NewsAPISwift
 
 protocol NewsFeedViewModelProtocol: class {
-    func requestArticles() -> Observable<[NewsAPIArticle]>
+    var articles: Variable<[NewsAPIArticle]> { get }
+    func fetchArticles()
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
     
-    let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
-    
     weak var viewController: NewsFeedViewControllerProtocol!
     
-    private func getUserSources() -> [NewsAPISource] {
-        return [
-            NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest])
-        ]
+    let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
+    let userModel = UserModel()
+    let disposeBag = DisposeBag()
+    
+    var articles = Variable<[NewsAPIArticle]>([])
+    
+    init() {
+        
     }
     
-    func requestArticles() -> Observable<[NewsAPIArticle]> {
-        return newsAPI.getArticles(from: getUserSources(), sortBy: SortBy.latest)
+    func fetchArticles() {
+        _ = userModel
+            .getSources()
+            .filter{ $0.id != nil }
+            .map { $0.id! }
+            .flatMap { sourceId in
+                return self.newsAPI.getArticles(sourceId: sourceId, sortBy: SortBy.latest)
+            }
+            .catchErrorJustReturn([])
+            .map { self.articles.value.append(contentsOf: $0) }
+            .subscribe()
+            .addDisposableTo(disposeBag)
     }
 }
