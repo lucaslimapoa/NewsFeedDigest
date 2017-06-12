@@ -31,6 +31,17 @@ class NewsFeedCell: UICollectionViewCell {
         return textView
     }()
     
+    var informationText: UILabel = {
+       let infoText = UILabel()
+        infoText.translatesAutoresizingMaskIntoConstraints = false
+        infoText.backgroundColor = .white
+        infoText.font = UIFont.systemFont(ofSize: 11.0)
+        infoText.textColor = Colors.subtitleText
+        infoText.text = "The Verge / 30 min"
+        
+        return infoText
+    }()
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("method not implemented")
     }
@@ -41,11 +52,13 @@ class NewsFeedCell: UICollectionViewCell {
     }
     
     func setupViews() {
+        self.backgroundColor = .white
         self.layer.cornerRadius = 5.0
         self.clipsToBounds = true
         
         addSubview(imageView)
         addSubview(contentDescription)
+        addSubview(informationText)
         
         imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
@@ -53,8 +66,13 @@ class NewsFeedCell: UICollectionViewCell {
         imageView.widthAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        contentDescription.bottomAnchor.constraint(equalTo: informationText.topAnchor).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        
+        informationText.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8).isActive = true
+        informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
+        informationText.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        informationText.heightAnchor.constraint(equalToConstant: 15)
     }
 }

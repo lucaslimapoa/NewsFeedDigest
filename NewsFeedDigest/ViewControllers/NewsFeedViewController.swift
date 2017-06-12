@@ -65,7 +65,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
             .addDisposableTo(disposeBag)
     }
     
-    // MARK - UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
