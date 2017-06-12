@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Nuke
 
 let newsFeedCellId = "NewsFeedCellId"
 
@@ -79,8 +80,11 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: newsFeedCellId, for: indexPath) as! NewsFeedCell
         let article = viewModel.getItem(for: indexPath)
         
-        if let title = article.title {
-            cell.contentDescription.text = title
+        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage {
+            cell.imageView.image = nil
+            Nuke.loadImage(with: imageUrl, into: cell.imageView)
+            
+            cell.contentDescription.attributedText = attributedDescription
         }
         
         return cell

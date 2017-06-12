@@ -30,3 +30,20 @@ extension NewsAPIProtocol {
     }
     
 }
+
+extension NewsAPIArticle {
+    
+    var attributedDescription: NSAttributedString? {
+        guard let title = title, let articleDescription = articleDescription else { return nil }
+        
+        let attributedText = NSMutableAttributedString(string: "\(title)\n", attributes: [NSFontAttributeName: Fonts.cellTitleFont])
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 3.0
+        
+        attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: NSMakeRange(0, attributedText.string.characters.count))
+        attributedText.append(NSAttributedString(string: articleDescription, attributes: [NSForegroundColorAttributeName: Colors.cellInformationText, NSFontAttributeName: Fonts.cellDescriptionFont]))
+        
+        return attributedText
+    }
+}
