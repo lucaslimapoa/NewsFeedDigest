@@ -16,7 +16,7 @@ class NewsFeedCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 5.0
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .green
+        imageView.backgroundColor = .gray
         
         return imageView
     }()
@@ -48,22 +48,29 @@ class NewsFeedCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        
+        setupCellView()
+        setupSubViews()
     }
     
-    func setupViews() {
-        self.backgroundColor = .white
+    private func setupCellView() {
         self.layer.cornerRadius = 5.0
-        self.clipsToBounds = true
+        self.layer.borderWidth = 0.5
+        self.layer.borderColor = Colors.cellBorder.cgColor
         
+        self.backgroundColor = .white
+        self.clipsToBounds = true
+    }
+    
+    private func setupSubViews() {
         addSubview(imageView)
         addSubview(contentDescription)
         addSubview(informationText)
         
-        imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        imageView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8.0).isActive = true
+        imageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 84.0).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         contentDescription.heightAnchor.constraint(equalToConstant: 90).isActive = true

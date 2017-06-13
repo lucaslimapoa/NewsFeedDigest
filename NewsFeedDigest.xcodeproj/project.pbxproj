@@ -274,6 +274,7 @@
 				TargetAttributes = {
 					D48CE7FF1EE8F46C00256E94 = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = HGYG7SB23F;
 						ProvisioningStyle = Automatic;
 					};
 					D48CE8131EE8F46C00256E94 = {
@@ -560,6 +561,7 @@
 			baseConfigurationReference = EDD68DF1C905F90365BDACAD /* Pods-NewsFeedDigest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HGYG7SB23F;
 				INFOPLIST_FILE = NewsFeedDigest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lucaslimapoa.NewsFeedDigest;
@@ -573,6 +575,7 @@
 			baseConfigurationReference = 797CBC0F0B4BF4F82D319F4B /* Pods-NewsFeedDigest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HGYG7SB23F;
 				INFOPLIST_FILE = NewsFeedDigest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lucaslimapoa.NewsFeedDigest;
