@@ -24,12 +24,9 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
     let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
     let userModel = UserModel()
     let disposeBag = DisposeBag()
+    let publishedTimeConversor = PublishedTimeConversor()
     
-    var articles = Variable<[NewsAPIArticle]>([])
-    
-    init() {
-        
-    }
+    var articles = Variable<[NewsAPIArticle]>([])    
     
     func fetchArticles() {
         _ = userModel

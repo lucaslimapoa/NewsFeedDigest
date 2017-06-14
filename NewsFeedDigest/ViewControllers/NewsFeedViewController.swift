@@ -84,7 +84,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
             cell.imageView.image = nil
             Nuke.loadImage(with: imageUrl, into: cell.imageView)
             
-            cell.contentDescription.attributedText = attributedDescription
+            cell.contentDescription.attributedText = attributedDescription            
         }
         
         return cell
