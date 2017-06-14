@@ -23,6 +23,7 @@ class NewsFeedCell: UICollectionViewCell {
     
     var contentDescription: UITextView = {
         let textView = UITextView()
+        textView.textContainer.lineBreakMode = .byWordWrapping
         textView.translatesAutoresizingMaskIntoConstraints = false        
         textView.isEditable = false
         textView.isSelectable = false
@@ -75,7 +76,7 @@ class NewsFeedCell: UICollectionViewCell {
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         contentDescription.heightAnchor.constraint(equalToConstant: 90).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor).isActive = true
-        contentDescription.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
         informationText.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 5).isActive = true
         informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true

@@ -34,7 +34,7 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .filter{ $0.id != nil }
             .map { $0.id! }
             .flatMap { sourceId in
-                return self.newsAPI.getArticles(sourceId: sourceId, sortBy: SortBy.latest)
+                return self.newsAPI.getArticles(sourceId: sourceId, sortBy: SortBy.top)
             }
             .catchErrorJustReturn([])
             .map { articles in
