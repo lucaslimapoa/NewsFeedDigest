@@ -80,11 +80,12 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: newsFeedCellId, for: indexPath) as! NewsFeedCell
         let article = viewModel.getItem(for: indexPath)
         
-        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage {
+        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage, let publishedAt = article.publishedAt {
             cell.imageView.image = nil
             Nuke.loadImage(with: imageUrl, into: cell.imageView)
             
-            cell.contentDescription.attributedText = attributedDescription            
+            cell.contentDescription.attributedText = attributedDescription
+            cell.informationText.text = "The Verge / \(publishedAt)"
         }
         
         return cell

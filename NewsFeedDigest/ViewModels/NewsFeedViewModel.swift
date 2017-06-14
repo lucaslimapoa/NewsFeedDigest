@@ -37,12 +37,26 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
                 return self.newsAPI.getArticles(sourceId: sourceId, sortBy: SortBy.latest)
             }
             .catchErrorJustReturn([])
-            .map { self.articles.value.append(contentsOf: $0) }
+            .map { articles in
+                for var article in articles {
+                    self.convertPublishedDate(article: &article)
+                    self.articles.value.append(article)
+                }
+            }
             .subscribe()
             .addDisposableTo(disposeBag)
     }
     
     func getItem(for indexPath: IndexPath) -> NewsAPIArticle {
         return articles.value[indexPath.item]
+    }
+    
+    private func convertPublishedDate(article: inout NewsAPIArticle) {
+        guard let publishedDate = article.publishedAt else {
+            article.publishedAt = nil
+            return
+        }
+        
+        article.publishedAt = publishedTimeConversor.convertToPassedTime(publishedDate: publishedDate)
     }
 }
