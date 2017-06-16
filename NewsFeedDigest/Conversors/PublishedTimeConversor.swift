@@ -29,12 +29,17 @@ class PublishedTimeConversor {
         let minutes = (difference / 60) % 60
         let hours = difference / 3600
         
-        if hours > 0 {
-            return "\(hours)h ago"
+        var timePassed: String?
+        
+        if hours > 0 && hours < 24 {
+            timePassed = "\(hours)h ago"
+        } else if hours >= 24 {
+            let days = hours / 24
+            timePassed = "\(days)d ago"
         } else if minutes > 0 {
-            return "\(minutes)min ago"
+            timePassed = "\(minutes)min ago"
         }
         
-        return nil
+        return timePassed
     }
 }

@@ -37,6 +37,12 @@ class PublishedTimeConversorTests: XCTestCase {
         actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
         
         XCTAssertEqual(expectedDiff, actualDiff)
+        
+        publishedTime = "2017-06-12T18:30:00Z"
+        expectedDiff = "1d ago"
+        actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
+        
+        XCTAssertEqual(expectedDiff, actualDiff)
     }
     
     func createMockDate() -> Date {
