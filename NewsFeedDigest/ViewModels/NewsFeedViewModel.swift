@@ -12,9 +12,8 @@ import NewsAPISwift
 
 protocol NewsFeedViewModelProtocol: class {
     var articles: Variable<[NewsAPIArticle]> { get }
-    
     func fetchArticles()
-    func getItem(for indexPath: IndexPath) -> NewsAPIArticle
+    func convertUTCDateToTimePassed(utc: String) -> String
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
@@ -23,40 +22,32 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
     
     let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
     let userModel = UserModel()
-    let disposeBag = DisposeBag()
-    let publishedTimeConversor = PublishedTimeConversor()
-    
-    var articles = Variable<[NewsAPIArticle]>([])    
+    let dateConversor = PublishedTimeConversor()
+    var articles = Variable<[NewsAPIArticle]>([])
     
     func fetchArticles() {
-        _ = userModel
-            .getSources()
+        _ = userModel.getSources()
             .filter{ $0.id != nil }
-            .map { $0.id! }
-            .flatMap { sourceId in
-                return self.newsAPI.getArticles(sourceId: sourceId, sortBy: SortBy.top)
-            }
-            .catchErrorJustReturn([])
-            .map { articles in
-                for var article in articles {
-                    self.convertPublishedDate(article: &article)
-                    self.articles.value.append(article)
+            .map{ self.newsAPI.getArticles(sourceId: $0.id!, sortBy: SortBy.top) }
+            .merge()
+            .map { (newArticles) -> [NewsAPIArticle] in
+                var articles = newArticles
+                articles.append(contentsOf: self.articles.value)
+                
+                return articles.sorted {
+                    guard let lhsStringDate = $0.0.publishedAt, let rhsStringDate = $0.1.publishedAt else { return false }
+                    
+                    guard let lhsDate = self.dateConversor.dateFormatter.date(from: lhsStringDate),
+                        let rhsDate = self.dateConversor.dateFormatter.date(from: rhsStringDate)
+                        else { return false }
+                    
+                    return lhsDate > rhsDate
                 }
             }
-            .subscribe()
-            .addDisposableTo(disposeBag)
+            .bind(to: articles)
     }
     
-    func getItem(for indexPath: IndexPath) -> NewsAPIArticle {
-        return articles.value[indexPath.item]
-    }
-    
-    private func convertPublishedDate(article: inout NewsAPIArticle) {
-        guard let publishedDate = article.publishedAt else {
-            article.publishedAt = nil
-            return
-        }
-        
-        article.publishedAt = publishedTimeConversor.convertToPassedTime(publishedDate: publishedDate)
+    func convertUTCDateToTimePassed(utc: String) -> String {
+        return dateConversor.convertToPassedTime(publishedDate: utc) ?? ""
     }
 }

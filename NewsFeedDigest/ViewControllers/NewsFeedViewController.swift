@@ -7,14 +7,15 @@
 //
 
 import UIKit
+import NewsAPISwift
 import RxSwift
 import RxCocoa
 import Nuke
 
-let newsFeedCellId = "NewsFeedCellId"
+let NewsFeedCellId = "NewsFeedCellId"
 
 protocol NewsFeedViewControllerProtocol: class {
-    var refreshTrigger: Observable<Void> { get }
+    
 }
 
 class NewsFeedViewController: UICollectionViewController, NewsFeedViewControllerProtocol {
@@ -24,49 +25,47 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
     let disposeBag = DisposeBag()
     var refreshControl: UIRefreshControl!
     
-    var refreshTrigger: Observable<Void> {
-        return refreshControl
-            .rx
-            .controlEvent(.valueChanged)
-            .map { [refreshControl] in
-                return refreshControl?.isRefreshing
-            }
-            .filter { $0 == true }
-            .map { _ in return () }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = Colors.collectionViewBackgroundColor
-        collectionView?.register(NewsFeedCell.self, forCellWithReuseIdentifier: newsFeedCellId)
         
-        collectionView?.contentInset.top = 10
-        collectionView?.contentInset.bottom = 10
+        collectionView!.dataSource = nil
+//        collectionView!.delegate = nil
+        collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
+        collectionView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
+        
+        collectionView!.contentInset.top = 10
+        collectionView!.contentInset.bottom = 10
         
         refreshControl = UIRefreshControl()
-        collectionView?.addSubview(refreshControl)
+        collectionView!.addSubview(refreshControl)
         
         setupRx()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.fetchArticles()
+        viewModel.fetchArticles()        
     }
     
     func setupRx() {
-        _ = viewModel.articles
-            .asObservable()
-            .observeOn(MainScheduler.instance)
-            .filter { $0.count > 0 }
-            .map { articles in
-                self.collectionView?.reloadData()
-            }
-            .subscribe()
+        viewModel.articles
+            .asDriver()
+            .asDriver(onErrorJustReturn: [])
+            .drive(collectionView!.rx.items(dataSource: self))
             .addDisposableTo(disposeBag)
     }
+}
+
+extension NewsFeedViewController: RxCollectionViewDataSourceType {
+    typealias Element = [NewsAPIArticle]
     
-    // MARK: - UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, observedEvent: Event<Element>) -> Void {
+        if case .next(let articles) = observedEvent {
+            if articles.count > 0 {
+                collectionView.reloadData()
+            }
+        }
+    }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -77,20 +76,21 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: newsFeedCellId, for: indexPath) as! NewsFeedCell
-        let article = viewModel.getItem(for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
+        let article = viewModel.articles.value[indexPath.item]
         
         if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage, let publishedAt = article.publishedAt, let source = article.sourceId {
             cell.imageView.image = nil
             Nuke.loadImage(with: imageUrl, into: cell.imageView)
             
             cell.contentDescription.attributedText = attributedDescription
-            cell.informationText.text = "\(source) / \(publishedAt)"
+            
+            let publishedTime = viewModel.convertUTCDateToTimePassed(utc: publishedAt)
+            cell.informationText.text = "\(source) / \(publishedTime)"
         }
         
         return cell
     }
-    
 }
 
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {

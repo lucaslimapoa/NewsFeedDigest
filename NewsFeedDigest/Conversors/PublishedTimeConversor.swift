@@ -9,8 +9,8 @@
 import Foundation
 
 class PublishedTimeConversor {
-    private let dateFormatter: DateFormatter
     private var currentDate: Date
+    let dateFormatter: DateFormatter
     
     init(currentDate: Date = Date()) {
         self.currentDate = currentDate
