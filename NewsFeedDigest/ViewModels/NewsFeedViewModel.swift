@@ -13,7 +13,7 @@ import NewsAPISwift
 protocol NewsFeedViewModelProtocol: class {
     var articles: Variable<[NewsAPIArticle]> { get }
     func fetchArticles()
-    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> String
+    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> NSAttributedString
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
@@ -52,10 +52,23 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .bind(to: articles)
     }
     
-    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> String {
-        let source = userModel.getSource(by: sourceId)?.name ?? ""
+    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> NSAttributedString {
+        let source = userModel.getSource(by: sourceId)
+        let sourceName = source?.name ?? ""
         let publishedTime = dateConversor.convertToPassedTime(publishedDate: publishedAt) ?? ""
         
-        return "\(source) | \(publishedTime)"
+        let categoryColor = source?.categoryColor ?? UIColor.black
+        
+        let infoText = NSMutableAttributedString(string: sourceName, attributes: [
+            NSForegroundColorAttributeName: categoryColor,
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 12.0)
+            ])
+        
+        infoText.append(NSAttributedString(string: " | \(publishedTime)", attributes: [
+            NSForegroundColorAttributeName: UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0),
+            NSFontAttributeName: UIFont.systemFont(ofSize: 12.0)
+            ]))
+        
+        return infoText
     }
 }

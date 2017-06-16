@@ -97,7 +97,7 @@ extension NewsFeedViewController: RxCollectionViewDataSourceType {
             Nuke.loadImage(with: imageUrl, into: cell.imageView)
             
             cell.contentDescription.attributedText = attributedDescription
-            cell.informationText.text = viewModel.convertToInformationText(sourceId: sourceId, publishedAt: publishedAt)
+            cell.informationText.attributedText = viewModel.convertToInformationText(sourceId: sourceId, publishedAt: publishedAt)
         }
         
         return cell

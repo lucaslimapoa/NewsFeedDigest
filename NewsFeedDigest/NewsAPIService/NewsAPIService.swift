@@ -47,3 +47,36 @@ extension NewsAPIArticle {
         return attributedText
     }
 }
+
+extension NewsAPISource {
+    
+    var categoryColor: UIColor {
+        guard let category = self.category else { return UIColor.black }        
+        var color: UIColor!
+        
+        switch category {
+        case .business:
+            color = UIColor(r: 44, g: 62, b: 80)
+        case .entertainment:
+            color = UIColor(r: 46, g: 204, b: 113)
+        case .gaming:
+            color = UIColor(r: 52, g: 152, b: 219)
+        case .general:
+            color = UIColor(r: 231, g: 76, b: 60)
+        case .music:
+            color = UIColor(r: 220, g: 48, b: 35)
+        case .politics:
+            color = UIColor(r: 127, g: 140, b: 141)
+        case .scienceAndNature:
+            color = UIColor(r: 255, g: 166, b: 49)
+        case .sport:
+            color = UIColor(r: 211, g: 84, b: 0)
+        case .technology:
+            color = UIColor(r: 155, g: 89, b: 182)
+        }
+        
+        return color
+    }
+}
+
+
