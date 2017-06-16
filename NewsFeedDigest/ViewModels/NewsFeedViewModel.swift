@@ -32,7 +32,12 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .merge()
             .map { (newArticles) -> [NewsAPIArticle] in
                 var articles = newArticles
-                articles.append(contentsOf: self.articles.value)
+                
+                for article in self.articles.value {
+                    if !articles.contains(article) {
+                        articles.append(article)
+                    }
+                }
                 
                 return articles.sorted {
                     guard let lhsStringDate = $0.0.publishedAt, let rhsStringDate = $0.1.publishedAt else { return false }

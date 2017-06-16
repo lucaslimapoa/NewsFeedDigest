@@ -12,7 +12,7 @@ import NewsAPISwift
 let sources = [
             NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest]),
             NewsAPISource(id: "polygon", name: "Polygon", sourceDescription: "", url: "", category: Category.gaming, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest]),
-            NewsAPISource(id: "techcrunch", name: "Techcrunch", sourceDescription: "", url: "", category: Category.gaming, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest])        
+            NewsAPISource(id: "techcrunch", name: "Techcrunch", sourceDescription: "", url: "", category: Category.gaming, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest])
         ]
 
 class UserModel {
