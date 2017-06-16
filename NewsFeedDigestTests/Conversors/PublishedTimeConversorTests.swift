@@ -32,8 +32,8 @@ class PublishedTimeConversorTests: XCTestCase {
         
         XCTAssertEqual(expectedDiff, actualDiff)
         
-        publishedTime = "2017-06-13T17:30:00Z"
-        expectedDiff = "1h ago"
+        publishedTime = "2017-06-13T17:30:00.132Z"
+        expectedDiff = "59min ago"
         actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
         
         XCTAssertEqual(expectedDiff, actualDiff)

@@ -42,8 +42,8 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
                 return articles.sorted {
                     guard let lhsStringDate = $0.0.publishedAt, let rhsStringDate = $0.1.publishedAt else { return false }
                     
-                    guard let lhsDate = self.dateConversor.dateFormatter.date(from: lhsStringDate),
-                        let rhsDate = self.dateConversor.dateFormatter.date(from: rhsStringDate)
+                    guard let lhsDate = self.dateConversor.convertToDate(string: lhsStringDate),
+                        let rhsDate = self.dateConversor.convertToDate(string: rhsStringDate)
                         else { return false }
                     
                     return lhsDate > rhsDate

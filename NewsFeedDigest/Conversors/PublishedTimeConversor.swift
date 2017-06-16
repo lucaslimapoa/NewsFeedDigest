@@ -10,18 +10,30 @@ import Foundation
 
 class PublishedTimeConversor {
     private var currentDate: Date
-    let dateFormatter: DateFormatter
+    private let dateFormatter: DateFormatter
+    private let formats = [ "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HH:mm:ss.SSSZ" ]
     
     init(currentDate: Date = Date()) {
         self.currentDate = currentDate
         
         dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         dateFormatter.timeZone = TimeZone.current
     }        
     
+    func convertToDate(string: String) -> Date? {
+        for format in formats {
+            dateFormatter.dateFormat = format
+            
+            if let date = dateFormatter.date(from: string) {
+                return date
+            }
+        }
+        
+        return nil
+    }
+    
     func convertToPassedTime(publishedDate: String) -> String? {
-        guard let publishedInterval = dateFormatter.date(from: publishedDate)?.timeIntervalSince1970 else { return nil }
+        guard let publishedInterval = convertToDate(string: publishedDate)?.timeIntervalSince1970 else { return nil }
         
         let currentInterval = currentDate.timeIntervalSince1970
         let difference = Int(currentInterval - publishedInterval)
