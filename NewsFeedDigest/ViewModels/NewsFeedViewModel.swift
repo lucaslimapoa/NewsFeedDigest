@@ -13,7 +13,7 @@ import NewsAPISwift
 protocol NewsFeedViewModelProtocol: class {
     var articles: Variable<[NewsAPIArticle]> { get }
     func fetchArticles()
-    func convertUTCDateToTimePassed(utc: String) -> String
+    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> String
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
@@ -47,7 +47,10 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .bind(to: articles)
     }
     
-    func convertUTCDateToTimePassed(utc: String) -> String {
-        return dateConversor.convertToPassedTime(publishedDate: utc) ?? ""
+    func convertToInformationText(sourceId: SourceId, publishedAt: String) -> String {
+        let source = userModel.getSource(by: sourceId)?.name ?? ""
+        let publishedTime = dateConversor.convertToPassedTime(publishedDate: publishedAt) ?? ""
+        
+        return "\(source) | \(publishedTime)"
     }
 }

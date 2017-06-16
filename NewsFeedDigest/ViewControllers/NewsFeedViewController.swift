@@ -79,14 +79,12 @@ extension NewsFeedViewController: RxCollectionViewDataSourceType {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
         let article = viewModel.articles.value[indexPath.item]
         
-        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage, let publishedAt = article.publishedAt, let source = article.sourceId {
+        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage, let publishedAt = article.publishedAt, let sourceId = article.sourceId {
             cell.imageView.image = nil
             Nuke.loadImage(with: imageUrl, into: cell.imageView)
             
             cell.contentDescription.attributedText = attributedDescription
-            
-            let publishedTime = viewModel.convertUTCDateToTimePassed(utc: publishedAt)
-            cell.informationText.text = "\(source) / \(publishedTime)"
+            cell.informationText.text = viewModel.convertToInformationText(sourceId: sourceId, publishedAt: publishedAt)
         }
         
         return cell

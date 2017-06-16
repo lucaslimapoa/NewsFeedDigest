@@ -23,4 +23,8 @@ class UserModel {
         }
     }
     
+    func getSource(by sourceId: SourceId) -> NewsAPISource? {
+        return sources.first { $0.id == sourceId }
+    }
+    
 }
