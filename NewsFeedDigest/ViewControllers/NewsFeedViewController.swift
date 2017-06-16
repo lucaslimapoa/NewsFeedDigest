@@ -29,7 +29,6 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
         super.viewDidLoad()
         
         collectionView!.dataSource = nil
-//        collectionView!.delegate = nil
         collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
         collectionView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
         
@@ -44,7 +43,7 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.fetchArticles()        
+        viewModel.fetchArticles()
     }
     
     func setupRx() {
@@ -52,6 +51,19 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
             .asDriver()
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items(dataSource: self))
+            .addDisposableTo(disposeBag)
+        
+        refreshControl
+            .rx
+            .controlEvent(.valueChanged)
+            .map { _ in
+                let isRefreshing = self.refreshControl.isRefreshing
+                return isRefreshing
+            }
+            .filter { $0 == true }
+            .subscribe(onNext: { _ in
+                self.viewModel.fetchArticles()
+            })
             .addDisposableTo(disposeBag)
     }
 }
@@ -62,6 +74,7 @@ extension NewsFeedViewController: RxCollectionViewDataSourceType {
     func collectionView(_ collectionView: UICollectionView, observedEvent: Event<Element>) -> Void {
         if case .next(let articles) = observedEvent {
             if articles.count > 0 {
+                refreshControl.endRefreshing()
                 collectionView.reloadData()
             }
         }
@@ -96,7 +109,6 @@ extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width - 20, height: 100)
     }
-    
 }
 
 
