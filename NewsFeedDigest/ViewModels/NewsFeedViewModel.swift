@@ -30,16 +30,10 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .filter{ $0.id != nil }
             .map{ self.newsAPI.getArticles(sourceId: $0.id!, sortBy: SortBy.top) }
             .merge()
+            .toArray()
+            .map { $0.flatMap { $0 } }        
             .map { (newArticles) -> [NewsAPIArticle] in
-                var articles = newArticles
-                
-                for article in self.articles.value {
-                    if !articles.contains(article) {
-                        articles.append(article)
-                    }
-                }
-                
-                return articles.sorted {
+                return newArticles.sorted {
                     guard let lhsStringDate = $0.0.publishedAt, let rhsStringDate = $0.1.publishedAt else { return false }
                     
                     guard let lhsDate = self.dateConversor.convertToDate(string: lhsStringDate),

@@ -9,7 +9,7 @@
 import RxSwift
 import NewsAPISwift
 
-let sources = [
+fileprivate let sources = [
             NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest]),
             NewsAPISource(id: "polygon", name: "Polygon", sourceDescription: "", url: "", category: Category.gaming, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest]),
             NewsAPISource(id: "techcrunch", name: "Techcrunch", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest]),
@@ -20,7 +20,12 @@ class UserModel {
     
     func getSources() -> Observable<NewsAPISource> {
         return Observable.create { observer in
-            _ = sources.map{ observer.onNext($0) }
+            
+            for source in sources {
+                observer.onNext(source)
+            }
+            
+            observer.onCompleted()
             return Disposables.create()
         }
     }
