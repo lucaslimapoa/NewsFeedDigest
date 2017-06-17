@@ -20,10 +20,16 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
     
     weak var viewController: NewsFeedViewControllerProtocol!
     
-    let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
-    let userModel = UserModel()
+    let newsAPI: NewsAPIProtocol
+    let userModel: UserModelProtocol
+    
     let dateConversor = PublishedTimeConversor()
     var articles = Variable<[NewsAPIArticle]>([])
+    
+    init(newsAPI: NewsAPIProtocol, userModel: UserModelProtocol) {
+        self.newsAPI = newsAPI
+        self.userModel = userModel
+    }
     
     func fetchArticles() {
         _ = userModel.getSources()

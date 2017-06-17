@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NewsAPISwift
 
 class AppCoordinator: Coordinator {
     
@@ -19,7 +20,10 @@ class AppCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = NewsFeedViewModel()
+        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
+        let userModel = UserModel()
+        let viewModel = NewsFeedViewModel(newsAPI: newsAPI, userModel: userModel)
+        
         rootViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
         
         rootViewController.viewModel = viewModel

@@ -16,7 +16,12 @@ fileprivate let sources = [
             NewsAPISource(id: "mashable", name: "Mashable", sourceDescription: "", url: "", category: Category.entertainment, language: Language.english, country: Country.unitedStates, sortBysAvailable: [SortBy.latest])
         ]
 
-class UserModel {
+protocol UserModelProtocol {
+    func getSources() -> Observable<NewsAPISource>
+    func getSource(by sourceId: SourceId) -> NewsAPISource?
+}
+
+class UserModel: UserModelProtocol {
     
     func getSources() -> Observable<NewsAPISource> {
         return Observable.create { observer in
