@@ -19,15 +19,10 @@ class AppCoordinator: Coordinator {
     
     init(window: UIWindow) {
         self.window = window
-        
-        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
-        let userModel = UserModel()
-        let viewModel = NewsFeedViewModel(newsAPI: newsAPI, userModel: userModel)
+        let viewModel = NewsFeedViewModel()
         
         rootViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        
         rootViewController.viewModel = viewModel
-        viewModel.viewController = rootViewController
         
         navigationController = UINavigationController(rootViewController: rootViewController)
     }
