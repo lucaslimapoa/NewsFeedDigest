@@ -38,7 +38,6 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
             .map { $0.flatMap { $0 } }
             .map{ self.sortByDate($0) }
         
-        
         return sortedStream
     }
     

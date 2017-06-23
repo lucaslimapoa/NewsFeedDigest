@@ -13,10 +13,10 @@ class MockNewsAPI: NewsAPI {
     override func getArticles(sourceId: SourceId, sortBy: SortBy?, completionHandler: @escaping (Result<[NewsAPIArticle]>) -> Void) {
         
         switch sourceId {
-        case "valid-id":
-            completionHandler(Result.success(createMockArticles()))
-        default:
+        case "invalid-id":
             completionHandler(Result.error(NewsAPIError.invalidUrl))
+        default:
+            completionHandler(Result.success(createMockArticles()))
         }
     }
 }

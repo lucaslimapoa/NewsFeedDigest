@@ -26,7 +26,7 @@ class NewsFeedViewModelTests: XCTestCase {
         testScheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
         
-        let userStore = UserStore()
+        let userStore = MockUserStore()
         let mockNewsAPIClient = MockNewsAPI(key: "")
         let mockDateConversor = DateConversor(currentDate: createMockDate())
         
@@ -40,8 +40,8 @@ class NewsFeedViewModelTests: XCTestCase {
     
     func test_FetchingArticles_SortByDate() {
         let tempArticles = createMockArticles()
-        let expectedArticles = [tempArticles[2], tempArticles[1], tempArticles[0]]
         
+        let expectedArticles = createSortedMockArticles()
         let actualArticles = subject.sortByDate(tempArticles)
         
         XCTAssertEqual(expectedArticles, actualArticles)
@@ -49,10 +49,9 @@ class NewsFeedViewModelTests: XCTestCase {
     
     func test_FetchArticles() {
         let testExpectation = expectation(description: "Should fetch the articles sorted by date")
-        let fetchArticlesObservable = subject.createArticlesFetcher()
         
-        let tempArticles = createMockArticles()
-        let expectedArticles = [tempArticles[2], tempArticles[1], tempArticles[0]]
+        let expectedArticles = createSortedMockArticles()
+        let fetchArticlesObservable = subject.createArticlesFetcher()
         
         fetchArticlesObservable.subscribe(onNext: { articles in
             XCTAssertEqual(expectedArticles, articles)
@@ -66,4 +65,8 @@ class NewsFeedViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func createSortedMockArticles() -> [NewsAPIArticle] {
+        let tempArticles = createMockArticles()
+        return [tempArticles[2], tempArticles[1], tempArticles[0]]
+    }
 }
