@@ -8,7 +8,12 @@
 
 import Foundation
 
-class DateConversor {
+protocol DateConversorProtocol {
+    func convertToDate(string: String) -> Date?
+    func convertToPassedTime(publishedDate: String) -> String?
+}
+
+class DateConversor: DateConversorProtocol {
     private var currentDate: Date
     private let dateFormatter: DateFormatter
     private let formats = [ "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HH:mm:ss.SSSZ" ]

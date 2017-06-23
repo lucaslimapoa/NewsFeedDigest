@@ -44,18 +44,18 @@ class PublishedTimeConversorTests: XCTestCase {
         
         XCTAssertEqual(expectedDiff, actualDiff)
     }
+}
+
+func createMockDate() -> Date {
+    var dateComponents = DateComponents()
+    dateComponents.year = 2017
+    dateComponents.month = 6
+    dateComponents.day = 13
+    dateComponents.hour = 18
+    dateComponents.minute = 30
+    dateComponents.second = 0
+    dateComponents.timeZone = TimeZone(abbreviation: "UTC")
     
-    func createMockDate() -> Date {
-        var dateComponents = DateComponents()
-        dateComponents.year = 2017
-        dateComponents.month = 6
-        dateComponents.day = 13
-        dateComponents.hour = 18
-        dateComponents.minute = 30
-        dateComponents.second = 0
-        dateComponents.timeZone = TimeZone(abbreviation: "UTC")
-        
-        let calendar = Calendar.current
-        return calendar.date(from: dateComponents)!
-    }
+    let calendar = Calendar.current
+    return calendar.date(from: dateComponents)!
 }
