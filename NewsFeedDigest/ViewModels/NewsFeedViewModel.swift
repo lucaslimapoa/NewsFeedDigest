@@ -10,17 +10,17 @@ import RxSwift
 import RxCocoa
 import NewsAPISwift
 
-protocol NewsFeedViewModelProtocol: class {
+protocol NewsFeedViewModelType: class {
     func fetchArticles() -> Observable<[NewsAPIArticle]>
 }
 
-class NewsFeedViewModel: NewsFeedViewModelProtocol {
+class NewsFeedViewModel: NewsFeedViewModelType {
     
-    let userStore: UserStoreProtocol
+    let userStore: UserStoreType
     let newsAPIClient: NewsAPIProtocol
-    let dateConversor: DateConversorProtocol
+    let dateConversor: DateConversorType
     
-    init(userStore: UserStoreProtocol, newsAPIClient: NewsAPIProtocol, dateConversor: DateConversor = DateConversor()) {
+    init(userStore: UserStoreType, newsAPIClient: NewsAPIProtocol, dateConversor: DateConversor = DateConversor()) {
         self.userStore = userStore
         self.newsAPIClient = newsAPIClient
         self.dateConversor = dateConversor

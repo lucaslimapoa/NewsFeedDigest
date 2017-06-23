@@ -12,7 +12,7 @@ import NewsAPISwift
 
 @testable import NewsFeedDigest
 
-class MockUserStore: UserStoreProtocol {
+class MockUserStore: UserStoreType {
     
     func fetchFollowingSources() -> Observable<NewsAPISource> {
         return Observable.from(mockFollowingSources)

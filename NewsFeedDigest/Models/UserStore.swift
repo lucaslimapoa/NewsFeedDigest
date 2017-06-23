@@ -9,11 +9,11 @@
 import RxSwift
 import NewsAPISwift
 
-protocol UserStoreProtocol {
+protocol UserStoreType {
     func fetchFollowingSources() -> Observable<NewsAPISource>
 }
 
-class FakeUserStore: UserStoreProtocol {
+class FakeUserStore: UserStoreType {
     
     let sources = [
         NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [.top, .latest])

@@ -16,7 +16,7 @@ let NewsFeedCellId = "NewsFeedCellId"
 
 class NewsFeedViewController: UICollectionViewController {
     
-    var viewModel: NewsFeedViewModelProtocol!
+    var viewModel: NewsFeedViewModelType!
     
     let disposeBag = DisposeBag()
     
