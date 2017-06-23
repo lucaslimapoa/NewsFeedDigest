@@ -60,8 +60,24 @@ class NewsFeedViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func test_CreateNewsCellViewModel_FromArticle() {
+        let article = createMockArticles()[0]
+        let cellViewModel = subject.createCellViewModel(from: article)
+        
+        let expectedDescription = "Mock 1\nArticle Mock 1 description"
+        let expectedInfo = "Source 1 | 3h ago"
+        
+        XCTAssertEqual(expectedInfo, cellViewModel.articleInfo.string)
+        XCTAssertEqual(expectedDescription, cellViewModel.articleDescription.string)
+        
+        XCTAssertNil(cellViewModel.url)
+        XCTAssertNil(cellViewModel.urlToImage)
+    }
+    
     func createSortedMockArticles() -> [NewsAPIArticle] {
         let tempArticles = createMockArticles()
         return [tempArticles[2], tempArticles[1], tempArticles[0]]
     }
 }
+
+//NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 1", articleDescription: "Article Mock 1 description", url: nil, urlToImage: nil, publishedAt: "2017-06-13T15:25:00Z")

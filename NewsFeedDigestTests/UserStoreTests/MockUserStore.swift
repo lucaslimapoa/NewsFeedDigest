@@ -17,6 +17,10 @@ class MockUserStore: UserStoreType {
     func fetchFollowingSources() -> Observable<NewsAPISource> {
         return Observable.from(mockFollowingSources)
     }
+    
+    func find(sourceId: SourceId?) -> NewsAPISource? {
+        return mockFollowingSources[0]
+    }
 }
 
 let mockFollowingSources = [

@@ -11,6 +11,7 @@ import NewsAPISwift
 
 protocol UserStoreType {
     func fetchFollowingSources() -> Observable<NewsAPISource>
+    func find(sourceId: SourceId?) -> NewsAPISource?
 }
 
 class FakeUserStore: UserStoreType {
@@ -21,5 +22,9 @@ class FakeUserStore: UserStoreType {
     
     func fetchFollowingSources() -> Observable<NewsAPISource> {
         return Observable.from(sources)
+    }
+    
+    func find(sourceId: SourceId?) -> NewsAPISource? {
+        return sources.first { $0.id == sourceId }
     }
 }
