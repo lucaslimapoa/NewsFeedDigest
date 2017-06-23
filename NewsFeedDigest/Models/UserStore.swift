@@ -13,11 +13,13 @@ protocol UserStoreProtocol {
     func fetchFollowingSources() -> Observable<NewsAPISource>
 }
 
-class UserStore: UserStoreProtocol {
+class FakeUserStore: UserStoreProtocol {
+    
+    let sources = [
+        NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [.top, .latest])
+    ]
+    
     func fetchFollowingSources() -> Observable<NewsAPISource> {
-        return Observable.create { _ in
-            
-            return Disposables.create()
-        }
+        return Observable.from(sources)
     }
 }
