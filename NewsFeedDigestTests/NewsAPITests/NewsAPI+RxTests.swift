@@ -60,6 +60,6 @@ class NewsAPI_RxTests: XCTestCase {
         
         testScheduler.start()
         waitForExpectations(timeout: 1.0, handler: nil)
-    }
+    }    
 }
 

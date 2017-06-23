@@ -11,7 +11,7 @@ import RxCocoa
 import NewsAPISwift
 
 protocol NewsFeedViewModelProtocol: class {
-    
+    func fetchArticles() -> Observable<[NewsAPIArticle]>
 }
 
 class NewsFeedViewModel: NewsFeedViewModelProtocol {
@@ -26,7 +26,7 @@ class NewsFeedViewModel: NewsFeedViewModelProtocol {
         self.dateConversor = dateConversor
     }
     
-    func createArticlesFetcher() -> Observable<[NewsAPIArticle]> {
+    func fetchArticles() -> Observable<[NewsAPIArticle]> {
         let articlesStream = userStore.fetchFollowingSources()
             .filter { $0.id != nil }
             .map { $0.id! }

@@ -33,11 +33,6 @@ class NewsFeedViewModelTests: XCTestCase {
         subject = NewsFeedViewModel(userStore: userStore, newsAPIClient: mockNewsAPIClient, dateConversor: mockDateConversor)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func test_FetchingArticles_SortByDate() {
         let tempArticles = createMockArticles()
         
@@ -51,7 +46,7 @@ class NewsFeedViewModelTests: XCTestCase {
         let testExpectation = expectation(description: "Should fetch the articles sorted by date")
         
         let expectedArticles = createSortedMockArticles()
-        let fetchArticlesObservable = subject.createArticlesFetcher()
+        let fetchArticlesObservable = subject.fetchArticles()
         
         fetchArticlesObservable.subscribe(onNext: { articles in
             XCTAssertEqual(expectedArticles, articles)
