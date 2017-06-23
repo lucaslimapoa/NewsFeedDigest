@@ -17,12 +17,14 @@ class NewsAPI_RxTests: XCTestCase {
     
     var subject: MockNewsAPI!
     var disposeBag: DisposeBag!
+    var testScheduler: TestScheduler!
     
     override func setUp() {
         super.setUp()
         
         subject = MockNewsAPI(key: "")
         disposeBag = DisposeBag()
+        testScheduler = TestScheduler(initialClock: 0)
     }
     
     override func tearDown() {
@@ -32,7 +34,6 @@ class NewsAPI_RxTests: XCTestCase {
 
     func test_GetArticles_ReturnsArticles() {
         let testExpectation = expectation(description: "Should return the articles for the source id")
-        let testScheduler = TestScheduler(initialClock: 0)
         
         _ = subject.getArticles(sourceId: "valid-id")
             .subscribe(onNext: { articles in
@@ -48,5 +49,17 @@ class NewsAPI_RxTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func test_GetArticles_ReturnsError() {
+        let testExpectation = expectation(description: "Should return the articles for the source id")
+        
+        _ = subject.getArticles(sourceId: "invalid-id")
+            .subscribe( onError: { error in
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        testScheduler.start()
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 }
 
