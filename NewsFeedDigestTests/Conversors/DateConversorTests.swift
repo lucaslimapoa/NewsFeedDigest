@@ -12,28 +12,28 @@ import XCTest
 
 class PublishedTimeConversorTests: XCTestCase {
     
-    var subject: PublishedTimeConversor!
+    var subject: DateConversor!
     
     override func setUp() {
         super.setUp()
-        subject = PublishedTimeConversor(currentDate: createMockDate())
+        subject = DateConversor(currentDate: createMockDate())
     }
     
     func test_UTC0PublishedTime_ReturnsPassedTime() {
         var publishedTime = "2017-06-13T18:00:00Z"
-        var expectedDiff = "30min ago"
+        var expectedDiff = "30m ago"
         var actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
         
         XCTAssertEqual(expectedDiff, actualDiff)
         
         publishedTime = "2017-06-13T17:45:00Z"
-        expectedDiff = "45min ago"
+        expectedDiff = "45m ago"
         actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
         
         XCTAssertEqual(expectedDiff, actualDiff)
         
         publishedTime = "2017-06-13T17:30:00.132Z"
-        expectedDiff = "59min ago"
+        expectedDiff = "59m ago"
         actualDiff = subject.convertToPassedTime(publishedDate: publishedTime)
         
         XCTAssertEqual(expectedDiff, actualDiff)

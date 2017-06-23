@@ -23,7 +23,7 @@ class MockNewsAPI: NewsAPI {
 
 func createMockArticles() -> [NewsAPIArticle] {
     return [
-        NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 1", articleDescription: nil, url: nil, urlToImage: nil, publishedAt: ""),
-        NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 2", articleDescription: nil, url: nil, urlToImage: nil, publishedAt: "")
+        NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 1", articleDescription: nil, url: nil, urlToImage: nil, publishedAt: "2017-06-13T17:45:00Z"),
+        NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 2", articleDescription: nil, url: nil, urlToImage: nil, publishedAt: "2017-06-13T16:45:00Z")
     ]
 }
