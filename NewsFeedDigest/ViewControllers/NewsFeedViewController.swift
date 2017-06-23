@@ -55,8 +55,9 @@ class NewsFeedViewController: UICollectionViewController {
         
         articlesStream
             .asDriver(onErrorJustReturn: [])
-            .drive(collectionView!.rx.items) { collectionView, row, element in
+            .drive(collectionView!.rx.items) { collectionView, row, article in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
+                cell.viewModel = self.viewModel.createCellViewModel(from: article)
                 
                 return cell
             }

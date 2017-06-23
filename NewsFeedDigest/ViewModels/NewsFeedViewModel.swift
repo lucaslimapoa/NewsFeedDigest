@@ -11,7 +11,8 @@ import RxCocoa
 import NewsAPISwift
 
 protocol NewsFeedViewModelType: class {
-    func fetchArticles() -> Observable<[NewsAPIArticle]>
+    func fetchArticles() -> Observable<[NewsAPIArticle]>    
+    func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel
 }
 
 class NewsFeedViewModel: NewsFeedViewModelType {

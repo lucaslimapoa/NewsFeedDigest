@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Nuke
 
 class NewsFeedCell: UICollectionViewCell {        
     
@@ -42,6 +43,18 @@ class NewsFeedCell: UICollectionViewCell {
         
         return infoText
     }()
+    
+    var viewModel: NewsCellViewModel! {
+        didSet {
+            contentDescription.attributedText = viewModel.articleDescription
+            informationText.attributedText = viewModel.articleInfo
+            
+            imageView.image = nil
+            if let urlToImage = viewModel.urlToImage {
+                Nuke.loadImage(with: urlToImage, into: imageView)
+            }
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("method not implemented")
