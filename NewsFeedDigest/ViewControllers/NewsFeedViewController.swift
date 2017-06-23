@@ -14,15 +14,13 @@ import Nuke
 
 let NewsFeedCellId = "NewsFeedCellId"
 
-protocol NewsFeedViewControllerProtocol: class {
+class NewsFeedViewController: UICollectionViewController {
     
-}
-
-class NewsFeedViewController: UICollectionViewController, NewsFeedViewControllerProtocol {
-    
-    var viewModel: NewsFeedViewModelProtocol!
+    var viewModel: NewsFeedViewModelType!
     
     let disposeBag = DisposeBag()
+    
+    var refreshTrigger: Observable<Void>!
     var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
@@ -43,75 +41,37 @@ class NewsFeedViewController: UICollectionViewController, NewsFeedViewController
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.fetchArticles()
     }
     
     func setupRx() {
-        viewModel.articles
-            .asDriver()
-            .asDriver(onErrorJustReturn: [])
-            .drive(collectionView!.rx.items(dataSource: self))
-            .addDisposableTo(disposeBag)
-        
-        refreshControl
+        refreshTrigger = refreshControl
             .rx
             .controlEvent(.valueChanged)
-            .map { _ in
-                let isRefreshing = self.refreshControl.isRefreshing
-                return isRefreshing
+            .map { () }
+        
+        let articlesStream = Observable.just(())
+            .concat(refreshTrigger)
+            .flatMapLatest { self.viewModel.fetchArticles() }
+        
+        articlesStream
+            .asDriver(onErrorJustReturn: [])
+            .drive(collectionView!.rx.items) { collectionView, row, article in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
+                cell.viewModel = self.viewModel.createCellViewModel(from: article)
+                
+                return cell
             }
-            .filter { $0 == true }
-            .subscribe(onNext: { _ in
-                self.viewModel.fetchArticles()
-            })
             .addDisposableTo(disposeBag)
-    }
-}
-
-extension NewsFeedViewController: RxCollectionViewDataSourceType {
-    typealias Element = [NewsAPIArticle]
-    
-    func collectionView(_ collectionView: UICollectionView, observedEvent: Event<Element>) -> Void {
-        if case .next(let articles) = observedEvent {
-            if articles.count > 0 {
-                refreshControl.endRefreshing()
-                collectionView.reloadData()
-            }
-        }
-    }
-    
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.articles.value.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
-        let article = viewModel.articles.value[indexPath.item]
-        
-        if let attributedDescription = article.attributedDescription, let imageUrl = article.urlToImage, let publishedAt = article.publishedAt, let sourceId = article.sourceId {
-            cell.imageView.image = nil
-            Nuke.loadImage(with: imageUrl, into: cell.imageView)
-            
-            cell.contentDescription.attributedText = attributedDescription
-            cell.informationText.attributedText = viewModel.convertToInformationText(sourceId: sourceId, publishedAt: publishedAt)
-        }
-        
-        return cell
     }
 }
 
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 20, height: 100)
+        return CGSize(width: view.frame.width - 20, height: 120)
     }
+    
 }
-
-
 
 
 

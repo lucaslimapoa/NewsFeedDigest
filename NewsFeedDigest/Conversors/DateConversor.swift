@@ -8,7 +8,12 @@
 
 import Foundation
 
-class PublishedTimeConversor {
+protocol DateConversorType {
+    func convertToDate(string: String) -> Date?
+    func convertToPassedTime(publishedDate: String) -> String?
+}
+
+class DateConversor: DateConversorType {
     private var currentDate: Date
     private let dateFormatter: DateFormatter
     private let formats = [ "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HH:mm:ss.SSSZ" ]
@@ -49,7 +54,7 @@ class PublishedTimeConversor {
             let days = hours / 24
             timePassed = "\(days)d ago"
         } else if minutes > 0 {
-            timePassed = "\(minutes)min ago"
+            timePassed = "\(minutes)m ago"
         }
         
         return timePassed
