@@ -54,6 +54,9 @@ class NewsFeedViewController: UICollectionViewController {
             .flatMapLatest { self.viewModel.fetchArticles() }
         
         articlesStream
+            .do(onNext: { _ in
+                self.refreshControl.endRefreshing()
+            })
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items) { collectionView, row, article in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
