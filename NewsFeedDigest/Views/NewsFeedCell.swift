@@ -68,7 +68,7 @@ class NewsFeedCell: UICollectionViewCell {
     }
     
     private func setupCellView() {
-        self.layer.cornerRadius = 5.0
+        self.layer.cornerRadius = 3.0
         self.layer.borderWidth = 0.5
         self.layer.borderColor = Colors.cellBorder.cgColor
         
@@ -87,13 +87,13 @@ class NewsFeedCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor).isActive = true
+        contentDescription.heightAnchor.constraint(equalToConstant: 85).isActive = true
+        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
-        informationText.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 5).isActive = true
+        informationText.leftAnchor.constraint(equalTo: contentDescription.leftAnchor, constant: 5).isActive = true
         informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
         informationText.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        informationText.heightAnchor.constraint(equalToConstant: 10)
+        informationText.heightAnchor.constraint(equalToConstant: 15)
     }
 }

@@ -71,7 +71,7 @@ class NewsFeedViewController: UICollectionViewController {
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 20, height: 120)
+        return CGSize(width: view.frame.width - 20, height: 100)
     }
     
 }
