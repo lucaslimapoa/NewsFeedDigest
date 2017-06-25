@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 protocol DateConversorType {
     func convertToDate(string: String) -> Date?
@@ -17,6 +18,8 @@ class DateConversor: DateConversorType {
     private var currentDate: Date
     private let dateFormatter: DateFormatter
     private let formats = [ "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HH:mm:ss.SSSZ" ]
+    
+    private let logger = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "DateFormatter")
     
     init(currentDate: Date = Date()) {
         self.currentDate = currentDate
@@ -38,7 +41,10 @@ class DateConversor: DateConversorType {
     }
     
     func convertToPassedTime(publishedDate: String) -> String? {
-        guard let publishedInterval = convertToDate(string: publishedDate)?.timeIntervalSince1970 else { return nil }
+        guard let publishedInterval = convertToDate(string: publishedDate)?.timeIntervalSince1970 else {
+            os_log("DateConversor::convertToPassedTime - failed", log: logger, type: .error, "publisedDate = \(publishedDate)", "currentDate = \(currentDate.description)")
+            return nil
+        }
         
         let currentInterval = currentDate.timeIntervalSince1970
         let difference = Int(currentInterval - publishedInterval)
