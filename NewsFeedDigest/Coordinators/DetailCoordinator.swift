@@ -8,11 +8,23 @@
 
 import UIKit
 import NewsAPISwift
+import SafariServices
 
-class DetailCoordinator: Coordinator {
+enum DetailCoordinatorError: Error {
+    case couldNotReadURL
+}
+
+protocol DetailCoordinatorDelegate {
+    func detailCoordinatorDidFail(_ coordinator: DetailCoordinator, error: DetailCoordinatorError)
+    func detailCoordinatorDidFinish(_ coordinator: DetailCoordinator)
+}
+
+class DetailCoordinator: NSObject, Coordinator, SFSafariViewControllerDelegate {
     
     let navigationController: UINavigationController
     let article: NewsAPIArticle
+    
+    var coordinatorDelegate: DetailCoordinatorDelegate?
     
     init(navigationController: UINavigationController, article: NewsAPIArticle) {
         self.navigationController = navigationController
@@ -20,11 +32,16 @@ class DetailCoordinator: Coordinator {
     }
     
     func start() {
-        let viewModel = ArticleDetailViewModel()
-        
-        let articleDetailViewController = ArticleDetailViewController()
-        articleDetailViewController.viewModel = viewModel
-        
-        navigationController.pushViewController(articleDetailViewController, animated: true)
+        if let urlToArticle = article.url {
+            let safariViewController = SFSafariViewController(url: urlToArticle, entersReaderIfAvailable: true)            
+            navigationController.present(safariViewController, animated: true, completion: nil)
+        } else {
+            coordinatorDelegate?.detailCoordinatorDidFail(self, error: DetailCoordinatorError.couldNotReadURL)
+        }
+    }
+    
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+        coordinatorDelegate?.detailCoordinatorDidFinish(self)
     }
 }

@@ -37,9 +37,19 @@ class NewsFeedCoordinator: Coordinator {
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
-    
     func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle) {
         detailCoordinator = DetailCoordinator(navigationController: navigationController, article: article)
         detailCoordinator?.start()
+    }
+}
+
+extension NewsFeedCoordinator: DetailCoordinatorDelegate {
+    func detailCoordinatorDidFinish(_ coordinator: DetailCoordinator) {
+        self.detailCoordinator = nil        
+    }
+    
+    func detailCoordinatorDidFail(_ coordinator: DetailCoordinator, error: DetailCoordinatorError) {
+        self.detailCoordinator = nil
+        // Todo: Present error message
     }
 }
