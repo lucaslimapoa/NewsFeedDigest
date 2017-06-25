@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import NewsAPISwift
 import RxSwift
 import RxCocoa
-import Nuke
+import NewsAPISwift
 
 let NewsFeedCellId = "NewsFeedCellId"
 
@@ -64,6 +63,11 @@ class NewsFeedViewController: UICollectionViewController {
                 
                 return cell
             }
+            .addDisposableTo(disposeBag)
+        
+        collectionView!.rx
+            .modelSelected(NewsAPIArticle.self)
+            .bind(to: viewModel.selectedItemListener)
             .addDisposableTo(disposeBag)
     }
 }

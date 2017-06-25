@@ -11,6 +11,8 @@ import RxCocoa
 import NewsAPISwift
 
 protocol NewsFeedViewModelType: class {
+    var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
+    
     func fetchArticles() -> Observable<[NewsAPIArticle]>    
     func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel
 }
@@ -20,11 +22,25 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     let userStore: UserStoreType
     let newsAPIClient: NewsAPIProtocol
     let dateConversor: DateConversorType
+    let disposeBag = DisposeBag()
+    
+    var selectedItemListener = PublishSubject<NewsAPIArticle>()
+    var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
     
     init(userStore: UserStoreType, newsAPIClient: NewsAPIProtocol, dateConversor: DateConversor = DateConversor()) {
         self.userStore = userStore
         self.newsAPIClient = newsAPIClient
         self.dateConversor = dateConversor
+        
+        setupListeners()
+    }
+    
+    func setupListeners() {
+        selectedItemListener
+            .subscribe(onNext: { article in
+                self.coordinatorDelegate?.newsFeedViewModelDidSelectArticle(viewModel: self, article: article)
+            })
+            .addDisposableTo(disposeBag)
     }
     
     func fetchArticles() -> Observable<[NewsAPIArticle]> {

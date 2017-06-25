@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct AppCoordinator: Coordinator {
+class AppCoordinator: Coordinator {
     
     let window: UIWindow
     let navigationController: UINavigationController
@@ -23,7 +23,7 @@ struct AppCoordinator: Coordinator {
         showNewsFeed()
     }
     
-    mutating func showNewsFeed() {
+    func showNewsFeed() {
         newsFeedCoordinator = NewsFeedCoordinator(navigationController: navigationController)
         newsFeedCoordinator?.start()                
     }

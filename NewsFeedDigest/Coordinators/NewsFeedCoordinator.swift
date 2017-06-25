@@ -9,23 +9,37 @@
 import UIKit
 import NewsAPISwift
 
-struct NewsFeedCoordinator: Coordinator {
+protocol NewsFeedViewModelCoordinatorDelegate {
+    func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle)
+}
+
+class NewsFeedCoordinator: Coordinator {
     
     let navigationController: UINavigationController
-    let newsFeedViewController: NewsFeedViewController
+    var detailCoordinator: DetailCoordinator?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        
-        let userStore = FakeUserStore()
-        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
-        let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
-        
-        newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        newsFeedViewController.viewModel = viewModel
     }
     
     func start() {
+        let userStore = FakeUserStore()
+        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
+        
+        let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
+        viewModel.coordinatorDelegate = self
+        
+        let newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        newsFeedViewController.viewModel = viewModel
+        
         navigationController.pushViewController(newsFeedViewController, animated: true)
+    }
+}
+
+extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
+    
+    func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle) {
+        detailCoordinator = DetailCoordinator(navigationController: navigationController, article: article)
+        detailCoordinator?.start()
     }
 }
