@@ -7,9 +7,7 @@
 //
 
 import Foundation
-import UIKit
 
-@objc protocol Coordinator {
-    var children: [Coordinator] { get }    
+protocol Coordinator {        
     func start()
 }

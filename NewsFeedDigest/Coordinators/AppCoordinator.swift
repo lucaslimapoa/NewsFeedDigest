@@ -7,27 +7,25 @@
 //
 
 import UIKit
-import NewsAPISwift
 
-class AppCoordinator: Coordinator {
+struct AppCoordinator: Coordinator {
     
     let window: UIWindow
     let navigationController: UINavigationController
-    let rootViewController: NewsFeedViewController
     
-    private(set) var children = [Coordinator]()
+    var newsFeedCoordinator: NewsFeedCoordinator?
     
     init(window: UIWindow) {
         self.window = window
         
-        let userStore = FakeUserStore()
-        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
-        let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
+        navigationController = UINavigationController()
         
-        rootViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        rootViewController.viewModel = viewModel
-        
-        navigationController = UINavigationController(rootViewController: rootViewController)
+        showNewsFeed()
+    }
+    
+    mutating func showNewsFeed() {
+        newsFeedCoordinator = NewsFeedCoordinator(navigationController: navigationController)
+        newsFeedCoordinator?.start()                
     }
     
     func start() {
