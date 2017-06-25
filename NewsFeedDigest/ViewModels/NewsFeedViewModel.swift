@@ -108,7 +108,7 @@ struct NewsCellViewModel {
         if let publishedAt = publishedAt {
             infoText.append(NSAttributedString(string: " | \(publishedAt)", attributes: [
                 NSForegroundColorAttributeName: UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0),
-                NSFontAttributeName: UIFont.systemFont(ofSize: 12.0)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 11.0)
                 ]))
         }
         

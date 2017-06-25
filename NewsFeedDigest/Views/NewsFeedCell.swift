@@ -25,10 +25,8 @@ class NewsFeedCell: UICollectionViewCell {
     var contentDescription: UITextView = {
         let textView = UITextView()
         textView.textContainer.lineBreakMode = .byWordWrapping
-        textView.translatesAutoresizingMaskIntoConstraints = false        
-        textView.isEditable = false
-        textView.isSelectable = false
-        textView.isScrollEnabled = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isUserInteractionEnabled = false
         
         return textView
     }()
@@ -38,8 +36,7 @@ class NewsFeedCell: UICollectionViewCell {
         infoText.translatesAutoresizingMaskIntoConstraints = false
         infoText.backgroundColor = .white
         infoText.font = Fonts.cellInformationFont
-        infoText.textColor = Colors.subtitleText
-        infoText.text = "The Verge / 30 min"
+        infoText.textColor = Colors.subtitleText        
         
         return infoText
     }()
@@ -87,7 +84,7 @@ class NewsFeedCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.heightAnchor.constraint(equalToConstant: 85).isActive = true
+        contentDescription.heightAnchor.constraint(equalToConstant: 68.0).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
