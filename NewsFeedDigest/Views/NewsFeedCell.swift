@@ -84,7 +84,7 @@ class NewsFeedCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.heightAnchor.constraint(equalToConstant: 68.0).isActive = true
+        contentDescription.heightAnchor.constraint(equalToConstant: 66.0).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
