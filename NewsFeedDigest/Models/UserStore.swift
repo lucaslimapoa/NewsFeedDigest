@@ -17,7 +17,8 @@ protocol UserStoreType {
 class FakeUserStore: UserStoreType {
     
     let sources = [
-        NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [.top, .latest])
+        NewsAPISource(id: "the-verge", name: "The Verge", sourceDescription: "", url: "", category: Category.technology, language: Language.english, country: Country.unitedStates, sortBysAvailable: [.top, .latest]),
+        NewsAPISource(id: "polygon", name: "Polygon", sourceDescription: "", url: "", category: Category.gaming, language: Language.english, country: Country.unitedStates, sortBysAvailable: [.top])
     ]
     
     func fetchFollowingSources() -> Observable<NewsAPISource> {

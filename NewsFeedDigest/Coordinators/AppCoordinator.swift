@@ -19,6 +19,7 @@ class AppCoordinator: Coordinator {
         self.window = window
         
         navigationController = UINavigationController()
+        navigationController.navigationBar.barTintColor = .white
         
         showNewsFeed()
     }
