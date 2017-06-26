@@ -87,7 +87,7 @@ struct NewsCellViewModel {
         var date: String?
         
         if let publishedAt = tuple.article.publishedAt {
-            date = dateConversor.convertToPassedTime(publishedDate: publishedAt)
+            date = dateConversor.convertToPassedTime(publishedAt: publishedAt)
         }
         
         articleInfo = createInformation(source: tuple.source, publishedAt: date)

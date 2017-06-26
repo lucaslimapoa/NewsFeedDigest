@@ -11,7 +11,7 @@ import os.log
 
 protocol DateConversorType {
     func convertToDate(string: String) -> Date?
-    func convertToPassedTime(publishedDate: String) -> String?
+    func convertToPassedTime(publishedAt: String) -> String?
 }
 
 class DateConversor: DateConversorType {
@@ -40,14 +40,18 @@ class DateConversor: DateConversorType {
         return nil
     }
     
-    func convertToPassedTime(publishedDate: String) -> String? {
-        guard let publishedInterval = convertToDate(string: publishedDate)?.timeIntervalSince1970 else {
-            os_log("DateConversor::convertToPassedTime - failed", log: logger, type: .error, "publisedDate = \(publishedDate)", "currentDate = \(currentDate.description)")
+    func convertToPassedTime(publishedAt: String) -> String? {
+        guard let publishedDate = convertToDate(string: publishedAt) else {
+            os_log("DateConversor::convertToPassedTime - failed", log: logger, type: .error, "publisedDate = \(publishedAt)", "currentDate = \(currentDate.description)")
             return nil
         }
         
+        if publishedDate > currentDate {
+            updateCurrentTime(date: Date())
+        }
+        
         let currentInterval = currentDate.timeIntervalSince1970
-        let difference = Int(currentInterval - publishedInterval)
+        let difference = Int(currentInterval - publishedDate.timeIntervalSince1970)
         
         let minutes = (difference / 60) % 60
         let hours = difference / 3600
@@ -64,5 +68,9 @@ class DateConversor: DateConversorType {
         }
         
         return timePassed
+    }
+    
+    func updateCurrentTime(date: Date) {
+        self.currentDate = date
     }
 }
