@@ -27,6 +27,7 @@ class AppCoordinator: Coordinator {
     
     func createCoordinators() {
         coordinators.append(NewsFeedCoordinator())
+        coordinators.append(SourceListCoordinator())
     }
     
     func start() {
