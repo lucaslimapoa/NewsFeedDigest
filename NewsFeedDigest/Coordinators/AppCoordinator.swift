@@ -11,26 +11,26 @@ import UIKit
 class AppCoordinator: Coordinator {
     
     let window: UIWindow
-    let navigationController: UINavigationController
+    let tabBarController: UITabBarController
     
-    var newsFeedCoordinator: NewsFeedCoordinator?
+    var coordinators: [TabBarCoordinator] = []
     
     init(window: UIWindow) {
         self.window = window
         
-        navigationController = UINavigationController()
-        navigationController.navigationBar.barTintColor = .white
+        tabBarController = UITabBarController()
         
-        showNewsFeed()
+        createCoordinators()
+        
+        tabBarController.viewControllers = coordinators.map{ $0.rootViewController }
     }
     
-    func showNewsFeed() {
-        newsFeedCoordinator = NewsFeedCoordinator(navigationController: navigationController)
-        newsFeedCoordinator?.start()                
+    func createCoordinators() {
+        coordinators.append(NewsFeedCoordinator())
     }
     
     func start() {
-        self.window.rootViewController = navigationController
+        self.window.rootViewController = tabBarController
         self.window.makeKeyAndVisible()
     }
 }

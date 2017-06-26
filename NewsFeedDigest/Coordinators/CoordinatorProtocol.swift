@@ -6,8 +6,13 @@
 //  Copyright © 2017 lucaslimapoa. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol Coordinator {        
     func start()
+}
+
+protocol TabBarCoordinator {
+    var rootViewController: UINavigationController { get }
+    var tabBarItem: UITabBarItem { get }
 }

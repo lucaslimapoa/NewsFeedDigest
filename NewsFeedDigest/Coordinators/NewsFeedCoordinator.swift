@@ -13,16 +13,25 @@ protocol NewsFeedViewModelCoordinatorDelegate {
     func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle)
 }
 
-class NewsFeedCoordinator: Coordinator {
+class NewsFeedCoordinator: TabBarCoordinator {
     
-    let navigationController: UINavigationController
+    var tabBarItem: UITabBarItem
+    var rootViewController: UINavigationController
+    
     var detailCoordinator: DetailCoordinator?
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init() {
+        tabBarItem = UITabBarItem(title: "News Feed", image: nil, selectedImage: nil)
+        
+        rootViewController = UINavigationController()
+        rootViewController.tabBarItem = tabBarItem
+        
+        let newsFeedViewController = createNewsFeedViewController()
+        
+        rootViewController.viewControllers = [newsFeedViewController]
     }
     
-    func start() {
+    private func createNewsFeedViewController() -> NewsFeedViewController {
         let userStore = FakeUserStore()
         let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
         
@@ -32,13 +41,13 @@ class NewsFeedCoordinator: Coordinator {
         let newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
         newsFeedViewController.viewModel = viewModel
         
-        navigationController.pushViewController(newsFeedViewController, animated: true)
+        return newsFeedViewController
     }
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
     func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle) {
-        detailCoordinator = DetailCoordinator(navigationController: navigationController, article: article)
+        detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
     }
 }
