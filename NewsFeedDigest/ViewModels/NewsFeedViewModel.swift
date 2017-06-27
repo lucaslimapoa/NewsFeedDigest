@@ -114,7 +114,7 @@ struct NewsCellViewModel {
     func createInformation(source: NewsAPISource?, publishedAt: String?) -> NSAttributedString {
         let sourceName = source?.name ?? ""
         
-        let categoryColor = getCategoryColor(source?.category)
+        let categoryColor = Colors.color(for: source?.category)
         
         let infoText = NSMutableAttributedString(string: sourceName, attributes: [
             NSForegroundColorAttributeName: categoryColor,
