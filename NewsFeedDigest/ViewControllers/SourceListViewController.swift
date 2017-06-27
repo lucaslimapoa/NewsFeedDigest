@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import RxSwift
 
 private let CategoryCellId = "CategoryCellId"
 
 class SourceListViewController: UICollectionViewController {
 
+    let disposeBag = DisposeBag()
     var viewModel: SourceListViewModelType!
     
     override func viewDidLoad() {
@@ -26,7 +28,17 @@ class SourceListViewController: UICollectionViewController {
     }
 
     func setupRx() {
-        
+        viewModel.fetchAvailableCategories()
+            .asDriver(onErrorJustReturn: [])
+            .drive(collectionView!.rx.items) { collectionView, row, element in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCellId, for: IndexPath(row: row, section: 0)) as! CategoryCell
+                
+                cell.nameLabel.text = element.convert()
+                cell.backgroundColor = Colors.color(for: element)
+                
+                return cell
+            }
+            .addDisposableTo(disposeBag)
         
         
     }

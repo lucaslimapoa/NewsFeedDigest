@@ -44,5 +44,30 @@ extension NewsAPIProtocol {
             return Disposables.create()
         }
     }
-    
+}
+
+extension NewsAPISwift.Category {
+    func convert() -> String {
+        switch self {
+        case .business:
+            return "Business"
+        case .entertainment:
+            return "Entertainment"
+        case .gaming:
+            return "Gaming"
+        case .general:
+            return "General"
+        case .music:
+            return "Music"
+        case .politics:
+            return "Politics"
+        case .scienceAndNature:
+            return "Science and Nature"
+        case .sport:
+            return "Sport"
+        case .technology:
+            return "Technology"
+        
+        }
+    }
 }

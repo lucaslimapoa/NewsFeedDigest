@@ -13,10 +13,10 @@ class CategoryCell: UICollectionViewCell {
     var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Business"
         label.textAlignment = .right
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 15.0)
+        label.numberOfLines = 3
         
         return label
     }()
@@ -42,7 +42,7 @@ class CategoryCell: UICollectionViewCell {
         
         addSubview(nameLabel)
         
-        nameLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 14.0).isActive = true
         nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -14.0).isActive = true
         nameLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14.0).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
