@@ -20,7 +20,11 @@ class NewsFeedCoordinator: TabBarCoordinator {
     
     var detailCoordinator: DetailCoordinator?
     
-    init() {
+    let newsAPI: NewsAPIProtocol
+    
+    init(newsAPI: NewsAPIProtocol) {
+        self.newsAPI = newsAPI
+        
         tabBarItem = UITabBarItem(title: "Feed", image: nil, selectedImage: nil)
         
         rootViewController = UINavigationController()
@@ -34,7 +38,6 @@ class NewsFeedCoordinator: TabBarCoordinator {
     
     private func createNewsFeedViewController() -> NewsFeedViewController {
         let userStore = FakeUserStore()
-        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
         
         let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
         viewModel.coordinatorDelegate = self

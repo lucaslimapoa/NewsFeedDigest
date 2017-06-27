@@ -12,34 +12,24 @@ private let CategoryCellId = "CategoryCellId"
 
 class SourceListViewController: UICollectionViewController {
 
+    var viewModel: SourceListViewModelType!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
      
-//        UIEdgeInsetsMake(<#T##top: CGFloat##CGFloat#>, <#T##left: CGFloat##CGFloat#>, <#T##bottom: CGFloat##CGFloat#>, <#T##right: CGFloat##CGFloat#>)
+        collectionView!.dataSource = nil
         collectionView!.contentInset = UIEdgeInsetsMake(10, 20, 10, 20)
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
+        
+        setupRx()
     }
 
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+    func setupRx() {
+        
+        
+        
     }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCellId, for: indexPath) as! CategoryCell
-    
-        cell.backgroundColor = Colors.color(for: .business)
-    
-        return cell
-    }
-
 }
 
 extension SourceListViewController: UICollectionViewDelegateFlowLayout {

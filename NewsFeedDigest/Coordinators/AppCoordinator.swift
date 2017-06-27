@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import NewsAPISwift
 
 class AppCoordinator: FlowCoordinator {
     
     let window: UIWindow
     let tabBarController: UITabBarController
+    let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
     
     var coordinators: [TabBarCoordinator] = []
     
@@ -26,8 +28,8 @@ class AppCoordinator: FlowCoordinator {
     }
     
     func createCoordinators() {
-        coordinators.append(NewsFeedCoordinator())
-        coordinators.append(SourceListCoordinator())
+        coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI))
+        coordinators.append(SourceListCoordinator(newsAPI: newsAPI))
     }
     
     func start() {

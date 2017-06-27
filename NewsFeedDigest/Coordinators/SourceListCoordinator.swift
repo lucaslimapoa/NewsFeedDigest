@@ -7,18 +7,25 @@
 //
 
 import UIKit
+import NewsAPISwift
 
 class SourceListCoordinator: TabBarCoordinator {
     
     var rootViewController: UINavigationController
     var tabBarItem: UITabBarItem
     
-    init() {
+    let newsAPI: NewsAPIProtocol
+    
+    init(newsAPI: NewsAPIProtocol) {
+        self.newsAPI = newsAPI
+        
         tabBarItem = UITabBarItem(title: "Sources", image: nil, selectedImage: nil)
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
         
+        let viewModel = SourceListViewModel(newsAPI: newsAPI)
         let sourceListViewController = createSourceListViewController()
+        sourceListViewController.viewModel = viewModel
         
         rootViewController.viewControllers = [sourceListViewController]
     }
