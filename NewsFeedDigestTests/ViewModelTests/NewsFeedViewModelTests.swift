@@ -79,5 +79,3 @@ class NewsFeedViewModelTests: XCTestCase {
         return [tempArticles[2], tempArticles[1], tempArticles[0]]
     }
 }
-
-//NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 1", articleDescription: "Article Mock 1 description", url: nil, urlToImage: nil, publishedAt: "2017-06-13T15:25:00Z")

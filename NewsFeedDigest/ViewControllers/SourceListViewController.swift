@@ -14,6 +14,8 @@ class SourceListViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
+        
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
 

@@ -21,10 +21,11 @@ class NewsFeedCoordinator: TabBarCoordinator {
     var detailCoordinator: DetailCoordinator?
     
     init() {
-        tabBarItem = UITabBarItem(title: "News Feed", image: nil, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: "Feed", image: nil, selectedImage: nil)
         
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
+        rootViewController.navigationBar.backgroundColor = .white
         
         let newsFeedViewController = createNewsFeedViewController()
         

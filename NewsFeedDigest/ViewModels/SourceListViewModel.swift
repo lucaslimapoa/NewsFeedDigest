@@ -6,12 +6,19 @@
 //  Copyright © 2017 lucaslimapoa. All rights reserved.
 //
 
-import Foundation
+import RxSwift
+import NewsAPISwift
 
-protocol SouceListViewModelType {
-    
+protocol SourceListViewModelType {
+    func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]>
 }
 
-class SouceListViewModel: SouceListViewModelType {
+class SourceListViewModel: SourceListViewModelType {
     
+    let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
+    
+    func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]> {
+        return Observable.from(optional: availableCategories)
+    }
 }
+
