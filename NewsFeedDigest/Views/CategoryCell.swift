@@ -24,18 +24,12 @@ class CategoryCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupCellView()
+        setupAsCardView()
         setupSubViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("CategoryCell should be instantiated from code.")
-    }
-    
-    private func setupCellView() {
-        self.layer.cornerRadius = 10.0
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = Colors.cellBorder.cgColor
     }
     
     private func setupSubViews() {

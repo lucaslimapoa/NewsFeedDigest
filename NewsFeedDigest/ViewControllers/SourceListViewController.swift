@@ -15,7 +15,7 @@ private let SourceCellId = "SourceCellId"
 
 enum ViewDataType {
     case category
-    case source
+    case source(NewsAPISwift.Category)
 }
 
 class SourceListViewController: UICollectionViewController {
@@ -38,24 +38,25 @@ class SourceListViewController: UICollectionViewController {
         switch viewDataType! {
         case .category:
             setupCategoryViewController()
-        case .source:
+            setupCategoryRx()
+        case .source(let category):
             setupSourceViewController()
+            setupSourceRx(category)
         }
     }
     
     func setupCategoryViewController() {
         collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
-        setupCategoryRx()
     }
 
     func setupCategoryRx() {
         viewModel.fetchAvailableCategories()
             .asDriver(onErrorJustReturn: [])
-            .drive(collectionView!.rx.items) { collectionView, row, element in
+            .drive(collectionView!.rx.items) { collectionView, row, category in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCellId, for: IndexPath(row: row, section: 0)) as! CategoryCell
                 
-                cell.nameLabel.text = element.convert()
-                cell.backgroundColor = Colors.color(for: element)
+                cell.nameLabel.text = category.convert()
+                cell.backgroundColor = Colors.color(for: category)
                 
                 return cell
             }
@@ -69,7 +70,25 @@ class SourceListViewController: UICollectionViewController {
     }
     
     func setupSourceViewController() {
-        
+        collectionView!.register(SourceCell.self, forCellWithReuseIdentifier: SourceCellId)
+    }
+    
+    func setupSourceRx(_ category: NewsAPISwift.Category) {
+        viewModel.fetchSources(for: category)
+            .bind(to: collectionView!.rx.items) { collectionView, row, source in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SourceCellId, for: IndexPath(row: row, section: 0)) as! SourceCell
+                
+                if let name = source.name {
+                    cell.nameLabel.text = name
+                }
+                
+                if let sourceDescription = source.sourceDescription {
+                    cell.descriptionLabel.text = sourceDescription
+                }
+                
+                return cell
+            }
+            .addDisposableTo(disposeBag)
     }
 }
 

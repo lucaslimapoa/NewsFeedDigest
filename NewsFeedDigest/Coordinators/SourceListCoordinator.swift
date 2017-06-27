@@ -49,16 +49,18 @@ class SourceListCoordinator: FlowCoordinator {
     
     let viewModel: SourceListViewModelType
     let navigationController: UINavigationController
+    let viewDataType: ViewDataType
     
-    init(viewModel: SourceListViewModelType, navigationController: UINavigationController) {
+    init(viewModel: SourceListViewModelType, navigationController: UINavigationController, viewDataType: ViewDataType) {
         self.viewModel = viewModel
         self.navigationController = navigationController
+        self.viewDataType = viewDataType
     }
     
     func start() {
         let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewLayout())
         sourceListViewController.viewModel = viewModel
-        sourceListViewController.viewDataType = .source
+        sourceListViewController.viewDataType = viewDataType
         
         navigationController.pushViewController(sourceListViewController, animated: true)
     }
@@ -67,7 +69,7 @@ class SourceListCoordinator: FlowCoordinator {
 extension CategoryListCoordinator: SourceListViewModelDelegate {
     
     func sourceListViewModel(viewModel: SourceListViewModel, didSelectCategory category: NewsAPISwift.Category) {
-        let sourceListCoordinator = SourceListCoordinator(viewModel: viewModel, navigationController: self.rootViewController)
+        let sourceListCoordinator = SourceListCoordinator(viewModel: viewModel, navigationController: self.rootViewController, viewDataType: .source(category))
         
         sourceListCoordinator.start()
     }
