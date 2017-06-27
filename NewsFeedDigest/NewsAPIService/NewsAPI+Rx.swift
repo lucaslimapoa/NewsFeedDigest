@@ -28,6 +28,23 @@ extension NewsAPIProtocol {
         }
     }
     
+    func getSources(category: NewsAPISwift.Category?, language: Language? = nil, country: Country? = nil) -> Observable<[NewsAPISource]> {
+        return Observable.create { observer in
+            
+            self.getSources(category: category, language: language, country: country) { result in
+                switch result {
+                case .success(let sources):
+                    observer.onNext(sources)
+                    observer.onCompleted()
+                case .error(let error):
+                    observer.onError(error)
+                }
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
 }
 
 func getCategoryColor(_ category: NewsAPISwift.Category?) -> UIColor {

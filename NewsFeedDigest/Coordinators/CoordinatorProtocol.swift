@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol Coordinator {        
+protocol FlowCoordinator {
     func start()
 }
 

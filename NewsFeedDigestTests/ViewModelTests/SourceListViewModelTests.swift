@@ -25,11 +25,6 @@ class SourceListViewModelTests: XCTestCase {
         disposeBag = DisposeBag()
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func test_FetchAvailableCategories() {
         let testExpectation = expectation(description: "Should return all available categories")
         let expectedResult: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
@@ -47,4 +42,31 @@ class SourceListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func test_FetchSourcesForCategory() {
+        let testExpectation = expectation(description: "Should return articles for a given category")
+        let expectedResult = createSortedMockSources()
+        
+        subject.fetchSources(for: Category.business)
+            .subscribe(onNext: { sources in
+                XCTAssertEqual(expectedResult, sources)
+            }, onError: { _ in
+                XCTFail("Should not error")
+            }, onCompleted: {
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func createSortedMockSources() -> [NewsAPISource] {
+        let unsortedSources = createMockSources()
+        return [
+            unsortedSources[0],
+            unsortedSources[2],
+            unsortedSources[1],
+            unsortedSources[4],
+            unsortedSources[3]
+        ]
+    }
 }

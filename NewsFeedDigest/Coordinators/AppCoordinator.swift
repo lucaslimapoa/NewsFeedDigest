@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppCoordinator: Coordinator {
+class AppCoordinator: FlowCoordinator {
     
     let window: UIWindow
     let tabBarController: UITabBarController

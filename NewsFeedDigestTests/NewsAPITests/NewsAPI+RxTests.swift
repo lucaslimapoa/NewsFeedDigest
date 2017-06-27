@@ -60,6 +60,23 @@ class NewsAPI_RxTests: XCTestCase {
         
         testScheduler.start()
         waitForExpectations(timeout: 1.0, handler: nil)
-    }    
+    }
+    
+    func test_GetSourcesForCategory_ReturnsSources() {
+        let testExpectation = expectation(description: "Should return sources for asked category")
+        let expectedResult = createMockSources()
+        
+        subject.getSources(category: .business)
+            .subscribe(onNext: { sources in
+                XCTAssertEqual(expectedResult, sources)
+            }, onError: { _ in
+                XCTFail("Should not error in this test")
+            }, onCompleted: {
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 }
 

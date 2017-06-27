@@ -20,5 +20,11 @@ class SourceListViewModel: SourceListViewModelType {
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]> {
         return Observable.from(optional: availableCategories)
     }
+    
+    func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]> {
+        return Observable.create { _ in
+            return Disposables.create()
+        }
+    }
 }
 
