@@ -29,7 +29,7 @@ class AppCoordinator: FlowCoordinator {
     
     func createCoordinators() {
         coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI))
-        coordinators.append(SourceListCoordinator(newsAPI: newsAPI))
+        coordinators.append(CategoryListCoordinator(newsAPI: newsAPI))
     }
     
     func start() {

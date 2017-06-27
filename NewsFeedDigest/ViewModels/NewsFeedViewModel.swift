@@ -38,7 +38,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     func setupListeners() {
         selectedItemListener
             .subscribe(onNext: { article in
-                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, DidSelectArticle: article)
+                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectArticle: article)
             })
             .addDisposableTo(disposeBag)
     }

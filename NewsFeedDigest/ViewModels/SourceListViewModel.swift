@@ -23,6 +23,7 @@ class SourceListViewModel: SourceListViewModelType {
     let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
     
     var selectedCategoryListener = PublishSubject<NewsAPISwift.Category>()
+    var delegate: SourceListViewModelDelegate?
     
     init(newsAPI: NewsAPIProtocol) {
         self.newsAPI = newsAPI
@@ -33,7 +34,7 @@ class SourceListViewModel: SourceListViewModelType {
     func setupListeners() {
         selectedCategoryListener
             .subscribe(onNext: { category in
-                print(category)
+                self.delegate?.sourceListViewModel(viewModel: self, didSelectCategory: category)
             })
             .addDisposableTo(disposeBag)
     }

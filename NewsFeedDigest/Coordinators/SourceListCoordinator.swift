@@ -9,7 +9,11 @@
 import UIKit
 import NewsAPISwift
 
-class SourceListCoordinator: TabBarCoordinator {
+protocol SourceListViewModelDelegate {
+    func sourceListViewModel(viewModel: SourceListViewModel, didSelectCategory category: NewsAPISwift.Category)
+}
+
+class CategoryListCoordinator: TabBarCoordinator {
     
     var rootViewController: UINavigationController
     var tabBarItem: UITabBarItem
@@ -31,6 +35,7 @@ class SourceListCoordinator: TabBarCoordinator {
         let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewFlowLayout())
         
         let viewModel = SourceListViewModel(newsAPI: newsAPI)
+        viewModel.delegate = self
         
         sourceListViewController.viewModel = viewModel
         sourceListViewController.viewDataType = .category
@@ -38,4 +43,32 @@ class SourceListCoordinator: TabBarCoordinator {
         return sourceListViewController
     }
     
+}
+
+class SourceListCoordinator: FlowCoordinator {
+    
+    let viewModel: SourceListViewModelType
+    let navigationController: UINavigationController
+    
+    init(viewModel: SourceListViewModelType, navigationController: UINavigationController) {
+        self.viewModel = viewModel
+        self.navigationController = navigationController
+    }
+    
+    func start() {
+        let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewLayout())
+        sourceListViewController.viewModel = viewModel
+        sourceListViewController.viewDataType = .source
+        
+        navigationController.pushViewController(sourceListViewController, animated: true)
+    }
+}
+
+extension CategoryListCoordinator: SourceListViewModelDelegate {
+    
+    func sourceListViewModel(viewModel: SourceListViewModel, didSelectCategory category: NewsAPISwift.Category) {
+        let sourceListCoordinator = SourceListCoordinator(viewModel: viewModel, navigationController: self.rootViewController)
+        
+        sourceListCoordinator.start()
+    }
 }

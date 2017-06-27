@@ -10,7 +10,7 @@ import UIKit
 import NewsAPISwift
 
 protocol NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, DidSelectArticle article: NewsAPIArticle)
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
 }
 
 class NewsFeedCoordinator: TabBarCoordinator {
@@ -50,7 +50,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, DidSelectArticle article: NewsAPIArticle) {
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle) {
         detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
     }
