@@ -23,7 +23,7 @@ class SourceListCoordinator: TabBarCoordinator {
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
         
-        let sourceListViewController = createSourceListViewController(viewDataType: .category)        
+        let sourceListViewController = createSourceListViewController(viewDataType: .category)
         rootViewController.viewControllers = [sourceListViewController]
     }
     
