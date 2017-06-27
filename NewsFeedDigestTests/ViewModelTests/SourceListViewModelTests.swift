@@ -21,7 +21,7 @@ class SourceListViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        subject = SourceListViewModel()
+        subject = SourceListViewModel(newsAPI: MockNewsAPI(key: ""))
         disposeBag = DisposeBag()
     }
     
@@ -57,6 +57,13 @@ class SourceListViewModelTests: XCTestCase {
             .addDisposableTo(disposeBag)
         
         waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func test_SortSourcesAlphabetically() {
+        let expectedResult = createSortedMockSources()
+        let actualResult = subject.sortAlphabetically(sources: createMockSources())
+        
+        XCTAssertEqual(expectedResult, actualResult)
     }
     
     func createSortedMockSources() -> [NewsAPISource] {
