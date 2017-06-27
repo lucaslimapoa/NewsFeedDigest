@@ -23,15 +23,17 @@ class SourceListCoordinator: TabBarCoordinator {
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
         
-        let viewModel = SourceListViewModel(newsAPI: newsAPI)
-        let sourceListViewController = createSourceListViewController()
-        sourceListViewController.viewModel = viewModel
-        
+        let sourceListViewController = createSourceListViewController(viewDataType: .category)        
         rootViewController.viewControllers = [sourceListViewController]
     }
     
-    func createSourceListViewController() -> SourceListViewController {
+    func createSourceListViewController(viewDataType: ViewDataType) -> SourceListViewController {
         let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        let viewModel = SourceListViewModel(newsAPI: newsAPI)
+        
+        sourceListViewController.viewModel = viewModel
+        sourceListViewController.viewDataType = .category
         
         return sourceListViewController
     }

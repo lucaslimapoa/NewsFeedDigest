@@ -11,11 +11,18 @@ import RxSwift
 import NewsAPISwift
 
 private let CategoryCellId = "CategoryCellId"
+private let SourceCellId = "SourceCellId"
+
+enum ViewDataType {
+    case category
+    case source
+}
 
 class SourceListViewController: UICollectionViewController {
 
     let disposeBag = DisposeBag()
     var viewModel: SourceListViewModelType!
+    var viewDataType: ViewDataType!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +30,25 @@ class SourceListViewController: UICollectionViewController {
      
         collectionView!.dataSource = nil
         collectionView!.contentInset = UIEdgeInsetsMake(10, 20, 10, 20)
-        self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
         
-        setupRx()
+        configureViewController()
+    }
+    
+    func configureViewController() {
+        switch viewDataType! {
+        case .category:
+            setupCategoryViewController()
+        case .source:
+            setupSourceViewController()
+        }
+    }
+    
+    func setupCategoryViewController() {
+        collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
+        setupCategoryRx()
     }
 
-    func setupRx() {
+    func setupCategoryRx() {
         viewModel.fetchAvailableCategories()
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items) { collectionView, row, element in
@@ -46,6 +66,10 @@ class SourceListViewController: UICollectionViewController {
             .modelSelected(NewsAPISwift.Category.self)
             .bind(to: viewModel.selectedCategoryListener)
             .addDisposableTo(disposeBag)
+    }
+    
+    func setupSourceViewController() {
+        
     }
 }
 
