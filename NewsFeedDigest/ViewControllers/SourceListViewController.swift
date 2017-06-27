@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import NewsAPISwift
 
 private let CategoryCellId = "CategoryCellId"
 
@@ -40,7 +41,11 @@ class SourceListViewController: UICollectionViewController {
             }
             .addDisposableTo(disposeBag)
         
-        
+        collectionView!
+            .rx
+            .modelSelected(NewsAPISwift.Category.self)
+            .bind(to: viewModel.selectedCategoryListener)
+            .addDisposableTo(disposeBag)
     }
 }
 

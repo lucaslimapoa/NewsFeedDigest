@@ -10,17 +10,32 @@ import RxSwift
 import NewsAPISwift
 
 protocol SourceListViewModelType {
+    var selectedCategoryListener: PublishSubject<NewsAPISwift.Category> { get }
+    
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]>
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]>
 }
 
 class SourceListViewModel: SourceListViewModelType {
     
+    let disposeBag = DisposeBag()
     let newsAPI: NewsAPIProtocol
     let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
     
+    var selectedCategoryListener = PublishSubject<NewsAPISwift.Category>()
+    
     init(newsAPI: NewsAPIProtocol) {
         self.newsAPI = newsAPI
+        
+        setupListeners()
+    }
+    
+    func setupListeners() {
+        selectedCategoryListener
+            .subscribe(onNext: { category in
+                print(category)
+            })
+            .addDisposableTo(disposeBag)
     }
     
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]> {

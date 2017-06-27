@@ -32,13 +32,13 @@ struct Colors {
         case .music:
             color = UIColor(r: 241, g: 196, b: 15)
         case .politics:
-            color = UIColor(r: 230, g: 126, b: 34)
+            color = UIColor(r: 52, g: 73, b: 94)
         case .scienceAndNature:
             color = UIColor(r: 231, g: 76, b: 60)
         case .sport:
             color = UIColor(r: 189, g: 195, b: 199)
         case .technology:
-            color = UIColor(r: 52, g: 73, b: 94)
+            color = UIColor(r: 230, g: 126, b: 34)
         }
         
         return color
