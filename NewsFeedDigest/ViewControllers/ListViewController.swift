@@ -75,7 +75,8 @@ class ListViewController: UICollectionViewController {
     
     func setupSourceRx(_ category: NewsAPISwift.Category) {
         viewModel.fetchSources(for: category)
-            .bind(to: collectionView!.rx.items) { collectionView, row, source in
+            .asDriver(onErrorJustReturn: [])
+            .drive(collectionView!.rx.items) { collectionView, row, source in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SourceCellId, for: IndexPath(row: row, section: 0)) as! SourceCell
                 
                 if let name = source.name {

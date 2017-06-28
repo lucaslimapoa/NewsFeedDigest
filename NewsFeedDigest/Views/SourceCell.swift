@@ -38,6 +38,7 @@ class SourceCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupAsCardView()
+        setupSubViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -60,8 +61,8 @@ class SourceCell: UICollectionViewCell {
         descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14).isActive = true
         
-        imageView.heightAnchor.constraint(equalToConstant: 48.0).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 48.0).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 12.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 12.0).isActive = true
         imageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
         
