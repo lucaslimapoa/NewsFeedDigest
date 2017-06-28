@@ -22,6 +22,7 @@
 		D4472A911EFCAC1B00CA4DAF /* UserStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4472A901EFCAC1B00CA4DAF /* UserStoreTests.swift */; };
 		D4472A931EFCAC9F00CA4DAF /* MockUserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4472A921EFCAC9F00CA4DAF /* MockUserStore.swift */; };
 		D44768341EFD8346001C81E8 /* NewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44768331EFD8346001C81E8 /* NewsFeedViewControllerTests.swift */; };
+		D44785161F043BB7004F474F /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44785151F043BB7004F474F /* FavoriteView.swift */; };
 		D447B7811EF0AECD00B7371E /* DateConversor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447B7801EF0AECD00B7371E /* DateConversor.swift */; };
 		D447B7841EF0AF7B00B7371E /* DateConversorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447B7831EF0AF7B00B7371E /* DateConversorTests.swift */; };
 		D46140541EF441A10010A36E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46140531EF441A10010A36E /* UIColor.swift */; };
@@ -36,7 +37,6 @@
 		D47C48241F00A87600956AF8 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47C48231F00A87600956AF8 /* ListViewModel.swift */; };
 		D47C48261F00A88700956AF8 /* ListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47C48251F00A88700956AF8 /* ListCoordinator.swift */; };
 		D48CE8041EE8F46C00256E94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48CE8031EE8F46C00256E94 /* AppDelegate.swift */; };
-		D48CE80B1EE8F46C00256E94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D48CE80A1EE8F46C00256E94 /* Assets.xcassets */; };
 		D48CE80E1EE8F46C00256E94 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */; };
 		D4CDBA9D1EE8F77F00C0F628 /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CDBA9C1EE8F77F00C0F628 /* CoordinatorProtocol.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +69,7 @@
 		D4472A901EFCAC1B00CA4DAF /* UserStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserStoreTests.swift; path = UserStoreTests/UserStoreTests.swift; sourceTree = "<group>"; };
 		D4472A921EFCAC9F00CA4DAF /* MockUserStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUserStore.swift; path = UserStoreTests/MockUserStore.swift; sourceTree = "<group>"; };
 		D44768331EFD8346001C81E8 /* NewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsFeedViewControllerTests.swift; path = ViewControllerTests/NewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
+		D44785151F043BB7004F474F /* FavoriteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoriteView.swift; path = Views/FavoriteView.swift; sourceTree = "<group>"; };
 		D447B7801EF0AECD00B7371E /* DateConversor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateConversor.swift; path = Conversors/DateConversor.swift; sourceTree = "<group>"; };
 		D447B7831EF0AF7B00B7371E /* DateConversorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateConversorTests.swift; path = Conversors/DateConversorTests.swift; sourceTree = "<group>"; };
 		D46140531EF441A10010A36E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColor.swift; path = Extensions/UIColor.swift; sourceTree = "<group>"; };
@@ -84,7 +85,6 @@
 		D47C48251F00A88700956AF8 /* ListCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListCoordinator.swift; path = Coordinators/ListCoordinator.swift; sourceTree = "<group>"; };
 		D48CE8001EE8F46C00256E94 /* NewsFeedDigest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsFeedDigest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D48CE8031EE8F46C00256E94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D48CE80A1EE8F46C00256E94 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D48CE80D1EE8F46C00256E94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D48CE80F1EE8F46C00256E94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D48CE8141EE8F46C00256E94 /* NewsFeedDigestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsFeedDigestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +234,7 @@
 				D46235861EECA6F20062E3F3 /* NewsFeedCell.swift */,
 				D444A0FA1F02FB8A002FF5DB /* CategoryCell.swift */,
 				D444A0FC1F031669002FF5DB /* SourceCell.swift */,
+				D44785151F043BB7004F474F /* FavoriteView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -241,7 +242,6 @@
 		D46D2C681EEA14DC008C022F /* Resource files */ = {
 			isa = PBXGroup;
 			children = (
-				D48CE80A1EE8F46C00256E94 /* Assets.xcassets */,
 				D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */,
 				D48CE80F1EE8F46C00256E94 /* Info.plist */,
 				D46D2C6A1EEA1585008C022F /* Constants.swift */,
@@ -412,7 +412,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D48CE80E1EE8F46C00256E94 /* LaunchScreen.storyboard in Resources */,
-				D48CE80B1EE8F46C00256E94 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +538,7 @@
 				D46140541EF441A10010A36E /* UIColor.swift in Sources */,
 				D447B7811EF0AECD00B7371E /* DateConversor.swift in Sources */,
 				D47C48241F00A87600956AF8 /* ListViewModel.swift in Sources */,
+				D44785161F043BB7004F474F /* FavoriteView.swift in Sources */,
 				D421B43B1EFF6D86004FE50F /* NewsFeedCoordinator.swift in Sources */,
 				D46D2C671EEA12B0008C022F /* NewsFeedViewController.swift in Sources */,
 				D444A0FF1F031DE7002FF5DB /* UICollectionViewCell+CardView.swift in Sources */,

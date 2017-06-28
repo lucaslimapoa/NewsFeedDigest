@@ -15,6 +15,8 @@ struct Colors {
     static let cellInformationText = UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0)
     static let cellBorder = UIColor(red: 203/255, green: 207/255, blue: 213/255, alpha: 1.0)
     static let appTint = UIColor(r: 244, g: 67, b: 54)
+    static let notFavoriteTint = UIColor.gray
+    static let favoriteTint = UIColor.yellow
     
     static func color(for category: NewsAPISwift.Category?) -> UIColor {
         guard let category = category else { return UIColor.black }

@@ -10,7 +10,9 @@ target 'NewsFeedDigest' do
   pod 'RxSwift',      '~> 3.0'
   pod 'RxCocoa',      '~> 3.0'
   pod 'Nuke',         '~> 5.0'
-  
+  pod 'RealmSwift',   '~> 2.8' 
+  pod 'RxRealm'
+
   target 'NewsFeedDigestTests' do
     inherit! :search_paths
     # Pods for testing
