@@ -58,7 +58,7 @@ class SourceListCoordinator: FlowCoordinator {
     }
     
     func start() {
-        let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewLayout())
+        let sourceListViewController = SourceListViewController(collectionViewLayout: UICollectionViewFlowLayout())
         sourceListViewController.viewModel = viewModel
         sourceListViewController.viewDataType = viewDataType
         
