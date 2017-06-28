@@ -25,7 +25,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
     init(newsAPI: NewsAPIProtocol) {
         self.newsAPI = newsAPI
         
-        tabBarItem = UITabBarItem(title: "Feed", image: nil, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: "For You", image: #imageLiteral(resourceName: "heart-icon"), selectedImage: nil)
         
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem

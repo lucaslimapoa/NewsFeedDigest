@@ -21,6 +21,8 @@ class AppCoordinator: FlowCoordinator {
         self.window = window
         
         tabBarController = UITabBarController()
+        tabBarController.tabBar.tintColor = Colors.appTint
+//        tabBarController.tabBar.itemPositioning = UITabBarItemPositioning.centered
         
         createCoordinators()
         

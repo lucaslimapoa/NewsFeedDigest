@@ -27,7 +27,6 @@ class NewsFeedCell: UICollectionViewCell {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isUserInteractionEnabled = false
-        textView.isScrollEnabled = false
         
         return textView
     }()
