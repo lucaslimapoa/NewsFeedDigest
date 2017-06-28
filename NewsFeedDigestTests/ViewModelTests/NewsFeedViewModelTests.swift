@@ -15,7 +15,6 @@ import NewsAPISwift
 
 class NewsFeedViewModelTests: XCTestCase {
     
-    var testScheduler: TestScheduler!
     var viewModel: NewsFeedViewModel!
     var disposeBag: DisposeBag!
     var subject: NewsFeedViewModel!
@@ -23,7 +22,6 @@ class NewsFeedViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        testScheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
         
         let userStore = MockUserStore()
@@ -55,8 +53,7 @@ class NewsFeedViewModelTests: XCTestCase {
         }, onCompleted: { _ in
             testExpectation.fulfill()
         }).addDisposableTo(disposeBag)
-        
-        testScheduler.start()
+                
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
