@@ -18,10 +18,10 @@ enum ViewDataType {
     case source(NewsAPISwift.Category)
 }
 
-class SourceListViewController: UICollectionViewController {
+class ListViewController: UICollectionViewController {
 
     let disposeBag = DisposeBag()
-    var viewModel: SourceListViewModelType!
+    var viewModel: ListViewModelType!
     var viewDataType: ViewDataType!
     
     override func viewDidLoad() {
@@ -92,7 +92,7 @@ class SourceListViewController: UICollectionViewController {
     }
 }
 
-extension SourceListViewController: UICollectionViewDelegateFlowLayout {
+extension ListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         

@@ -9,14 +9,14 @@
 import RxSwift
 import NewsAPISwift
 
-protocol SourceListViewModelType {
+protocol ListViewModelType {
     var selectedCategoryListener: PublishSubject<NewsAPISwift.Category> { get }
     
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]>
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]>
 }
 
-class SourceListViewModel: SourceListViewModelType {
+class ListViewModel: ListViewModelType {
     
     let disposeBag = DisposeBag()
     let newsAPI: NewsAPIProtocol
