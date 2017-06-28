@@ -29,9 +29,53 @@ class FavoriteView: UIView {
     
     var imageView: UIImageView = {
         var imageView = UIImageView()
-        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = #imageLiteral(resourceName: "ic_favorite_border")//.withRenderingMode(.alwaysOriginal)
+        imageView.tintColor = Colors.notFavoriteTint
         
         return imageView
     }()
     
+    var button: UIButton = {
+        var button = UIButton()
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonDidGetTouched), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("This view should not be instantiated through Storyboards")
+    }
+    
+    func setupView() {
+        addSubview(imageView)
+        addSubview(button)
+        
+        imageView.heightAnchor.constraint(equalToConstant: 16.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 16.0).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        button.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        button.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        button.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    func buttonDidGetTouched() {
+        if viewState == .isFavorite {
+            didUnfavorite?()
+            viewState = .isNotFavorite
+        } else {
+            didFavorite?()
+            viewState = .isFavorite
+        }
+    }
 }

@@ -23,6 +23,11 @@
 		D4472A931EFCAC9F00CA4DAF /* MockUserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4472A921EFCAC9F00CA4DAF /* MockUserStore.swift */; };
 		D44768341EFD8346001C81E8 /* NewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44768331EFD8346001C81E8 /* NewsFeedViewControllerTests.swift */; };
 		D44785161F043BB7004F474F /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44785151F043BB7004F474F /* FavoriteView.swift */; };
+		D44785181F043FAC004F474F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D44785171F043FAC004F474F /* Assets.xcassets */; };
+		D447851A1F044442004F474F /* SourceFavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44785191F044442004F474F /* SourceFavoriteView.swift */; };
+		D447851C1F04462F004F474F /* SourceInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447851B1F04462F004F474F /* SourceInteractorTests.swift */; };
+		D447851E1F044642004F474F /* SourceInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447851D1F044642004F474F /* SourceInteractor.swift */; };
+		D44785201F0448B8004F474F /* FavoriteSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447851F1F0448B8004F474F /* FavoriteSource.swift */; };
 		D447B7811EF0AECD00B7371E /* DateConversor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447B7801EF0AECD00B7371E /* DateConversor.swift */; };
 		D447B7841EF0AF7B00B7371E /* DateConversorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447B7831EF0AF7B00B7371E /* DateConversorTests.swift */; };
 		D46140541EF441A10010A36E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46140531EF441A10010A36E /* UIColor.swift */; };
@@ -70,6 +75,11 @@
 		D4472A921EFCAC9F00CA4DAF /* MockUserStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUserStore.swift; path = UserStoreTests/MockUserStore.swift; sourceTree = "<group>"; };
 		D44768331EFD8346001C81E8 /* NewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsFeedViewControllerTests.swift; path = ViewControllerTests/NewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
 		D44785151F043BB7004F474F /* FavoriteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoriteView.swift; path = Views/FavoriteView.swift; sourceTree = "<group>"; };
+		D44785171F043FAC004F474F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D44785191F044442004F474F /* SourceFavoriteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SourceFavoriteView.swift; path = Views/SourceFavoriteView.swift; sourceTree = "<group>"; };
+		D447851B1F04462F004F474F /* SourceInteractorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SourceInteractorTests.swift; path = UserStoreTests/SourceInteractorTests.swift; sourceTree = "<group>"; };
+		D447851D1F044642004F474F /* SourceInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SourceInteractor.swift; path = Models/SourceInteractor.swift; sourceTree = "<group>"; };
+		D447851F1F0448B8004F474F /* FavoriteSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoriteSource.swift; path = Models/FavoriteSource.swift; sourceTree = "<group>"; };
 		D447B7801EF0AECD00B7371E /* DateConversor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateConversor.swift; path = Conversors/DateConversor.swift; sourceTree = "<group>"; };
 		D447B7831EF0AF7B00B7371E /* DateConversorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateConversorTests.swift; path = Conversors/DateConversorTests.swift; sourceTree = "<group>"; };
 		D46140531EF441A10010A36E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColor.swift; path = Extensions/UIColor.swift; sourceTree = "<group>"; };
@@ -155,17 +165,20 @@
 			isa = PBXGroup;
 			children = (
 				D4357EA21EEB82F400B0C203 /* UserStore.swift */,
+				D447851D1F044642004F474F /* SourceInteractor.swift */,
+				D447851F1F0448B8004F474F /* FavoriteSource.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
 		};
-		D4472A8F1EFCABF300CA4DAF /* UserStore */ = {
+		D4472A8F1EFCABF300CA4DAF /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				D4472A901EFCAC1B00CA4DAF /* UserStoreTests.swift */,
 				D4472A921EFCAC9F00CA4DAF /* MockUserStore.swift */,
+				D447851B1F04462F004F474F /* SourceInteractorTests.swift */,
 			);
-			name = UserStore;
+			name = Models;
 			sourceTree = "<group>";
 		};
 		D44768321EFD8321001C81E8 /* ViewControllerTests */ = {
@@ -235,6 +248,7 @@
 				D444A0FA1F02FB8A002FF5DB /* CategoryCell.swift */,
 				D444A0FC1F031669002FF5DB /* SourceCell.swift */,
 				D44785151F043BB7004F474F /* FavoriteView.swift */,
+				D44785191F044442004F474F /* SourceFavoriteView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -242,6 +256,7 @@
 		D46D2C681EEA14DC008C022F /* Resource files */ = {
 			isa = PBXGroup;
 			children = (
+				D44785171F043FAC004F474F /* Assets.xcassets */,
 				D48CE80C1EE8F46C00256E94 /* LaunchScreen.storyboard */,
 				D48CE80F1EE8F46C00256E94 /* Info.plist */,
 				D46D2C6A1EEA1585008C022F /* Constants.swift */,
@@ -297,7 +312,7 @@
 		D48CE8171EE8F46C00256E94 /* NewsFeedDigestTests */ = {
 			isa = PBXGroup;
 			children = (
-				D4472A8F1EFCABF300CA4DAF /* UserStore */,
+				D4472A8F1EFCABF300CA4DAF /* Models */,
 				D46A97E51EFB54A9004BAF56 /* NewsAPITests */,
 				D447B7821EF0AF6300B7371E /* Conversors */,
 				D405BC381EEA1A2A007F53C0 /* ViewModelTests */,
@@ -411,6 +426,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44785181F043FAC004F474F /* Assets.xcassets in Resources */,
 				D48CE80E1EE8F46C00256E94 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -522,11 +538,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44785201F0448B8004F474F /* FavoriteSource.swift in Sources */,
 				D444A0FB1F02FB8A002FF5DB /* CategoryCell.swift in Sources */,
 				D46D2C6B1EEA1585008C022F /* Constants.swift in Sources */,
 				D46D2C6D1EEA16FB008C022F /* NewsFeedViewModel.swift in Sources */,
 				D46D2C621EEA1088008C022F /* AppCoordinator.swift in Sources */,
 				D444A0FD1F031669002FF5DB /* SourceCell.swift in Sources */,
+				D447851A1F044442004F474F /* SourceFavoriteView.swift in Sources */,
+				D447851E1F044642004F474F /* SourceInteractor.swift in Sources */,
 				D421B43D1EFF7823004FE50F /* DetailCoordinator.swift in Sources */,
 				D48CE8041EE8F46C00256E94 /* AppDelegate.swift in Sources */,
 				D47C48221F00A86600956AF8 /* ListViewController.swift in Sources */,
@@ -554,6 +573,7 @@
 				D447B7841EF0AF7B00B7371E /* DateConversorTests.swift in Sources */,
 				D4472A931EFCAC9F00CA4DAF /* MockUserStore.swift in Sources */,
 				D44768341EFD8346001C81E8 /* NewsFeedViewControllerTests.swift in Sources */,
+				D447851C1F04462F004F474F /* SourceInteractorTests.swift in Sources */,
 				D4472A911EFCAC1B00CA4DAF /* UserStoreTests.swift in Sources */,
 				D4373F0E1F01D7CF00113C79 /* SourceListViewModelTests.swift in Sources */,
 				D46A97E91EFB551F004BAF56 /* NewsAPI+RxTests.swift in Sources */,
