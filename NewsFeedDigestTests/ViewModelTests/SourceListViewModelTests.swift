@@ -15,13 +15,13 @@ import RxTest
 
 class SourceListViewModelTests: XCTestCase {
     
-    var subject: SourceListViewModel!
+    var subject: ListViewModel!
     var disposeBag: DisposeBag!
     
     override func setUp() {
         super.setUp()
         
-        subject = SourceListViewModel(newsAPI: MockNewsAPI(key: ""))
+        subject = ListViewModel(newsAPI: MockNewsAPI(key: ""))
         disposeBag = DisposeBag()
     }
     

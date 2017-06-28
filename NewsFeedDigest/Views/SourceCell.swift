@@ -10,22 +10,13 @@ import UIKit
 
 class SourceCell: UICollectionViewCell {
     
-    var nameLabel: UILabel = {
-        var label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 13.0)
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
+    var contentText: UITextView = {
+        var textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isUserInteractionEnabled = false
+        textView.isScrollEnabled = false
         
-        return label
-    }()
-    
-    var descriptionLabel: UILabel = {
-        var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12.0)
-        label.numberOfLines = 3
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        return label
+        return textView
     }()
     
     var imageView: UIImageView = {
@@ -47,22 +38,16 @@ class SourceCell: UICollectionViewCell {
     
     private func setupSubViews() {
         
-        addSubview(nameLabel)
-        addSubview(descriptionLabel)
+        addSubview(contentText)
         addSubview(imageView)
         
-        nameLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        nameLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        nameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        contentText.leftAnchor.constraint(equalTo: leftAnchor, constant: 8.0).isActive = true
+        contentText.topAnchor.constraint(equalTo: topAnchor, constant: 8.0).isActive = true
+        contentText.rightAnchor.constraint(equalTo: rightAnchor, constant: -8.0).isActive = true
+        contentText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -26.0).isActive = true
         
-        descriptionLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor).isActive = true
-        descriptionLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor).isActive = true
-        descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
-        descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14).isActive = true
-        
-        imageView.heightAnchor.constraint(equalToConstant: 12.0).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 12.0).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 16.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 16.0).isActive = true
         imageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
         
