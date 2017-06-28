@@ -23,9 +23,17 @@ struct SourceInteractor: SourceInteractorType {
         self.realm = realm
     }
     
-    func fetchAllFavorites() -> Observable<Results<FavoriteSource>> {
-        let results = realm.objects(FavoriteSource.self)
+    func fetchFavorites(predicate: String? = nil) -> Observable<Results<FavoriteSource>> {
+        var results = realm.objects(FavoriteSource.self)
+        
+        if let predicate = predicate {
+            results = results.filter(predicate)
+        }
+        
         return Observable.collection(from: results)
     }
     
+    func isFavorite(_ sourceId: SourceId) -> Observable<Results<FavoriteSource>> {
+        return fetchFavorites(predicate: "id == '\(sourceId)'")
+    }
 }

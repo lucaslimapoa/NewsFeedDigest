@@ -36,10 +36,10 @@ class SourceInteractorTests: XCTestCase {
         subject = SourceInteractor(realm: inMemoryRealm)
     }
     
-    func test_SourceInteractor_GetFavoriteSources() {
+    func test_GetFavoriteSources() {
         let testExpectation = expectation(description: "Should return all favorites")
         
-        subject.fetchAllFavorites()
+        subject.fetchFavorites()
             .subscribe(onNext: { results in
                 XCTAssertEqual(results[0], self.favoriteSources[0])
                 XCTAssertEqual(results[1], self.favoriteSources[1])
@@ -47,7 +47,28 @@ class SourceInteractorTests: XCTestCase {
                 testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("Should not error")
-            })            
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func test_CheckIfSourceIdIsFavorite() {
+        let successTestExpectation = expectation(description: "SourceId should be favorite")
+        let emptyTestExpectation = expectation(description: "Should be empty")
+        
+        subject.isFavorite("Test1")
+            .subscribe(onNext: { results in
+                XCTAssertEqual(results[0], self.favoriteSources[0])
+                successTestExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        subject.isFavorite("Test5")
+            .subscribe(onNext: { results in
+                XCTAssert(results.isEmpty)
+                emptyTestExpectation.fulfill()
+            })
             .addDisposableTo(disposeBag)
         
         waitForExpectations(timeout: 1.0, handler: nil)
@@ -57,17 +78,10 @@ class SourceInteractorTests: XCTestCase {
         let inMemoryRealm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "SourceInteractorTests"))
         
         try! inMemoryRealm.write {
+            inMemoryRealm.deleteAll()
             _ = favorites.map { inMemoryRealm.add($0) }
         }
         
         return inMemoryRealm
     }
-}
-
-extension SourceInteractorTests {
-    
-    class MockSourceInteractor {
-        
-    }
-    
 }
