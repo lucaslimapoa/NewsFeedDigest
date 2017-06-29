@@ -14,12 +14,16 @@ protocol ListViewModelType {
     
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]>
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]>
+    
+    func createSourceCellViewModel(with source: NewsAPISource) -> SourceCellViewModel
 }
 
 class ListViewModel: ListViewModelType {
     
     let disposeBag = DisposeBag()
     let newsAPI: NewsAPIProtocol
+    var sourceInteractor: SourceInteractor!
+    
     let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
     
     var selectedCategoryListener = PublishSubject<NewsAPISwift.Category>()
@@ -27,7 +31,6 @@ class ListViewModel: ListViewModelType {
     
     init(newsAPI: NewsAPIProtocol) {
         self.newsAPI = newsAPI
-        
         setupListeners()
     }
     
@@ -54,5 +57,59 @@ class ListViewModel: ListViewModelType {
             return lhsName < rhsName
         }
     }
+    
+    func createSourceCellViewModel(with source: NewsAPISource) -> SourceCellViewModel {
+        return SourceCellViewModel(source: source, interactor: sourceInteractor)
+    }
 }
 
+struct SourceCellViewModel {
+    
+    private(set) var sourceDescription: NSAttributedString!
+    private(set) var interactor: SourceInteractor!    
+    
+    private(set) var didFavorite: (() -> Void)?
+    private(set) var didUnfavorite: (() -> Void)?
+    
+    init(source: NewsAPISource, interactor: SourceInteractor) {
+        self.interactor = interactor
+        sourceDescription = createSourceDescription(source: source)
+        
+        didFavorite = {
+            if let id = source.id {
+                interactor.favorite(sourceId: id)
+            }
+        }
+        
+        didUnfavorite = {
+            if let id = source.id {
+                interactor.unfavorite(sourceId: id)
+            }
+        }
+    }
+    
+    private func createSourceDescription(source: NewsAPISource) -> NSAttributedString {
+        guard let name = source.name, let description = source.sourceDescription else {
+            return NSAttributedString()
+        }
+        
+        let attributedText = NSMutableAttributedString(string: "\(name)\n", attributes: [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16.0),
+            NSForegroundColorAttributeName: UIColor(r: 0, g: 92, b: 208)
+            ])
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4.0
+        
+        let range = NSMakeRange(0, attributedText.string.characters.count)
+        
+        attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: range)
+        
+        attributedText.append(NSAttributedString(string: description, attributes: [
+            NSFontAttributeName: UIFont.systemFont(ofSize: 13.0),
+            NSForegroundColorAttributeName: UIColor(r: 78, g: 85, b: 94)
+            ]))
+        
+        return attributedText
+    }
+}

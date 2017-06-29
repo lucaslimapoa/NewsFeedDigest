@@ -34,11 +34,11 @@ struct SourceInteractor {
         return fetchFavorites(predicate: "id == '\(sourceId)'")
     }
     
-    func favorite(sourceId: SourceId) {
+    func favorite(sourceId: SourceId) {        
         let newFavorite = FavoriteSource(sourceId: sourceId)
         
         Observable.just(newFavorite)
-            .subscribe(realm.rx.add())
+            .subscribe(realm.rx.add(update: true))
             .addDisposableTo(disposeBag)
     }
     

@@ -19,12 +19,21 @@ class SourceCell: UICollectionViewCell {
         return textView
     }()
     
-//    var imageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        return imageView
-//    }()
+    let favoriteView = FavoriteView()
+    
+    var viewModel: SourceCellViewModel! {
+        didSet {
+            contentText.attributedText = viewModel?.sourceDescription
+            
+            favoriteView.didFavorite = { [weak self] in
+                self?.viewModel.didFavorite?()
+            }
+            
+            favoriteView.didUnfavorite = { [weak self] in
+                self?.viewModel.didUnfavorite?()
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,18 +48,14 @@ class SourceCell: UICollectionViewCell {
     private func setupSubViews() {
         
         addSubview(contentText)
-//        addSubview(imageView)
+        addSubview(favoriteView)
         
         contentText.leftAnchor.constraint(equalTo: leftAnchor, constant: 8.0).isActive = true
         contentText.topAnchor.constraint(equalTo: topAnchor, constant: 8.0).isActive = true
         contentText.rightAnchor.constraint(equalTo: rightAnchor, constant: -8.0).isActive = true
         contentText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -26.0).isActive = true
-        
-//        imageView.heightAnchor.constraint(equalToConstant: 16.0).isActive = true
-//        imageView.widthAnchor.constraint(equalToConstant: 16.0).isActive = true
-//        imageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
-//        imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-        
-//        imageView.image = #imageLiteral(resourceName: "heart-icon")
+                
+        favoriteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6).isActive = true
+        favoriteView.rightAnchor.constraint(equalTo: rightAnchor, constant: -6).isActive = true
     }
 }

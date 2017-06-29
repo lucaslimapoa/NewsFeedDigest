@@ -30,7 +30,7 @@ class FavoriteView: UIView {
     var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = #imageLiteral(resourceName: "ic_favorite_border")//.withRenderingMode(.alwaysOriginal)
+        imageView.image = #imageLiteral(resourceName: "ic_favorite_border").withRenderingMode(.alwaysTemplate)
         imageView.tintColor = Colors.notFavoriteTint
         
         return imageView
@@ -58,8 +58,8 @@ class FavoriteView: UIView {
         addSubview(imageView)
         addSubview(button)
         
-        imageView.heightAnchor.constraint(equalToConstant: 16.0).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 16.0).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 20.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
@@ -67,6 +67,8 @@ class FavoriteView: UIView {
         button.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         button.topAnchor.constraint(equalTo: topAnchor).isActive = true
         button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     func buttonDidGetTouched() {

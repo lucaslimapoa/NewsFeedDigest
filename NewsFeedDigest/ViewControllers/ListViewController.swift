@@ -79,26 +79,7 @@ class ListViewController: UICollectionViewController {
             .drive(collectionView!.rx.items) { collectionView, row, source in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SourceCellId, for: IndexPath(row: row, section: 0)) as! SourceCell
                 
-                if let name = source.name, let description = source.sourceDescription {
-                    let attributedText = NSMutableAttributedString(string: "\(name)\n", attributes: [
-                        NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16.0),
-                        NSForegroundColorAttributeName: UIColor(r: 0, g: 92, b: 208)
-                        ])
-                    
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.lineSpacing = 4.0
-                    
-                    let range = NSMakeRange(0, attributedText.string.characters.count)
-                    
-                    attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: range)
-                    
-                    attributedText.append(NSAttributedString(string: description, attributes: [
-                        NSFontAttributeName: UIFont.systemFont(ofSize: 13.0),
-                        NSForegroundColorAttributeName: UIColor(r: 78, g: 85, b: 94)
-                        ]))
-                    
-                    cell.contentText.attributedText = attributedText
-                }
+                cell.viewModel = self.viewModel.createSourceCellViewModel(with: source)
                 
                 return cell
             }
@@ -107,7 +88,6 @@ class ListViewController: UICollectionViewController {
 }
 
 extension ListViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let padding: CGFloat = 60
@@ -123,5 +103,4 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
-    
 }

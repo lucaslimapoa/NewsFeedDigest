@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 import NewsAPISwift
 
 protocol SourceListViewModelDelegate {
@@ -19,10 +20,13 @@ class CategoryListCoordinator: TabBarCoordinator {
     var tabBarItem: UITabBarItem
     
     let newsAPI: NewsAPIProtocol    
+    let realm: Realm
+    
     var sourceListCoordinator: SourceListCoordinator?
     
-    init(newsAPI: NewsAPIProtocol) {
+    init(newsAPI: NewsAPIProtocol, realm: Realm) {
         self.newsAPI = newsAPI
+        self.realm = realm
         
         tabBarItem = UITabBarItem(title: "Favorites", image: nil, selectedImage: nil)
         rootViewController = UINavigationController()
@@ -37,6 +41,7 @@ class CategoryListCoordinator: TabBarCoordinator {
         
         let viewModel = ListViewModel(newsAPI: newsAPI)
         viewModel.delegate = self
+        viewModel.sourceInteractor = SourceInteractor(realm: realm)
         
         sourceListViewController.viewModel = viewModel
         sourceListViewController.viewDataType = .category
