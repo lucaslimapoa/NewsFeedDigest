@@ -19,7 +19,7 @@ protocol DetailCoordinatorDelegate {
     func detailCoordinatorDidFinish(_ coordinator: DetailCoordinator)
 }
 
-class DetailCoordinator: NSObject, Coordinator, SFSafariViewControllerDelegate {
+class DetailCoordinator: NSObject, FlowCoordinator, SFSafariViewControllerDelegate {
     
     let navigationController: UINavigationController
     let article: NewsAPIArticle

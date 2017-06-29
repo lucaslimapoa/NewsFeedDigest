@@ -38,7 +38,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     func setupListeners() {
         selectedItemListener
             .subscribe(onNext: { article in
-                self.coordinatorDelegate?.newsFeedViewModelDidSelectArticle(viewModel: self, article: article)
+                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectArticle: article)
             })
             .addDisposableTo(disposeBag)
     }
@@ -87,7 +87,7 @@ struct NewsCellViewModel {
         var date: String?
         
         if let publishedAt = tuple.article.publishedAt {
-            date = dateConversor.convertToPassedTime(publishedDate: publishedAt)
+            date = dateConversor.convertToPassedTime(publishedAt: publishedAt)
         }
         
         articleInfo = createInformation(source: tuple.source, publishedAt: date)
@@ -114,7 +114,7 @@ struct NewsCellViewModel {
     func createInformation(source: NewsAPISource?, publishedAt: String?) -> NSAttributedString {
         let sourceName = source?.name ?? ""
         
-        let categoryColor = getCategoryColor(source?.category)
+        let categoryColor = Colors.color(for: source?.category)
         
         let infoText = NSMutableAttributedString(string: sourceName, attributes: [
             NSForegroundColorAttributeName: categoryColor,

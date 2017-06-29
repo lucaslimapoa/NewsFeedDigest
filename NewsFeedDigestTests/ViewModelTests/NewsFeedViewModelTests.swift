@@ -15,7 +15,6 @@ import NewsAPISwift
 
 class NewsFeedViewModelTests: XCTestCase {
     
-    var testScheduler: TestScheduler!
     var viewModel: NewsFeedViewModel!
     var disposeBag: DisposeBag!
     var subject: NewsFeedViewModel!
@@ -23,7 +22,6 @@ class NewsFeedViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        testScheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
         
         let userStore = MockUserStore()
@@ -55,8 +53,7 @@ class NewsFeedViewModelTests: XCTestCase {
         }, onCompleted: { _ in
             testExpectation.fulfill()
         }).addDisposableTo(disposeBag)
-        
-        testScheduler.start()
+                
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
@@ -79,5 +76,3 @@ class NewsFeedViewModelTests: XCTestCase {
         return [tempArticles[2], tempArticles[1], tempArticles[0]]
     }
 }
-
-//NewsAPIArticle(sourceId: "valid-id", author: nil, title: "Mock 1", articleDescription: "Article Mock 1 description", url: nil, urlToImage: nil, publishedAt: "2017-06-13T15:25:00Z")

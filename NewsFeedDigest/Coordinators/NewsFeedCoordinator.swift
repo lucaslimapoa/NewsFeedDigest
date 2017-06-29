@@ -10,21 +10,34 @@ import UIKit
 import NewsAPISwift
 
 protocol NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle)
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
 }
 
-class NewsFeedCoordinator: Coordinator {
+class NewsFeedCoordinator: TabBarCoordinator {
     
-    let navigationController: UINavigationController
+    var tabBarItem: UITabBarItem
+    var rootViewController: UINavigationController
+    
     var detailCoordinator: DetailCoordinator?
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    let newsAPI: NewsAPIProtocol
+    
+    init(newsAPI: NewsAPIProtocol) {
+        self.newsAPI = newsAPI
+        
+        tabBarItem = UITabBarItem(title: "For You", image: nil, selectedImage: nil)
+        
+        rootViewController = UINavigationController()
+        rootViewController.tabBarItem = tabBarItem
+        rootViewController.navigationBar.backgroundColor = .white
+        
+        let newsFeedViewController = createNewsFeedViewController()
+        
+        rootViewController.viewControllers = [newsFeedViewController]
     }
     
-    func start() {
+    private func createNewsFeedViewController() -> NewsFeedViewController {
         let userStore = FakeUserStore()
-        let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
         
         let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
         viewModel.coordinatorDelegate = self
@@ -32,13 +45,13 @@ class NewsFeedCoordinator: Coordinator {
         let newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
         newsFeedViewController.viewModel = viewModel
         
-        navigationController.pushViewController(newsFeedViewController, animated: true)
+        return newsFeedViewController
     }
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModelDidSelectArticle(viewModel: NewsFeedViewModelType, article: NewsAPIArticle) {
-        detailCoordinator = DetailCoordinator(navigationController: navigationController, article: article)
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle) {
+        detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
     }
 }
