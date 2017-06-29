@@ -32,6 +32,12 @@ class SourceCell: UICollectionViewCell {
             favoriteView.didUnfavorite = { [weak self] in
                 self?.viewModel.didUnfavorite?()
             }
+            
+            viewModel.viewState?
+                .subscribe(onNext: { [weak self] state in
+                    self?.favoriteView.viewState = state
+                })
+                .dispose()
         }
     }
     

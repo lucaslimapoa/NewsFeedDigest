@@ -71,19 +71,23 @@ struct SourceCellViewModel {
     private(set) var didFavorite: (() -> Void)?
     private(set) var didUnfavorite: (() -> Void)?
     
+    var viewState: Observable<FavoriteViewState>?
+    
     init(source: NewsAPISource, interactor: SourceInteractor) {
         self.interactor = interactor
         sourceDescription = createSourceDescription(source: source)
         
-        didFavorite = {
-            if let id = source.id {
-                interactor.favorite(sourceId: id)
+        if let sourceId = source.id {
+            viewState = interactor.isFavorite(sourceId)
+                .map { ($0.isEmpty)
+                    ? FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite }
+            
+            didFavorite = {
+                interactor.favorite(sourceId: sourceId)
             }
-        }
-        
-        didUnfavorite = {
-            if let id = source.id {
-                interactor.unfavorite(sourceId: id)
+            
+            didUnfavorite = {
+                interactor.unfavorite(sourceId: sourceId)
             }
         }
     }
