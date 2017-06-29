@@ -11,11 +11,7 @@ import RxRealm
 import RealmSwift
 import NewsAPISwift
 
-protocol SourceInteractorType {
-    
-}
-
-struct SourceInteractor: SourceInteractorType {
+struct SourceInteractor {
     
     let realm: Realm
     let disposeBag = DisposeBag()
@@ -44,5 +40,11 @@ struct SourceInteractor: SourceInteractorType {
         Observable.just(newFavorite)
             .subscribe(realm.rx.add())
             .addDisposableTo(disposeBag)
+    }
+    
+    func unfavorite(sourceId: SourceId) {
+        isFavorite(sourceId)
+            .subscribe(realm.rx.delete())
+            .dispose()
     }
 }

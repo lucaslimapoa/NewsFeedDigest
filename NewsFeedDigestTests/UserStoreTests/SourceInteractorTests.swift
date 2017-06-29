@@ -95,6 +95,24 @@ class SourceInteractorTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func test_UnfavoriteSourceId() {
+        let testExpectation = expectation(description: "Unfavorite should remove sourceId from Realm")
+        
+        let realm = createInMemoryRealm(with: favoriteSources)
+        let subject = SourceInteractor(realm: realm)
+        
+        subject.unfavorite(sourceId: "Test1")
+            
+        subject.isFavorite("Test1")
+            .subscribe(onNext: { results in
+                XCTAssert(results.isEmpty)
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
     func cleanRealm(_ realm: Realm) {
         try! realm.write {
             realm.deleteAll()
