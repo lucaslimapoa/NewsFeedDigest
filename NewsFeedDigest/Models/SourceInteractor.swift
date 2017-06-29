@@ -18,6 +18,7 @@ protocol SourceInteractorType {
 struct SourceInteractor: SourceInteractorType {
     
     let realm: Realm
+    let disposeBag = DisposeBag()
     
     init(realm: Realm) {
         self.realm = realm
@@ -35,5 +36,13 @@ struct SourceInteractor: SourceInteractorType {
     
     func isFavorite(_ sourceId: SourceId) -> Observable<Results<FavoriteSource>> {
         return fetchFavorites(predicate: "id == '\(sourceId)'")
+    }
+    
+    func favorite(sourceId: SourceId) {
+        let newFavorite = FavoriteSource(sourceId: sourceId)
+        
+        Observable.just(newFavorite)
+            .subscribe(realm.rx.add())
+            .addDisposableTo(disposeBag)
     }
 }
