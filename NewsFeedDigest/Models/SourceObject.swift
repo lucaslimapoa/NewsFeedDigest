@@ -49,5 +49,9 @@ class SourceObject: Object {
         if let country = source.country {
             self.country = country.rawValue
         }
-    }        
+    }
+    
+    func convertToNewsAPI() -> NewsAPISource {
+        return NewsAPISource(id: self.id, name: self.name, sourceDescription: self.sourceDescription, url: "", category: Category(rawValue: self.category)!, language: Language(rawValue: self.language)!, country: Country(rawValue: self.country)!, sortBysAvailable: [.top])
+    }
 }

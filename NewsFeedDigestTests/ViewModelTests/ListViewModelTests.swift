@@ -20,8 +20,15 @@ class ListViewModelTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+
+        let mockNewsAPI = MockNewsAPI(key: "")
+        let mockRealm = createInMemoryRealm()
+        
+        let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPI)
         
         subject = ListViewModel(newsAPI: MockNewsAPI(key: ""))
+        subject.sourceInteractor = sourceInteractor
+        
         disposeBag = DisposeBag()
     }
     
@@ -49,10 +56,12 @@ class ListViewModelTests: XCTestCase {
         subject.fetchSources(for: Category.business)
             .subscribe(onNext: { sources in
                 XCTAssertEqual(expectedResult, sources)
+                
+                
+                
+                testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("Should not error")
-            }, onCompleted: {
-                testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
         

@@ -7,6 +7,8 @@
 //
 
 import RxSwift
+import RxRealm
+import RealmSwift
 import NewsAPISwift
 
 protocol ListViewModelType {
@@ -47,8 +49,10 @@ class ListViewModel: ListViewModelType {
     }
     
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]> {
-        return newsAPI.getSources(category: category)
-            .map { self.sortAlphabetically(sources: $0) }
+        return sourceInteractor
+            .fetchSources(for: category)
+            .map { $0.map { $0.convertToNewsAPI() } }
+            .flatMap { Observable.from(optional: Array($0)) }
     }
     
     func sortAlphabetically(sources: [NewsAPISource]) -> [NewsAPISource] {

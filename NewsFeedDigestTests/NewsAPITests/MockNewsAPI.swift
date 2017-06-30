@@ -36,9 +36,9 @@ func createMockArticles() -> [NewsAPIArticle] {
 func createMockSources() -> [NewsAPISource] {
     return [
         NewsAPISource(id: "a", name: "A", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top]),
-        NewsAPISource(id: "c", name: "C", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top, .latest]),
+        NewsAPISource(id: "c", name: "C", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top]),
         NewsAPISource(id: "b", name: "B", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top]),
-        NewsAPISource(id: "f", name: "F", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top, .popular]),
-        NewsAPISource(id: "e", name: "E", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top, .latest])
+        NewsAPISource(id: "f", name: "F", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top]),
+        NewsAPISource(id: "e", name: "E", sourceDescription: "", url: "", category: Category.business, language: .english, country: .unitedStates, sortBysAvailable: [.top])
     ]
 }

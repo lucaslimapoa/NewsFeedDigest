@@ -49,6 +49,7 @@ struct SourceInteractor {
             .map { results -> Results<SourceObject> in
                 return results.sorted(byKeyPath: "name", ascending: true)
             }
+            .asObservable()
         
         return sortedResults
     }

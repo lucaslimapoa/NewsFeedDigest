@@ -149,27 +149,27 @@ class SourceInteractorTests: XCTestCase {
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
+}
+
+func cleanRealm(_ realm: Realm) {
+    try! realm.write {
+        realm.deleteAll()
+    }
+}
+
+func createInMemoryRealm(with sources: [NewsAPISource]? = nil) -> Realm {
+    var configuration = Realm.Configuration()
+    configuration.inMemoryIdentifier = UUID().uuidString
     
-    func cleanRealm(_ realm: Realm) {
-        try! realm.write {
-            realm.deleteAll()
+    let inMemoryRealm = try! Realm(configuration: configuration)
+    
+    cleanRealm(inMemoryRealm)
+    
+    if let sources = sources {
+        try! inMemoryRealm.write {
+            _ = sources.map { inMemoryRealm.add(SourceObject(source: $0)) }
         }
     }
     
-    func createInMemoryRealm(with sources: [NewsAPISource]? = nil) -> Realm {
-        var configuration = Realm.Configuration()
-        configuration.inMemoryIdentifier = UUID().uuidString
-        
-        let inMemoryRealm = try! Realm(configuration: configuration)
-        
-        cleanRealm(inMemoryRealm)
-        
-        if let sources = sources {
-            try! inMemoryRealm.write {
-                _ = sources.map { inMemoryRealm.add(SourceObject(source: $0)) }
-            }
-        }
-        
-        return inMemoryRealm
-    }
+    return inMemoryRealm
 }
