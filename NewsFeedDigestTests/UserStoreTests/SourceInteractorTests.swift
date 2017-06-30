@@ -19,12 +19,6 @@ class SourceInteractorTests: XCTestCase {
     var disposeBag: DisposeBag!
     var testScheduler: TestScheduler!
     
-    let favoriteSources = [
-        FavoriteSource(sourceId: "Test1"),
-        FavoriteSource(sourceId: "Test2"),
-        FavoriteSource(sourceId: "Test3")
-    ]
-    
     override func setUp() {
         super.setUp()
         
@@ -32,19 +26,24 @@ class SourceInteractorTests: XCTestCase {
         testScheduler = TestScheduler(initialClock: 0)
     }
     
-//    func test_SaveSource() {
-//        let testExpectation = expectation(description: "Should return all favorites")
-//        
-//        let realm = createInMemoryRealm()
-//        let subject = SourceInteractor(realm: realm)
-//        
-//        let sourcesObserverable = Observable.from(createMockSources())
-//        subject.add(observable: sourcesObserverable)
-//        
-//        
-//        
-//        
-//    }
+    func test_AddSource() {
+        let testExpectation = expectation(description: "Should return all favorites")
+        
+        let realm = createInMemoryRealm()
+        let subject = SourceInteractor(realm: realm)
+        
+        let mockSources = createMockSources()
+        subject.add(observable: Observable.from(mockSources))
+        
+        subject.fetchSources()
+            .subscribe(onNext: { results in
+                XCTAssertEqual(results.count, 5)
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 
     func test_FetchSources() {
         let testExpectation = expectation(description: "Should return all favorites")
