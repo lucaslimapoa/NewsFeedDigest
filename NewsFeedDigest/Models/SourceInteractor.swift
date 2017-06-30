@@ -20,6 +20,20 @@ struct SourceInteractor {
         self.realm = realm
     }
     
+//    func add(observable: Observable<NewsAPISource>) {
+//        
+//    }
+    
+    func fetchSources(with predicate: String? = nil) -> Observable<Results<SourceObject>> {
+        var results = realm.objects(SourceObject.self)
+        
+        if let predicate = predicate {
+            results = results.filter(predicate)
+        }
+        
+        return Observable.collection(from: results)
+    }
+    
     func fetchFavorites(predicate: String? = nil) -> Observable<Results<FavoriteSource>> {
         var results = realm.objects(FavoriteSource.self)
         
@@ -39,7 +53,7 @@ struct SourceInteractor {
         
         Observable.just(newFavorite)
             .subscribe(realm.rx.add(update: true))
-            .addDisposableTo(disposeBag)
+            .dispose()
     }
     
     func unfavorite(sourceId: SourceId) {
