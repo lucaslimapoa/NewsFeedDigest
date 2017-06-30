@@ -73,7 +73,7 @@ class SourceInteractorTests: XCTestCase {
         cleanRealm(realm)
         
         try! realm.write {
-            realm.add(newFavorite, update: true)
+            realm.add(newFavorite)
         }
         
         subject.isFavorite("a")
@@ -109,7 +109,30 @@ class SourceInteractorTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
 
+    func test_UnfavoriteSourceId() {
+        let testExpectation = expectation(description: "Unfavorite should unfavorite source from Realm")
 
+        cleanRealm(realm)
+        
+        let favoriteSource = SourceObject()
+        favoriteSource.id = "a"
+        favoriteSource.isFavorite = true
+        
+        try! realm.write {
+            realm.add(favoriteSource)
+        }
+        
+        subject.setFavorite(for: "a", isFavorite: false)
+
+        subject.isFavorite("a")
+            .subscribe(onNext: { results in
+                XCTAssert(results.isEmpty)
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
     
 //    func test_GetFavoriteSources() {
 //        let testExpectation = expectation(description: "Should return all favorites")
@@ -131,25 +154,6 @@ class SourceInteractorTests: XCTestCase {
 //        waitForExpectations(timeout: 1.0, handler: nil)
 //    }
 //
-
-//    
-//    func test_UnfavoriteSourceId() {
-//        let testExpectation = expectation(description: "Unfavorite should remove sourceId from Realm")
-//        
-//        let realm = createInMemoryRealm(with: favoriteSources)
-//        let subject = SourceInteractor(realm: realm)
-//        
-//        subject.unfavorite(sourceId: "Test1")
-//            
-//        subject.isFavorite("Test1")
-//            .subscribe(onNext: { results in
-//                XCTAssert(results.isEmpty)
-//                testExpectation.fulfill()
-//            })
-//            .addDisposableTo(disposeBag)
-//        
-//        waitForExpectations(timeout: 1.0, handler: nil)
-//    }
     
     func cleanRealm(_ realm: Realm) {
         try! realm.write {
