@@ -26,7 +26,7 @@ class ListViewModelTests: XCTestCase {
         
         let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPI)
         
-        subject = ListViewModel(newsAPI: MockNewsAPI(key: ""))
+        subject = ListViewModel(sourceInteractor: sourceInteractor)
         subject.sourceInteractor = sourceInteractor
         
         disposeBag = DisposeBag()
