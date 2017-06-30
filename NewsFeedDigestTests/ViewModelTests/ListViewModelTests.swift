@@ -56,9 +56,6 @@ class ListViewModelTests: XCTestCase {
         subject.fetchSources(for: Category.business)
             .subscribe(onNext: { sources in
                 XCTAssertEqual(expectedResult, sources)
-                
-                
-                
                 testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("Should not error")
@@ -68,19 +65,10 @@ class ListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
-    func test_SortSourcesAlphabetically() {
-        let expectedResult = createSortedMockSources()
-        let actualResult = subject.sortAlphabetically(sources: createMockSources())
-        
-        XCTAssertEqual(expectedResult, actualResult)
-    }
-    
     func createSortedMockSources() -> [NewsAPISource] {
         let unsortedSources = createMockSources()
         return [
             unsortedSources[0],
-            unsortedSources[2],
-            unsortedSources[1],
             unsortedSources[4],
             unsortedSources[3]
         ]

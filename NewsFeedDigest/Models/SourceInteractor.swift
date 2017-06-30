@@ -42,10 +42,11 @@ struct SourceInteractor {
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<Results<SourceObject>> {
         let sourcesFetcher = newsAPI.getSources(category: category)
             .flatMap { Observable.from($0) }
+            .observeOn(MainScheduler.instance)
         
         add(observable: sourcesFetcher)
         
-        let sortedResults = fetchSources()
+        let sortedResults = fetchSources(predicate: "category == '\(category.rawValue)'")
             .map { results -> Results<SourceObject> in
                 return results.sorted(byKeyPath: "name", ascending: true)
             }

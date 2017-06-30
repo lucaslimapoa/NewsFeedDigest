@@ -142,7 +142,7 @@ class SourceInteractorTests: XCTestCase {
         
         subject.fetchSources(for: .business)
             .subscribe(onNext: { results in
-                XCTAssertEqual(results.count, 5)
+                XCTAssertEqual(results.count, 3)
                 testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
