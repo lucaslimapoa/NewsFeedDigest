@@ -24,8 +24,24 @@ struct SourceInteractor {
     
     func add(observable: Observable<NewsAPISource>) {
         observable
-            .map { SourceObject(source: $0) }
-            .subscribe(realm.rx.add(update: true))
+            .subscribe(onNext: { source in
+                let properties = [
+                    "id": source.id ?? "",
+                    "name": source.name ?? "",
+                    "sourceDescription": source.sourceDescription ?? "",
+                    "category": source.category?.rawValue ?? "",
+                    "language": source.language?.rawValue ?? "",
+                    "country": source.country?.rawValue ?? ""
+                ]
+                
+                do {
+                    try self.realm.write {
+                        self.realm.create(SourceObject.self, value: properties, update: true)
+                    }
+                } catch let error {
+                    fatalError("\(error.localizedDescription)")
+                }
+            })
             .addDisposableTo(disposeBag)
     }
     
