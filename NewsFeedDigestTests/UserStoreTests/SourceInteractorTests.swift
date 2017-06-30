@@ -19,18 +19,22 @@ class SourceInteractorTests: XCTestCase {
     var disposeBag: DisposeBag!
     var testScheduler: TestScheduler!
     
+    var realm: Realm!
+    var subject: SourceInteractor!
+    
     override func setUp() {
         super.setUp()
         
         disposeBag = DisposeBag()
         testScheduler = TestScheduler(initialClock: 0)
+        realm = createInMemoryRealm(with: createMockSources())
+        subject = SourceInteractor(realm: realm)
     }
     
     func test_AddSource() {
         let testExpectation = expectation(description: "Should return all favorites")
         
-        let realm = createInMemoryRealm()
-        let subject = SourceInteractor(realm: realm)
+        cleanRealm(realm)
         
         let mockSources = createMockSources()
         subject.add(observable: Observable.from(mockSources))
@@ -47,9 +51,6 @@ class SourceInteractorTests: XCTestCase {
 
     func test_FetchSources() {
         let testExpectation = expectation(description: "Should return all favorites")
-        
-        let realm = createInMemoryRealm(with: createMockSources())
-        let subject = SourceInteractor(realm: realm)
         
         subject.fetchSources()
             .subscribe(onNext: { results in
@@ -80,7 +81,7 @@ class SourceInteractorTests: XCTestCase {
 //        
 //        waitForExpectations(timeout: 1.0, handler: nil)
 //    }
-//    
+//
 //    func test_CheckIfSourceIdIsFavorite() {
 //        let successTestExpectation = expectation(description: "SourceId should be favorite")
 //        let emptyTestExpectation = expectation(description: "Should be empty")
