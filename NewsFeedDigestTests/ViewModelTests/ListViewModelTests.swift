@@ -13,7 +13,7 @@ import RxTest
 
 @testable import NewsFeedDigest
 
-class SourceListViewModelTests: XCTestCase {
+class ListViewModelTests: XCTestCase {
     
     var subject: ListViewModel!
     var disposeBag: DisposeBag!
