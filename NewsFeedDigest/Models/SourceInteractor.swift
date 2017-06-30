@@ -15,9 +15,11 @@ struct SourceInteractor {
     
     let realm: Realm
     let disposeBag = DisposeBag()
+    let newsAPI: NewsAPIProtocol
     
-    init(realm: Realm) {
+    init(realm: Realm, newsAPI: NewsAPIProtocol) {
         self.realm = realm
+        self.newsAPI = newsAPI
     }
     
     func add(observable: Observable<NewsAPISource>) {
@@ -37,14 +39,18 @@ struct SourceInteractor {
         return Observable.collection(from: results)
     }
     
-    func fetchFavorites(predicate: String? = nil) -> Observable<Results<FavoriteSource>> {
-        var results = realm.objects(FavoriteSource.self)
+    func fetchSources(for category: NewsAPISwift.Category) -> Observable<Results<SourceObject>> {
+        let sourcesFetcher = newsAPI.getSources(category: category)
+            .flatMap { Observable.from($0) }
         
-        if let predicate = predicate {
-            results = results.filter(predicate)
-        }
+        add(observable: sourcesFetcher)
         
-        return Observable.collection(from: results)
+        let sortedResults = fetchSources()
+            .map { results -> Results<SourceObject> in
+                return results.sorted(byKeyPath: "name", ascending: true)
+            }
+        
+        return sortedResults
     }
     
     func isFavorite(_ sourceId: SourceId) -> Observable<Results<SourceObject>> {

@@ -28,7 +28,8 @@ class SourceInteractorTests: XCTestCase {
         disposeBag = DisposeBag()
         testScheduler = TestScheduler(initialClock: 0)
         realm = createInMemoryRealm(with: createMockSources())
-        subject = SourceInteractor(realm: realm)
+        
+        subject = SourceInteractor(realm: realm, newsAPI: MockNewsAPI(key: ""))
     }
     
     func test_AddSource() {
@@ -134,26 +135,20 @@ class SourceInteractorTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
-//    func test_GetFavoriteSources() {
-//        let testExpectation = expectation(description: "Should return all favorites")
-//        
-//        let realm = createInMemoryRealm(with: favoriteSources)
-//        let subject = SourceInteractor(realm: realm)
-//        
-//        subject.fetchFavorites()
-//            .subscribe(onNext: { results in
-//                XCTAssertEqual(results[0], self.favoriteSources[0])
-//                XCTAssertEqual(results[1], self.favoriteSources[1])
-//                XCTAssertEqual(results[2], self.favoriteSources[2])
-//                testExpectation.fulfill()
-//            }, onError: { _ in
-//                XCTFail("Should not error")
-//            })
-//            .addDisposableTo(disposeBag)
-//        
-//        waitForExpectations(timeout: 1.0, handler: nil)
-//    }
-//
+    func test_FetchSources_MergesNetworkAndRealm() {
+        let testExpectation = expectation(description: "Should call from network and save on realm")
+        
+        cleanRealm(realm)
+        
+        subject.fetchSources(for: .business)
+            .subscribe(onNext: { results in
+                XCTAssertEqual(results.count, 5)
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
     
     func cleanRealm(_ realm: Realm) {
         try! realm.write {

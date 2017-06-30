@@ -41,7 +41,7 @@ class CategoryListCoordinator: TabBarCoordinator {
         
         let viewModel = ListViewModel(newsAPI: newsAPI)
         viewModel.delegate = self
-        viewModel.sourceInteractor = SourceInteractor(realm: realm)
+        viewModel.sourceInteractor = SourceInteractor(realm: realm, newsAPI: newsAPI)
         
         sourceListViewController.viewModel = viewModel
         sourceListViewController.viewDataType = .category
