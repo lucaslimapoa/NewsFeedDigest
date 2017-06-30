@@ -27,7 +27,7 @@ struct SourceInteractor {
             .addDisposableTo(disposeBag)
     }
     
-    func fetchSources(with predicate: String? = nil) -> Observable<Results<SourceObject>> {
+    func fetchSources(predicate: String? = nil) -> Observable<Results<SourceObject>> {
         var results = realm.objects(SourceObject.self)
         
         if let predicate = predicate {
@@ -47,21 +47,18 @@ struct SourceInteractor {
         return Observable.collection(from: results)
     }
     
-    func isFavorite(_ sourceId: SourceId) -> Observable<Results<FavoriteSource>> {
-        return fetchFavorites(predicate: "id == '\(sourceId)'")
+    func isFavorite(_ sourceId: SourceId) -> Observable<Results<SourceObject>> {
+        return fetchSources(predicate: "id == '\(sourceId)' AND isFavorite = true")
     }
     
-    func favorite(sourceId: SourceId) {        
-//        let newFavorite = FavoriteSource(sourceId: sourceId)
-//        
-//        Observable.just(newFavorite)
-//            .subscribe(realm.rx.add(update: true))
-//            .dispose()
-    }
-    
-    func unfavorite(sourceId: SourceId) {
-//        isFavorite(sourceId)
-//            .subscribe(realm.rx.delete())
-//            .dispose()
+    func setFavorite(for sourceId: SourceId, isFavorite: Bool) {
+        fetchSources(predicate: "id == '\(sourceId)'")
+            .map { $0.first }
+            .subscribe(onNext: { sourceObject in
+                try? self.realm.write {
+                    sourceObject?.isFavorite = isFavorite
+                }
+            })
+            .dispose()
     }
 }

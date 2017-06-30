@@ -83,11 +83,11 @@ struct SourceCellViewModel {
                     ? FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite }
             
             didFavorite = {
-                interactor.favorite(sourceId: sourceId)
+//                interactor.favorite(sourceId: sourceId)
             }
             
             didUnfavorite = {
-                interactor.unfavorite(sourceId: sourceId)
+//                interactor.unfavorite(sourceId: sourceId)
             }
         }
     }
