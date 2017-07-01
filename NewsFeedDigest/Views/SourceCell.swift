@@ -25,13 +25,8 @@ class SourceCell: UICollectionViewCell {
         didSet {
             contentText.attributedText = viewModel?.sourceDescription
             
-            favoriteView.didFavorite = { [weak self] in
-                self?.viewModel.didFavorite?()
-            }
-            
-            favoriteView.didUnfavorite = { [weak self] in
-                self?.viewModel.didUnfavorite?()
-            }
+            favoriteView.didFavorite = viewModel.didFavorite
+            favoriteView.didUnfavorite = viewModel.didUnfavorite
             
             viewModel.viewState?
                 .subscribe(onNext: { [weak self] state in

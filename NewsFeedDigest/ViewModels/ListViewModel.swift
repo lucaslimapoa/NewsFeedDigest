@@ -7,6 +7,8 @@
 //
 
 import RxSwift
+import RxRealm
+import RealmSwift
 import NewsAPISwift
 
 protocol ListViewModelType {
@@ -21,7 +23,6 @@ protocol ListViewModelType {
 class ListViewModel: ListViewModelType {
     
     let disposeBag = DisposeBag()
-    let newsAPI: NewsAPIProtocol
     var sourceInteractor: SourceInteractor!
     
     let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
@@ -29,8 +30,8 @@ class ListViewModel: ListViewModelType {
     var selectedCategoryListener = PublishSubject<NewsAPISwift.Category>()
     var delegate: SourceListViewModelDelegate?
     
-    init(newsAPI: NewsAPIProtocol) {
-        self.newsAPI = newsAPI
+    init(sourceInteractor: SourceInteractor) {
+        self.sourceInteractor = sourceInteractor
         setupListeners()
     }
     
@@ -47,8 +48,10 @@ class ListViewModel: ListViewModelType {
     }
     
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<[NewsAPISource]> {
-        return newsAPI.getSources(category: category)
-            .map { self.sortAlphabetically(sources: $0) }
+        return sourceInteractor
+            .fetchSources(for: category)
+            .map { $0.map { $0.convertToNewsAPI() } }
+            .flatMap { Observable.from(optional: Array($0)) }
     }
     
     func sortAlphabetically(sources: [NewsAPISource]) -> [NewsAPISource] {
@@ -79,15 +82,16 @@ struct SourceCellViewModel {
         
         if let sourceId = source.id {
             viewState = interactor.isFavorite(sourceId)
-                .map { ($0.isEmpty)
-                    ? FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite }
+                .map { ($0.isEmpty) ?
+                    FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite
+                }
             
             didFavorite = {
-                interactor.favorite(sourceId: sourceId)
+                interactor.setFavorite(for: sourceId, isFavorite: true)
             }
             
             didUnfavorite = {
-                interactor.unfavorite(sourceId: sourceId)
+                interactor.setFavorite(for: sourceId, isFavorite: false)
             }
         }
     }

@@ -15,13 +15,38 @@ struct SourceInteractor {
     
     let realm: Realm
     let disposeBag = DisposeBag()
+    let newsAPI: NewsAPIProtocol
     
-    init(realm: Realm) {
+    init(realm: Realm, newsAPI: NewsAPIProtocol) {
         self.realm = realm
+        self.newsAPI = newsAPI
     }
     
-    func fetchFavorites(predicate: String? = nil) -> Observable<Results<FavoriteSource>> {
-        var results = realm.objects(FavoriteSource.self)
+    func add(observable: Observable<NewsAPISource>) {
+        observable
+            .subscribe(onNext: { source in
+                let properties = [
+                    "id": source.id ?? "",
+                    "name": source.name ?? "",
+                    "sourceDescription": source.sourceDescription ?? "",
+                    "category": source.category?.rawValue ?? "",
+                    "language": source.language?.rawValue ?? "",
+                    "country": source.country?.rawValue ?? ""
+                ]
+                
+                do {
+                    try self.realm.write {
+                        self.realm.create(SourceObject.self, value: properties, update: true)
+                    }
+                } catch let error {
+                    fatalError("\(error.localizedDescription)")
+                }
+            })
+            .addDisposableTo(disposeBag)
+    }
+    
+    func fetchSources(predicate: String? = nil) -> Observable<Results<SourceObject>> {
+        var results = realm.objects(SourceObject.self)
         
         if let predicate = predicate {
             results = results.filter(predicate)
@@ -30,21 +55,34 @@ struct SourceInteractor {
         return Observable.collection(from: results)
     }
     
-    func isFavorite(_ sourceId: SourceId) -> Observable<Results<FavoriteSource>> {
-        return fetchFavorites(predicate: "id == '\(sourceId)'")
-    }
-    
-    func favorite(sourceId: SourceId) {        
-        let newFavorite = FavoriteSource(sourceId: sourceId)
+    func fetchSources(for category: NewsAPISwift.Category) -> Observable<Results<SourceObject>> {
+        let sourcesFetcher = newsAPI.getSources(category: category)
+            .flatMap { Observable.from($0) }
+            .observeOn(MainScheduler.instance)
         
-        Observable.just(newFavorite)
-            .subscribe(realm.rx.add(update: true))
-            .addDisposableTo(disposeBag)
+        add(observable: sourcesFetcher)
+        
+        let sortedResults = fetchSources(predicate: "category == '\(category.rawValue)'")
+            .map { results -> Results<SourceObject> in
+                return results.sorted(byKeyPath: "name", ascending: true)
+            }
+            .asObservable()
+        
+        return sortedResults
     }
     
-    func unfavorite(sourceId: SourceId) {
-        isFavorite(sourceId)
-            .subscribe(realm.rx.delete())
+    func isFavorite(_ sourceId: SourceId) -> Observable<Results<SourceObject>> {
+        return fetchSources(predicate: "id == '\(sourceId)' AND isFavorite = true")
+    }
+    
+    func setFavorite(for sourceId: SourceId, isFavorite: Bool) {
+        fetchSources(predicate: "id == '\(sourceId)'")
+            .map { $0.first }
+            .subscribe(onNext: { sourceObject in
+                try? self.realm.write {
+                    sourceObject?.isFavorite = isFavorite
+                }
+            })
             .dispose()
     }
 }

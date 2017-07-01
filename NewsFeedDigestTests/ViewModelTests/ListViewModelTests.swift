@@ -13,15 +13,22 @@ import RxTest
 
 @testable import NewsFeedDigest
 
-class SourceListViewModelTests: XCTestCase {
+class ListViewModelTests: XCTestCase {
     
     var subject: ListViewModel!
     var disposeBag: DisposeBag!
     
     override func setUp() {
         super.setUp()
+
+        let mockNewsAPI = MockNewsAPI(key: "")
+        let mockRealm = createInMemoryRealm()
         
-        subject = ListViewModel(newsAPI: MockNewsAPI(key: ""))
+        let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPI)
+        
+        subject = ListViewModel(sourceInteractor: sourceInteractor)
+        subject.sourceInteractor = sourceInteractor
+        
         disposeBag = DisposeBag()
     }
     
@@ -49,29 +56,19 @@ class SourceListViewModelTests: XCTestCase {
         subject.fetchSources(for: Category.business)
             .subscribe(onNext: { sources in
                 XCTAssertEqual(expectedResult, sources)
+                testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("Should not error")
-            }, onCompleted: {
-                testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
-    func test_SortSourcesAlphabetically() {
-        let expectedResult = createSortedMockSources()
-        let actualResult = subject.sortAlphabetically(sources: createMockSources())
-        
-        XCTAssertEqual(expectedResult, actualResult)
-    }
-    
     func createSortedMockSources() -> [NewsAPISource] {
         let unsortedSources = createMockSources()
         return [
             unsortedSources[0],
-            unsortedSources[2],
-            unsortedSources[1],
             unsortedSources[4],
             unsortedSources[3]
         ]

@@ -19,33 +19,44 @@ class SourceInteractorTests: XCTestCase {
     var disposeBag: DisposeBag!
     var testScheduler: TestScheduler!
     
-    let favoriteSources = [
-        FavoriteSource(sourceId: "Test1"),
-        FavoriteSource(sourceId: "Test2"),
-        FavoriteSource(sourceId: "Test3")
-    ]
+    var realm: Realm!
+    var subject: SourceInteractor!
     
     override func setUp() {
         super.setUp()
         
         disposeBag = DisposeBag()
         testScheduler = TestScheduler(initialClock: 0)
+        realm = createInMemoryRealm(with: createMockSources())
+        
+        subject = SourceInteractor(realm: realm, newsAPI: MockNewsAPI(key: ""))
     }
     
-    func test_GetFavoriteSources() {
+    func test_AddSource() {
         let testExpectation = expectation(description: "Should return all favorites")
         
-        let realm = createInMemoryRealm(with: favoriteSources)
-        let subject = SourceInteractor(realm: realm)
+        cleanRealm(realm)
         
-        subject.fetchFavorites()
+        let mockSources = createMockSources()
+        subject.add(observable: Observable.from(mockSources))
+        
+        subject.fetchSources()
             .subscribe(onNext: { results in
-                XCTAssertEqual(results[0], self.favoriteSources[0])
-                XCTAssertEqual(results[1], self.favoriteSources[1])
-                XCTAssertEqual(results[2], self.favoriteSources[2])
+                XCTAssertEqual(results.count, 5)
                 testExpectation.fulfill()
-            }, onError: { _ in
-                XCTFail("Should not error")
+            })
+            .addDisposableTo(disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
+    func test_FetchSources() {
+        let testExpectation = expectation(description: "Should return all favorites")
+        
+        subject.fetchSources()
+            .subscribe(onNext: { results in
+                XCTAssertEqual(results.count, 5)
+                testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
         
@@ -55,18 +66,25 @@ class SourceInteractorTests: XCTestCase {
     func test_CheckIfSourceIdIsFavorite() {
         let successTestExpectation = expectation(description: "SourceId should be favorite")
         let emptyTestExpectation = expectation(description: "Should be empty")
+
+        let newFavorite = SourceObject()
+        newFavorite.id = "a"
+        newFavorite.isFavorite = true
         
-        let realm = createInMemoryRealm(with: favoriteSources)
-        let subject = SourceInteractor(realm: realm)
+        cleanRealm(realm)
         
-        subject.isFavorite("Test1")
+        try! realm.write {
+            realm.add(newFavorite)
+        }
+        
+        subject.isFavorite("a")
             .subscribe(onNext: { results in
-                XCTAssertEqual(results[0], self.favoriteSources[0])
+                XCTAssertEqual(results.count, 1)
                 successTestExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
-        
-        subject.isFavorite("Test5")
+
+        subject.isFavorite("z")
             .subscribe(onNext: { results in
                 XCTAssert(results.isEmpty)
                 emptyTestExpectation.fulfill()
@@ -78,61 +96,80 @@ class SourceInteractorTests: XCTestCase {
     
     func test_FavoriteSourceId() {
         let testExpectation = expectation(description: "SourceId should be favorite")
-        let newFavoriteSourceId = "Test4"
-        
-        let realm = createInMemoryRealm(with: favoriteSources)
-        let subject = SourceInteractor(realm: realm)
-        
-        subject.favorite(sourceId: newFavoriteSourceId)                
-        
+        let newFavoriteSourceId = "a"
+
+        subject.setFavorite(for: newFavoriteSourceId, isFavorite: true)
+
         subject.isFavorite(newFavoriteSourceId)
             .subscribe(onNext: { results in
                 XCTAssertEqual(results[0].id, newFavoriteSourceId)
                 testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
+    func test_UnfavoriteSourceId() {
+        let testExpectation = expectation(description: "Unfavorite should unfavorite source from Realm")
+
+        cleanRealm(realm)
         
+        let favoriteSource = SourceObject()
+        favoriteSource.id = "a"
+        favoriteSource.isFavorite = true
+        
+        try! realm.write {
+            realm.add(favoriteSource)
+        }
+        
+        subject.setFavorite(for: "a", isFavorite: false)
+
+        subject.isFavorite("a")
+            .subscribe(onNext: { results in
+                XCTAssert(results.isEmpty)
+                testExpectation.fulfill()
+            })
+            .addDisposableTo(disposeBag)
+
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
-    func test_UnfavoriteSourceId() {
-        let testExpectation = expectation(description: "Unfavorite should remove sourceId from Realm")
+    func test_FetchSources_MergesNetworkAndRealm() {
+        let testExpectation = expectation(description: "Should call from network and save on realm")
         
-        let realm = createInMemoryRealm(with: favoriteSources)
-        let subject = SourceInteractor(realm: realm)
+        cleanRealm(realm)
         
-        subject.unfavorite(sourceId: "Test1")
-            
-        subject.isFavorite("Test1")
+        subject.fetchSources(for: .business)
             .subscribe(onNext: { results in
-                XCTAssert(results.isEmpty)
+                XCTAssertEqual(results.count, 3)
                 testExpectation.fulfill()
             })
             .addDisposableTo(disposeBag)
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
+}
+
+func cleanRealm(_ realm: Realm) {
+    try! realm.write {
+        realm.deleteAll()
+    }
+}
+
+func createInMemoryRealm(with sources: [NewsAPISource]? = nil) -> Realm {
+    var configuration = Realm.Configuration()
+    configuration.inMemoryIdentifier = UUID().uuidString
     
-    func cleanRealm(_ realm: Realm) {
-        try! realm.write {
-            realm.deleteAll()
+    let inMemoryRealm = try! Realm(configuration: configuration)
+    
+    cleanRealm(inMemoryRealm)
+    
+    if let sources = sources {
+        try! inMemoryRealm.write {
+            _ = sources.map { inMemoryRealm.add(SourceObject(source: $0)) }
         }
     }
     
-    func createInMemoryRealm(with favorites: [FavoriteSource]? = nil) -> Realm {
-        var configuration = Realm.Configuration()
-        configuration.inMemoryIdentifier = UUID().uuidString
-        
-        let inMemoryRealm = try! Realm(configuration: configuration)
-        
-        cleanRealm(inMemoryRealm)
-        
-        if let favorites = favorites {
-            try! inMemoryRealm.write {
-                _ = favorites.map { inMemoryRealm.add($0) }
-            }
-        }
-        
-        return inMemoryRealm
-    }
+    return inMemoryRealm
 }
