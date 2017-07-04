@@ -9,10 +9,6 @@
 import UIKit
 import NewsAPISwift
 
-protocol NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
-}
-
 class NewsFeedCoordinator: TabBarCoordinator {
     
     var tabBarItem: UITabBarItem

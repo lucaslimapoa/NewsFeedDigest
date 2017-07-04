@@ -9,6 +9,10 @@
 import RxSwift
 import NewsAPISwift
 
+protocol NewsFeedViewModelCoordinatorDelegate {
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
+}
+
 protocol NewsFeedViewModelType: class {
     var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
     
