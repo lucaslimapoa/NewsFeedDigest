@@ -52,6 +52,15 @@ class DateConversorTests: XCTestCase {
         
         XCTAssertEqual(expectedDiff, actualDiff)
     }
+    
+    func test_ConvertToTimeInterval() {
+        let publishedTime = "2017-06-13T19:30:00Z"
+        
+        let expectedResult: Double = 1497382200
+        let actualResult = subject.convertToTimeInterval(publishedTime)
+        
+        XCTAssertEqual(expectedResult, actualResult)
+    }
 }
 
 extension DateConversorTests {

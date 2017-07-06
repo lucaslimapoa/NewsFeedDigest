@@ -12,6 +12,7 @@ import os.log
 protocol DateConversorType {
     func convertToDate(string: String) -> Date?
     func convertToPassedTime(publishedAt: String) -> String?
+    func convertToTimeInterval(_ publishedAt: String) -> TimeInterval
 }
 
 class DateConversor: DateConversorType {
@@ -68,6 +69,11 @@ class DateConversor: DateConversorType {
         }
         
         return timePassed
+    }
+    
+    func convertToTimeInterval(_ publishedAt: String) -> TimeInterval {
+        guard let date = convertToDate(string: publishedAt) else { return 0 }
+        return date.timeIntervalSince1970
     }
     
     func updateCurrentTime(date: Date) {
