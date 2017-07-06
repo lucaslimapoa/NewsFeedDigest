@@ -30,11 +30,19 @@ class ArticleInteractorTests: XCTestCase {
     }
     
     func test_AddArticles() {
-        let articlesObservable = Observable.from(createMockArticles())
-        subject.add(observable: articlesObservable)
+        addArticlesToSubject(articles: createMockArticles())
+        XCTAssertEqual(mockRealm.objects(ArticleObject.self).count, 3)
+    }
+    
+    func test_DontDuplicateArticles() {
+        addArticlesToSubject(articles: createMockArticles())
+        addArticlesToSubject(articles: createMockArticles())
         
         XCTAssertEqual(mockRealm.objects(ArticleObject.self).count, 3)
     }
     
-    
+    func addArticlesToSubject(articles: [NewsAPIArticle]) {
+        let articlesObservable = Observable.from(articles)
+        subject.add(observable: articlesObservable)
+    }
 }

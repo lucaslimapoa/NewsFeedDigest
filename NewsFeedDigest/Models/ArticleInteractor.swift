@@ -33,7 +33,18 @@ struct ArticleInteractor {
                 
                 return articleObject
             }
-            .subscribe(realm.rx.add())
+            .subscribe(onNext: { article in
+                if self.realm.objects(ArticleObject.self)
+                    .filter("title == '\(article.title)' AND sourceId == '\(article.sourceId)'").count == 0 {
+                    do {
+                        try self.realm.write {
+                            self.realm.add(article)
+                        }
+                    } catch let error {
+                        fatalError("\(error.localizedDescription)")
+                    }
+                }
+            })
             .dispose()
     }
     
