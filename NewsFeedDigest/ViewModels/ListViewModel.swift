@@ -40,7 +40,7 @@ class ListViewModel: ListViewModelType {
             .subscribe(onNext: { category in
                 self.delegate?.sourceListViewModel(viewModel: self, didSelectCategory: category)
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
     
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]> {

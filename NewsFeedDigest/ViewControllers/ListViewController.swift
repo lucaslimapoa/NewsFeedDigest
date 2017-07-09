@@ -66,7 +66,7 @@ class ListViewController: UICollectionViewController {
             .rx
             .modelSelected(NewsAPISwift.Category.self)
             .bind(to: viewModel.selectedCategoryListener)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
     
     func setupSourceViewController() {
@@ -83,7 +83,7 @@ class ListViewController: UICollectionViewController {
                 
                 return cell
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
 }
 

@@ -63,12 +63,12 @@ class NewsFeedViewController: UICollectionViewController {
                 
                 return cell
             }
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
         
         collectionView!.rx
             .modelSelected(NewsAPIArticle.self)
             .bind(to: viewModel.selectedItemListener)
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
 }
 
