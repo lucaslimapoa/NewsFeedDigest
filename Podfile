@@ -6,11 +6,12 @@ target 'NewsFeedDigest' do
   use_frameworks!
 
   # Pods for NewsFeedDigest
-  pod 'NewsAPISwift', '~> 0.1.1'
-  pod 'RxSwift',      '~> 3.0'
-  pod 'RxCocoa',      '~> 3.0'
-  pod 'Nuke',         '~> 5.0'
-  pod 'RealmSwift',   '~> 2.8' 
+  pod 'NewsAPISwift',  '~> 0.1.1'
+  pod 'RxSwift',       '~> 3.0'
+  pod 'RxCocoa',       '~> 3.0'
+  pod 'Nuke',          '~> 5.0'
+  pod 'RealmSwift',    '~> 2.8'
+  pod 'RxDataSources', '~> 1.0'
   pod 'RxRealm'
 
   target 'NewsFeedDigestTests' do

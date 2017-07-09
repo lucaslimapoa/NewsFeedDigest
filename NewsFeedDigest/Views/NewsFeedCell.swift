@@ -9,9 +9,9 @@
 import UIKit
 import Nuke
 
-class NewsFeedCell: UICollectionViewCell {        
+class NewsFeedCell: UITableViewCell {
     
-    var imageView: UIImageView = {
+    var articleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 5.0
@@ -46,9 +46,9 @@ class NewsFeedCell: UICollectionViewCell {
             contentDescription.attributedText = viewModel.articleDescription
             informationText.attributedText = viewModel.articleInfo
             
-            imageView.image = nil
+            articleImageView.image = nil
             if let urlToImage = viewModel.urlToImage {
-                Nuke.loadImage(with: urlToImage, into: imageView)
+                Nuke.loadImage(with: urlToImage, into: articleImageView)
             }
         }
     }
@@ -57,12 +57,12 @@ class NewsFeedCell: UICollectionViewCell {
         fatalError("method not implemented")
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupCellView()
-        setupSubViews()
-    }
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        
+//        setupCellView()
+//        setupSubViews()
+//    }
     
     private func setupCellView() {
         self.layer.cornerRadius = 3.0
@@ -74,18 +74,18 @@ class NewsFeedCell: UICollectionViewCell {
     }
     
     private func setupSubViews() {
-        addSubview(imageView)
+        addSubview(articleImageView)
         addSubview(contentDescription)
         addSubview(informationText)
         
-        imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8.0).isActive = true
-        imageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 84.0).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
+        articleImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8.0).isActive = true
+        articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
+        articleImageView.widthAnchor.constraint(equalToConstant: 84.0).isActive = true
+        articleImageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         contentDescription.heightAnchor.constraint(equalToConstant: 66.0).isActive = true
-        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8.0).isActive = true
+        contentDescription.leftAnchor.constraint(equalTo: articleImageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
         informationText.leftAnchor.constraint(equalTo: contentDescription.leftAnchor, constant: 5).isActive = true

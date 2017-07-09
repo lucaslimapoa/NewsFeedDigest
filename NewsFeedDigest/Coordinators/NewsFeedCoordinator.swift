@@ -38,7 +38,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
         let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
         viewModel.coordinatorDelegate = self
         
-        let newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let newsFeedViewController = NewsFeedViewController()
         newsFeedViewController.viewModel = viewModel
         
         return newsFeedViewController

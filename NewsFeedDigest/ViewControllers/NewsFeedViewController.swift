@@ -13,27 +13,28 @@ import NewsAPISwift
 
 let NewsFeedCellId = "NewsFeedCellId"
 
-class NewsFeedViewController: UICollectionViewController {
+class NewsFeedViewController: UITableViewController {
     
     var viewModel: NewsFeedViewModelType!
     
     let disposeBag = DisposeBag()
     
     var refreshTrigger: Observable<Void>!
-    var refreshControl: UIRefreshControl!
+//    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView!.dataSource = nil
-        collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
-        collectionView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
+        tableView!.dataSource = nil
+        tableView!.backgroundColor = Colors.collectionViewBackgroundColor
+//        tableView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
+        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: NewsFeedCellId)
         
-        collectionView!.contentInset.top = 10
-        collectionView!.contentInset.bottom = 10
+        tableView!.contentInset.top = 10
+        tableView!.contentInset.bottom = 10
         
         refreshControl = UIRefreshControl()
-        collectionView!.addSubview(refreshControl)
+        tableView!.addSubview(refreshControl!)
         
         setupRx()
     }
@@ -43,7 +44,7 @@ class NewsFeedViewController: UICollectionViewController {
     }
     
     func setupRx() {
-        refreshTrigger = refreshControl
+        refreshTrigger = refreshControl!
             .rx
             .controlEvent(.valueChanged)
             .map { () }
@@ -54,33 +55,27 @@ class NewsFeedViewController: UICollectionViewController {
         
         articlesStream
             .do(onNext: { _ in
-                self.refreshControl.endRefreshing()
+                self.refreshControl!.endRefreshing()
             })
             .asDriver(onErrorJustReturn: [])
-            .drive(collectionView!.rx.items) { collectionView, row, article in
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
-                cell.viewModel = self.viewModel.createCellViewModel(from: article)
+            .drive(tableView!.rx.items) { tableView, row, article in
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
+//                cell.viewModel = self.viewModel.createCellViewModel(from: article)
+
+                let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0))
+                
+                cell.textLabel?.text = article.title!
                 
                 return cell
             }
             .disposed(by: disposeBag)
         
-        collectionView!.rx
+        tableView!.rx
             .modelSelected(NewsAPIArticle.self)
             .bind(to: viewModel.selectedItemListener)
             .disposed(by: disposeBag)
     }
 }
-
-extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 20, height: 100)
-    }
-    
-}
-
-
 
 
 
