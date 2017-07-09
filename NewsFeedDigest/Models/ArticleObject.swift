@@ -18,6 +18,7 @@ class ArticleObject: Object {
     dynamic var url = ""
     dynamic var urlToImage = ""
     dynamic var timeInterval: Double = 0
+    dynamic var isSaved = false
     
 }
 

@@ -48,4 +48,8 @@ struct ArticleInteractor {
             .dispose()
     }
     
+    func fetchSavedArticles() -> Observable<Results<ArticleObject>> {
+        let results = realm.objects(ArticleObject.self).filter("isSaved == true")
+        return Observable.collection(from: results)
+    }
 }
