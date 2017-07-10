@@ -41,18 +41,17 @@ class NewsFeedViewModelTests: XCTestCase {
     }
     
     func test_FetchArticles() {
-        let testExpectation = expectation(description: "Should fetch the articles sorted by date")
+        let testExpectation = expectation(description: "Should fetch the articles sorted by date")        
         
-        let expectedArticles = createSortedMockArticles()
-        let fetchArticlesObservable = subject.fetchArticles()
+        subject.fetchArticles()
+            .subscribe(onNext: { sections in
+                XCTAssertEqual(3, sections.count)
+                testExpectation.fulfill()
+            }, onError: { _ in
+                XCTFail("This is not supposed to fail")
+            })
+            .disposed(by: disposeBag)
         
-        fetchArticlesObservable.subscribe(onNext: { articles in
-            XCTAssertEqual(expectedArticles, articles)
-        }, onError: { _ in
-            XCTFail("Should return articles sorted by date")
-        }, onCompleted: { _ in
-            testExpectation.fulfill()
-        }).addDisposableTo(disposeBag)
                 
         waitForExpectations(timeout: 1.0, handler: nil)
     }
@@ -74,5 +73,15 @@ class NewsFeedViewModelTests: XCTestCase {
     func createSortedMockArticles() -> [NewsAPIArticle] {
         let tempArticles = createMockArticles()
         return [tempArticles[2], tempArticles[1], tempArticles[0]]
+    }
+    
+    func createMockArticleSections() -> [ArticleSection] {
+        let mockArticles = createMockArticles()
+        
+        return [
+            ArticleSection(header: "Source 1", items: [ArticleObject(article: mockArticles[0])]),
+            ArticleSection(header: "Source 2", items: [ArticleObject(article: mockArticles[1])]),
+            ArticleSection(header: "Source 3", items: [ArticleObject(article: mockArticles[2])])
+        ]
     }
 }

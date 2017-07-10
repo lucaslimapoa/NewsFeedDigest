@@ -37,7 +37,7 @@ class AppCoordinator: FlowCoordinator {
     }
     
     func createCoordinators() {
-        coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI))
+        coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI, realm: realm))
         coordinators.append(CategoryListCoordinator(newsAPI: newsAPI, realm: realm))
     }
     

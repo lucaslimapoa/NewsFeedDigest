@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 import NewsAPISwift
 
 class NewsFeedCoordinator: TabBarCoordinator {
@@ -17,9 +18,11 @@ class NewsFeedCoordinator: TabBarCoordinator {
     var detailCoordinator: DetailCoordinator?
     
     let newsAPI: NewsAPIProtocol
+    let realm: Realm
     
-    init(newsAPI: NewsAPIProtocol) {
+    init(newsAPI: NewsAPIProtocol, realm: Realm) {
         self.newsAPI = newsAPI
+        self.realm = realm
         
         tabBarItem = UITabBarItem(title: "For You", image: nil, selectedImage: nil)
         
@@ -35,7 +38,10 @@ class NewsFeedCoordinator: TabBarCoordinator {
     private func createNewsFeedViewController() -> NewsFeedViewController {
         let userStore = FakeUserStore()
         
-        let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
+        let dateConversor = DateConversor(currentDate: Date())
+        let articleInteractor = ArticleInteractor(realm: realm, dateConversor: dateConversor)
+        
+        let viewModel = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor)
         viewModel.coordinatorDelegate = self
         
         let newsFeedViewController = NewsFeedViewController()

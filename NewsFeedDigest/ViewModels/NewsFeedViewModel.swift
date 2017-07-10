@@ -24,16 +24,17 @@ protocol NewsFeedViewModelType: class {
 class NewsFeedViewModel: NewsFeedViewModelType {
     
     let userStore: UserStoreType
-    let newsAPIClient: NewsAPIProtocol
+    let articleInteractor: ArticleInteractor
     let dateConversor: DateConversorType
+    
     let disposeBag = DisposeBag()
     
     var selectedItemListener = PublishSubject<NewsAPIArticle>()
     var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
     
-    init(userStore: UserStoreType, newsAPIClient: NewsAPIProtocol, dateConversor: DateConversor = DateConversor()) {
+    init(userStore: UserStoreType, articleInteractor: ArticleInteractor, dateConversor: DateConversor = DateConversor()) {
         self.userStore = userStore
-        self.newsAPIClient = newsAPIClient
+        self.articleInteractor = articleInteractor
         self.dateConversor = dateConversor
         
         setupListeners()
