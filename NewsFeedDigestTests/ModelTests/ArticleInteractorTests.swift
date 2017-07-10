@@ -30,7 +30,8 @@ class ArticleInteractorTests: XCTestCase {
         mockDateConversor = DateConversor(currentDate: createMockDate())
         mockRealm = createInMemoryRealm()
         
-        subject = ArticleInteractor(realm: mockRealm, dateConversor: mockDateConversor)
+        let mockNewsAPI = MockNewsAPI(key: "")
+        subject = ArticleInteractor(newsAPI: mockNewsAPI, realm: mockRealm, dateConversor: mockDateConversor)
     }
     
     func test_AddArticles() {
@@ -59,6 +60,24 @@ class ArticleInteractorTests: XCTestCase {
                 testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("Should not error")
+            })
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func test_FetchArticles() {
+        let testExpectation = expectation(description: "Should fetch articles from the service and save on Realm")
+        
+        let sourcesObservable = Observable.from(createMockSources())
+            .map { SourceObject(source: $0) }
+        
+        subject.fetchArticles(observable: sourcesObservable)
+            .subscribe(onNext: { results in
+                XCTAssertEqual(3, results.count)
+                testExpectation.fulfill()
+            }, onError: { _ in
+                XCTFail("Should not fail")
             })
             .disposed(by: disposeBag)
         

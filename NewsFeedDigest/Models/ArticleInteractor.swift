@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import RxRealm
 import RealmSwift
 import NewsAPISwift
 
@@ -14,10 +15,12 @@ struct ArticleInteractor {
     
     let realm: Realm
     let dateConversor: DateConversorType
+    let newsAPI: NewsAPIProtocol
     
     let disposeBag = DisposeBag()
     
-    init(realm: Realm, dateConversor: DateConversorType) {
+    init(newsAPI: NewsAPIProtocol, realm: Realm, dateConversor: DateConversorType) {
+        self.newsAPI = newsAPI
         self.realm = realm
         self.dateConversor = dateConversor
     }
@@ -48,8 +51,34 @@ struct ArticleInteractor {
             .dispose()
     }
     
+    func fetchArticles(observable: Observable<SourceObject>) -> Observable<Results<ArticleObject>> {
+        let fetchArticlesStream = observable
+            .map { $0.id }
+            .map { self.newsAPI.getArticles(sourceId: $0) }
+            .merge()
+            .flatMapLatest { Observable.from($0) }
+        
+        add(observable: fetchArticlesStream)
+        
+        return fetchArticles()
+    }
+    
     func fetchSavedArticles() -> Observable<Results<ArticleObject>> {
         let results = realm.objects(ArticleObject.self).filter("isSaved == true")
         return Observable.collection(from: results)
     }
+}
+
+private extension ArticleInteractor {
+    
+    func fetchArticles(predicate: String? = nil) -> Observable<Results<ArticleObject>> {
+        var results = realm.objects(ArticleObject.self)
+        
+        if let predicate = predicate {
+            results = results.filter(predicate)
+        }
+        
+        return Observable.collection(from: results)
+    }
+
 }
