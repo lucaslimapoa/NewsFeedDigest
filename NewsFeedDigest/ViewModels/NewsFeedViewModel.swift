@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import RealmSwift
 import NewsAPISwift
 
 protocol NewsFeedViewModelCoordinatorDelegate {
@@ -16,7 +17,7 @@ protocol NewsFeedViewModelCoordinatorDelegate {
 protocol NewsFeedViewModelType: class {
     var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
     
-    func fetchArticles() -> Observable<[NewsAPIArticle]>    
+    func fetchArticles() -> Observable<[ArticleSection]>
     func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel
 }
 
@@ -46,19 +47,10 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .addDisposableTo(disposeBag)
     }
     
-    func fetchArticles() -> Observable<[NewsAPIArticle]> {
-        let articlesStream = userStore.fetchFollowingSources()
-            .filter { $0.id != nil }
-            .map { $0.id! }
-            .map{ self.newsAPIClient.getArticles(sourceId: $0) }
-            .merge()
-        
-        let sortedStream = articlesStream
-            .toArray()
-            .map { $0.flatMap { $0 } }
-            .map{ self.sortByDate($0) }
-        
-        return sortedStream
+    func fetchArticles() -> Observable<[ArticleSection]> {
+        return Observable.create { _ in
+            return Disposables.create()
+        }
     }
     
     func sortByDate(_ articles: [NewsAPIArticle]) -> [NewsAPIArticle] {

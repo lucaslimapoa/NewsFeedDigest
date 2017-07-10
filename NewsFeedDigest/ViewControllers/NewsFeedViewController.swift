@@ -10,31 +10,29 @@ import UIKit
 import RxSwift
 import RxCocoa
 import NewsAPISwift
+import RxDataSources
 
 let NewsFeedCellId = "NewsFeedCellId"
 
 class NewsFeedViewController: UITableViewController {
     
-    var viewModel: NewsFeedViewModelType!
-    
     let disposeBag = DisposeBag()
     
+    var viewModel: NewsFeedViewModelType!
     var refreshTrigger: Observable<Void>!
-//    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView!.dataSource = nil
-        tableView!.backgroundColor = Colors.collectionViewBackgroundColor
-//        tableView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
-        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: NewsFeedCellId)
+        tableView.dataSource = nil
+        tableView.backgroundColor = Colors.collectionViewBackgroundColor
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: NewsFeedCellId)
         
-        tableView!.contentInset.top = 10
-        tableView!.contentInset.bottom = 10
+        tableView.contentInset.top = 10
+        tableView.contentInset.bottom = 10
         
         refreshControl = UIRefreshControl()
-        tableView!.addSubview(refreshControl!)
+        tableView.addSubview(refreshControl!)
         
         setupRx()
     }
@@ -53,21 +51,13 @@ class NewsFeedViewController: UITableViewController {
             .concat(refreshTrigger)
             .flatMapLatest { self.viewModel.fetchArticles() }
         
+        let dataSource = createDataSource()
+
         articlesStream
             .do(onNext: { _ in
                 self.refreshControl!.endRefreshing()
             })
-            .asDriver(onErrorJustReturn: [])
-            .drive(tableView!.rx.items) { tableView, row, article in
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
-//                cell.viewModel = self.viewModel.createCellViewModel(from: article)
-
-                let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0))
-                
-                cell.textLabel?.text = article.title!
-                
-                return cell
-            }
+            .bind(to: tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         tableView!.rx
@@ -75,8 +65,21 @@ class NewsFeedViewController: UITableViewController {
             .bind(to: viewModel.selectedItemListener)
             .disposed(by: disposeBag)
     }
+    
+    func createDataSource() -> RxTableViewSectionedReloadDataSource<ArticleSection> {
+        let dataSource = RxTableViewSectionedReloadDataSource<ArticleSection>()
+        
+        dataSource.configureCell = { dataSource, tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath)
+            
+            cell.textLabel?.text = item.title
+            
+            return cell
+        }
+        
+        return dataSource
+    }
 }
-
 
 
 
