@@ -36,9 +36,10 @@ struct ArticleInteractor {
                 
                 return articleObject
             }
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { article in
                 if self.realm.objects(ArticleObject.self)
-                    .filter("title == '\(article.title)' AND sourceId == '\(article.sourceId)'").count == 0 {
+                    .filter("title == %@ AND sourceId == %@", article.title, article.sourceId).count == 0 {
                     do {
                         try self.realm.write {
                             self.realm.add(article)
@@ -48,13 +49,12 @@ struct ArticleInteractor {
                     }
                 }
             })
-            .dispose()
+            .disposed(by: disposeBag)
     }
     
     func fetchArticles(observable: Observable<SourceObject>) -> Observable<Results<ArticleObject>> {
         let fetchArticlesStream = observable
-            .map { $0.id }
-            .map { self.newsAPI.getArticles(sourceId: $0) }
+            .map { self.newsAPI.getArticles(sourceId: $0.id) }
             .merge()
             .flatMapLatest { Observable.from($0) }
         
@@ -66,6 +66,11 @@ struct ArticleInteractor {
     func fetchSavedArticles() -> Observable<Results<ArticleObject>> {
         let results = realm.objects(ArticleObject.self).filter("isSaved == true")
         return Observable.collection(from: results)
+    }
+    
+    func fetchArticles(from sourceId: SourceId) -> [ArticleObject] {
+        let results = realm.objects(ArticleObject.self).filter("sourceId == '\(sourceId)'")
+        return results.toArray()
     }
 }
 

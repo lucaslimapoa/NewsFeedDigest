@@ -15,26 +15,31 @@ protocol NewsFeedViewModelCoordinatorDelegate {
 }
 
 protocol NewsFeedViewModelType: class {
+    var articleSections: Variable<[ArticleSection]> { get }
     var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
     
-    func fetchArticles() -> Observable<[ArticleSection]>
+    func fetchArticles()
     func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel
 }
 
 class NewsFeedViewModel: NewsFeedViewModelType {
     
     let userStore: UserStoreType
-    let articleInteractor: ArticleInteractor
     let dateConversor: DateConversorType
+    
+    let articleInteractor: ArticleInteractor
+    let sourceInteractor: SourceInteractor
     
     let disposeBag = DisposeBag()
     
     var selectedItemListener = PublishSubject<NewsAPIArticle>()
     var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
+    var articleSections = Variable<[ArticleSection]>([])
     
-    init(userStore: UserStoreType, articleInteractor: ArticleInteractor, dateConversor: DateConversor = DateConversor()) {
+    init(userStore: UserStoreType, articleInteractor: ArticleInteractor, sourceInteractor: SourceInteractor, dateConversor: DateConversor = DateConversor()) {
         self.userStore = userStore
         self.articleInteractor = articleInteractor
+        self.sourceInteractor = sourceInteractor
         self.dateConversor = dateConversor
         
         setupListeners()
@@ -48,12 +53,28 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .addDisposableTo(disposeBag)
     }
     
-    func fetchArticles() -> Observable<[ArticleSection]> {
-        return Observable.create { _ in
-            return Disposables.create()
-        }
+    func fetchArticles() {
+        self.articleSections.value.removeAll()
+        
+        let sourcesObservable = sourceInteractor.fetchSources(predicate: "isFavorite == true")
+            .flatMap { Observable.array(from: $0) }
+            .flatMap { Observable.from($0) }
+
+        _ = articleInteractor.fetchArticles(observable: sourcesObservable)
+        
+        sourcesObservable
+            .map { (sourceObject: SourceObject) -> ArticleSection in
+                let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id)
+                let articleSection = ArticleSection(header: sourceObject.name, items: sectionItems)
+                
+                return articleSection
+            }
+            .subscribe(onNext: { section in
+                self.articleSections.value.append(section)
+            })
+            .dispose()
     }
-    
+
     func sortByDate(_ articles: [NewsAPIArticle]) -> [NewsAPIArticle] {
         return articles.sorted {
             guard let lhsPublishedTime = $0.0.publishedAt,

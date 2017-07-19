@@ -27,11 +27,13 @@ class NewsFeedViewModelTests: XCTestCase {
         let userStore = MockUserStore()
         let mockNewsAPIClient = MockNewsAPI(key: "")
         let mockDateConversor = DateConversor(currentDate: createMockDate())
-        let mockRealm = createInMemoryRealm()
+        let mockRealm = createInMemoryRealm(with: createMockSources())
         
         let articleInteractor = ArticleInteractor(newsAPI: mockNewsAPIClient, realm: mockRealm, dateConversor: mockDateConversor)
+        let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPIClient)
+        sourceInteractor.setFavorite(for: "a", isFavorite: true)
         
-        subject = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, dateConversor: mockDateConversor)
+        subject = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, sourceInteractor: sourceInteractor, dateConversor: mockDateConversor)
     }
     
     func test_FetchingArticles_SortByDate() {
@@ -43,21 +45,20 @@ class NewsFeedViewModelTests: XCTestCase {
         XCTAssertEqual(expectedArticles, actualArticles)
     }
     
-//    func test_FetchArticles() {
-//        let testExpectation = expectation(description: "Should fetch the articles sorted by date")        
-//        
-//        subject.fetchArticles()
-//            .subscribe(onNext: { sections in
-//                XCTAssertEqual(3, sections.count)
-//                testExpectation.fulfill()
-//            }, onError: { _ in
-//                XCTFail("This is not supposed to fail")
-//            })
-//            .disposed(by: disposeBag)
-//        
-//                
-//        waitForExpectations(timeout: 1.0, handler: nil)
-//    }
+    func test_FetchArticles() {
+        let testExpectation = expectation(description: "Should fetch the articles return ArticleSections")
+        
+        subject.fetchArticles()
+            .subscribe(onNext: { sections in
+                XCTAssertEqual(3, sections.count)
+                testExpectation.fulfill()
+            }, onError: { _ in
+                XCTFail("This is not supposed to fail")
+            })
+            .disposed(by: disposeBag)
+                
+        waitForExpectations(timeout: 5.0, handler: nil)
+    }
     
     func test_CreateNewsCellViewModel_FromArticle() {
         let article = createMockArticles()[0]

@@ -41,21 +41,29 @@ class NewsFeedViewController: UITableViewController {
         super.viewDidAppear(animated)
     }
     
+}
+
+private extension NewsFeedViewController {
+    
     func setupRx() {
         refreshTrigger = refreshControl!
             .rx
             .controlEvent(.valueChanged)
             .map { () }
         
-        let articlesStream = Observable.just(())
+        Observable.just(())
             .concat(refreshTrigger)
-            .flatMapLatest { self.viewModel.fetchArticles() }
+            .subscribe(onNext: { _ in
+                self.viewModel.fetchArticles()
+            })
+            .disposed(by: disposeBag)
         
         let dataSource = createDataSource()
-
-        articlesStream
+        
+        viewModel.articleSections
+            .asObservable()
             .do(onNext: { _ in
-                self.refreshControl!.endRefreshing()
+                self.refreshControl?.endRefreshing()
             })
             .bind(to: tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -79,9 +87,8 @@ class NewsFeedViewController: UITableViewController {
         
         return dataSource
     }
+    
 }
-
-
 
 
 

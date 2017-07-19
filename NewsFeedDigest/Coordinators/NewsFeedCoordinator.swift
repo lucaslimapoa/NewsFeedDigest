@@ -40,8 +40,10 @@ class NewsFeedCoordinator: TabBarCoordinator {
         
         let dateConversor = DateConversor(currentDate: Date())
         let articleInteractor = ArticleInteractor(newsAPI: newsAPI, realm: realm, dateConversor: dateConversor)
+        let sourceInteractor = SourceInteractor(realm: realm, newsAPI: newsAPI)        
         
-        let viewModel = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor)
+        let viewModel = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, sourceInteractor: sourceInteractor)
+        
         viewModel.coordinatorDelegate = self
         
         let newsFeedViewController = NewsFeedViewController()

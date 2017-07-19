@@ -84,6 +84,15 @@ class ArticleInteractorTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
+    func test_FetchArticlesFromSourceId() {
+        let mockArticles = createMockArticles()
+        addArticlesToSubject(articles: mockArticles)
+        
+        let actualArticles = subject.fetchArticles(from: "valid-id")
+        
+        XCTAssertEqual(actualArticles.count, 3)
+    }
+    
     func addArticlesToSubject(articles: [NewsAPIArticle]) {
         let articlesObservable = Observable.from(articles)
         subject.add(observable: articlesObservable)
