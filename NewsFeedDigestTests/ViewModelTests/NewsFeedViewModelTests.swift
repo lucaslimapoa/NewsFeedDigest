@@ -30,8 +30,9 @@ class NewsFeedViewModelTests: XCTestCase {
         let mockRealm = createInMemoryRealm(with: createMockSources())
         
         let articleInteractor = ArticleInteractor(newsAPI: mockNewsAPIClient, realm: mockRealm, dateConversor: mockDateConversor)
+        
         let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPIClient)
-        sourceInteractor.setFavorite(for: "a", isFavorite: true)
+        sourceInteractor.setFavorite(for: "a", isFavorite: true)        
         
         subject = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, sourceInteractor: sourceInteractor, dateConversor: mockDateConversor)
     }
@@ -49,8 +50,11 @@ class NewsFeedViewModelTests: XCTestCase {
         let testExpectation = expectation(description: "Should fetch the articles return ArticleSections")
         
         subject.fetchArticles()
+            
+        subject.articleSections
+            .asObservable()
             .subscribe(onNext: { sections in
-                XCTAssertEqual(3, sections.count)
+                XCTAssertEqual(1, sections.count)
                 testExpectation.fulfill()
             }, onError: { _ in
                 XCTFail("This is not supposed to fail")
