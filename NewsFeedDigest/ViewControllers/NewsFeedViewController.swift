@@ -19,7 +19,7 @@ class NewsFeedViewController: UITableViewController {
     let disposeBag = DisposeBag()
     
     var viewModel: NewsFeedViewModelType!
-    var refreshTrigger: Observable<Void>!
+    var refreshTrigger = PublishSubject<Void>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,20 +39,24 @@ class NewsFeedViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        refreshTrigger.onNext(())
     }
     
 }
 
 private extension NewsFeedViewController {
     
-    func setupRx() {
-        refreshTrigger = refreshControl!
+    func setupRx() {        
+        let refreshControlStream = refreshControl!
             .rx
             .controlEvent(.valueChanged)
             .map { () }
         
-        Observable.just(())
-            .concat(refreshTrigger)
+        Observable.of(refreshControlStream, refreshTrigger.asObservable())
+            .merge()
+            .do(onNext: { _ in
+                self.refreshControl?.endRefreshing()
+            })
             .subscribe(onNext: { _ in
                 self.viewModel.fetchArticles()
             })
