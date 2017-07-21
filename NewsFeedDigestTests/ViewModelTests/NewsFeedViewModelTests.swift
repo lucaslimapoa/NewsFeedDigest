@@ -65,8 +65,11 @@ class NewsFeedViewModelTests: XCTestCase {
     }
     
     func test_CreateNewsCellViewModel_FromArticle() {
-        let article = createMockArticles()[0]
-        let cellViewModel = subject.createCellViewModel(from: article)
+        let mockArticle = createMockArticles()[0]
+        let articleObject = ArticleObject(article: mockArticle)
+        articleObject.timeInterval = 1497367500
+        
+        let cellViewModel = subject.createCellViewModel(from: articleObject)
         
         let expectedDescription = "Mock 1\nArticle Mock 1 description"
         let expectedInfo = "Source 1 | 3h ago"

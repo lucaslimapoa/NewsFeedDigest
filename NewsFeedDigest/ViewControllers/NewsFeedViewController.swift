@@ -26,7 +26,8 @@ class NewsFeedViewController: UITableViewController {
         
         tableView.dataSource = nil
         tableView.backgroundColor = Colors.collectionViewBackgroundColor
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: NewsFeedCellId)
+        
+        tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
         
         tableView.contentInset.top = 10
         tableView.contentInset.bottom = 10
@@ -82,10 +83,10 @@ private extension NewsFeedViewController {
         let dataSource = RxTableViewSectionedReloadDataSource<ArticleSection>()
         
         dataSource.configureCell = { dataSource, tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
             
-            cell.textLabel?.text = item.title
-            
+//            cell.viewModel = self.viewModel.createCellViewModel(from: <#T##NewsAPIArticle#>)
+                        
             return cell
         }
         

@@ -19,7 +19,7 @@ protocol NewsFeedViewModelType: class {
     var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
     
     func fetchArticles()
-    func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel
+    func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
 }
 
 class NewsFeedViewModel: NewsFeedViewModelType {
@@ -87,7 +87,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
         }
     }
     
-    func createCellViewModel(from article: NewsAPIArticle) -> NewsCellViewModel {
+    func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
         let source = userStore.find(sourceId: article.sourceId)
         return NewsCellViewModel((article, source), dateConversor: dateConversor)
     }

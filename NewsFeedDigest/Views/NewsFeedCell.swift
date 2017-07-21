@@ -54,23 +54,12 @@ class NewsFeedCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("method not implemented")
+        fatalError("Method not implemented")
     }
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        
-//        setupCellView()
-//        setupSubViews()
-//    }
-    
-    private func setupCellView() {
-        self.layer.cornerRadius = 3.0
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = Colors.cellBorder.cgColor
-        
-        self.backgroundColor = .white
-        self.clipsToBounds = true
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupSubViews()
     }
     
     private func setupSubViews() {

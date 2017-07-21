@@ -15,18 +15,14 @@ struct NewsCellViewModel {
     private(set) var urlToImage: URL?
     private(set) var url: URL?
     
-    init(_ tuple: (article: NewsAPIArticle, source: NewsAPISource?), dateConversor: DateConversorType) {
-        var date: String?
-        
-        if let publishedAt = tuple.article.publishedAt {
-            date = dateConversor.convertToPassedTime(publishedAt: publishedAt)
-        }
+    init(_ tuple: (article: ArticleObject, source: NewsAPISource?), dateConversor: DateConversorType) {
+        let date: String? = dateConversor.convertToPassedTime(timeInterval: tuple.article.timeInterval)
         
         articleInfo = createInformation(source: tuple.source, publishedAt: date)
         articleDescription = createDescription(title: tuple.article.title, description: tuple.article.articleDescription)
         
-        urlToImage = tuple.article.urlToImage
-        url = tuple.article.url
+        urlToImage = URL(string: tuple.article.urlToImage)
+        url = URL(string: tuple.article.url)
     }
     
     func createDescription(title: String?, description: String?) -> NSAttributedString {
