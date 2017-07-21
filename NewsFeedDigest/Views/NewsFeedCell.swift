@@ -27,6 +27,7 @@ class NewsFeedCell: UITableViewCell {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isUserInteractionEnabled = false
+        textView.isScrollEnabled = false
         
         return textView
     }()
@@ -67,13 +68,13 @@ class NewsFeedCell: UITableViewCell {
         addSubview(contentDescription)
         addSubview(informationText)
         
-        articleImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8.0).isActive = true
+        articleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
         articleImageView.widthAnchor.constraint(equalToConstant: 84.0).isActive = true
         articleImageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.heightAnchor.constraint(equalToConstant: 66.0).isActive = true
+        contentDescription.heightAnchor.constraint(equalToConstant: 99.0).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: articleImageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
