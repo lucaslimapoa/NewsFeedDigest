@@ -42,6 +42,10 @@ class NewsFeedViewController: UITableViewController {
         super.viewDidAppear(animated)
         refreshTrigger.onNext(())
     }
+ 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0
+    }
     
 }
 
@@ -73,7 +77,7 @@ private extension NewsFeedViewController {
             .bind(to: tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        tableView!.rx
+        tableView.rx
             .modelSelected(NewsAPIArticle.self)
             .bind(to: viewModel.selectedItemListener)
             .disposed(by: disposeBag)
@@ -85,8 +89,8 @@ private extension NewsFeedViewController {
         dataSource.configureCell = { dataSource, tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
             
-//            cell.viewModel = self.viewModel.createCellViewModel(from: <#T##NewsAPIArticle#>)
-                        
+            cell.viewModel = self.viewModel.createCellViewModel(from: item)
+            
             return cell
         }
         
