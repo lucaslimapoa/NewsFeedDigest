@@ -54,7 +54,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle) {
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject) {
         detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
     }

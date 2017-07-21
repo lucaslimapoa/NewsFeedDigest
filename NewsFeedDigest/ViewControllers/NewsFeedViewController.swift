@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import NewsAPISwift
 import RxDataSources
 
 let NewsFeedCellId = "NewsFeedCellId"
@@ -78,7 +77,7 @@ private extension NewsFeedViewController {
             .disposed(by: disposeBag)
         
         tableView.rx
-            .modelSelected(NewsAPIArticle.self)
+            .modelSelected(ArticleObject.self)
             .bind(to: viewModel.selectedItemListener)
             .disposed(by: disposeBag)
     }

@@ -11,12 +11,12 @@ import RealmSwift
 import NewsAPISwift
 
 protocol NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject)
 }
 
 protocol NewsFeedViewModelType: class {
     var articleSections: Variable<[ArticleSection]> { get }
-    var selectedItemListener: PublishSubject<NewsAPIArticle> { get }
+    var selectedItemListener: PublishSubject<ArticleObject> { get }
     
     func fetchArticles()
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
@@ -32,7 +32,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     
     let disposeBag = DisposeBag()
     
-    var selectedItemListener = PublishSubject<NewsAPIArticle>()
+    var selectedItemListener = PublishSubject<ArticleObject>()
     var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
     var articleSections = Variable<[ArticleSection]>([])
     
