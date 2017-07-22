@@ -35,11 +35,11 @@ class NewsFeedViewController: UITableViewController {
         tableView.addSubview(refreshControl!)
         
         setupRx()
+        refreshTrigger.onNext(())
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        refreshTrigger.onNext(())
     }
  
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
