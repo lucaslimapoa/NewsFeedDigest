@@ -52,7 +52,7 @@ struct ArticleInteractor {
             .disposed(by: disposeBag)
     }
     
-    func fetchArticles(observable: Observable<SourceObject>) -> Observable<Results<ArticleObject>> {
+    func fetchArticles(observable: Observable<SourceObject>, predicate: String? = nil) -> Observable<Results<ArticleObject>> {
         let fetchArticlesStream = observable
             .map { self.newsAPI.getArticles(sourceId: $0.id) }
             .merge()
@@ -60,7 +60,7 @@ struct ArticleInteractor {
         
         add(observable: fetchArticlesStream)
         
-        return fetchArticles()
+        return fetchArticles(predicate: predicate)
     }
     
     func fetchSavedArticles() -> Observable<Results<ArticleObject>> {

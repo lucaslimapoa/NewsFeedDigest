@@ -9,6 +9,7 @@
 import XCTest
 import RxTest
 import RxSwift
+import RealmSwift
 import NewsAPISwift
 
 @testable import NewsFeedDigest
@@ -18,6 +19,7 @@ class NewsFeedViewModelTests: XCTestCase {
     var viewModel: NewsFeedViewModel!
     var disposeBag: DisposeBag!
     var subject: NewsFeedViewModel!
+    var realm: Realm!
     
     override func setUp() {
         super.setUp()
@@ -27,23 +29,40 @@ class NewsFeedViewModelTests: XCTestCase {
         let userStore = MockUserStore()
         let mockNewsAPIClient = MockNewsAPI(key: "")
         let mockDateConversor = DateConversor(currentDate: createMockDate())
-        let mockRealm = createInMemoryRealm(with: createMockSources())
+        realm = createInMemoryRealm(with: createMockSources())
         
-        let articleInteractor = ArticleInteractor(newsAPI: mockNewsAPIClient, realm: mockRealm, dateConversor: mockDateConversor)
+        let articleInteractor = ArticleInteractor(newsAPI: mockNewsAPIClient, realm: realm, dateConversor: mockDateConversor)
         
-        let sourceInteractor = SourceInteractor(realm: mockRealm, newsAPI: mockNewsAPIClient)
+        let sourceInteractor = SourceInteractor(realm: realm, newsAPI: mockNewsAPIClient)
         sourceInteractor.setFavorite(for: "a", isFavorite: true)        
         
         subject = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, sourceInteractor: sourceInteractor, dateConversor: mockDateConversor)
     }
     
+    override func tearDown() {
+        cleanRealm(realm)
+    }
+    
     func test_FetchingArticles_SortByDate() {
-        let tempArticles = createMockArticles()
+        let testExpectation = expectation(description: "Should return the articles sorted by date")
+        let mockArticles = createRealmMockArticles()
+        let expectedArticles = [ mockArticles[2], mockArticles[1], mockArticles[0] ]
         
-        let expectedArticles = createSortedMockArticles()
-        let actualArticles = subject.sortByDate(tempArticles)
+        addMockArticlesToRealm(mockArticles)        
+        subject.fetchArticles()
         
-        XCTAssertEqual(expectedArticles, actualArticles)
+        subject.articleSections
+            .asObservable()
+            .subscribe(onNext: { sections in
+                XCTAssertEqual(expectedArticles, sections[0].items)
+                testExpectation.fulfill()
+            },
+            onError: { _ in
+                XCTFail("Should not fail")
+            })
+            .disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     func test_FetchArticles() {
@@ -81,9 +100,29 @@ class NewsFeedViewModelTests: XCTestCase {
         XCTAssertNil(cellViewModel.urlToImage)
     }
     
-    func createSortedMockArticles() -> [NewsAPIArticle] {
+    func addMockArticlesToRealm(_ articles: [ArticleObject]) {
+        try! realm.write {
+            for article in articles {
+                realm.add(article)
+            }
+        }
+    }
+    
+    func createRealmMockArticles() -> [ArticleObject] {
         let tempArticles = createMockArticles()
-        return [tempArticles[2], tempArticles[1], tempArticles[0]]
+        let first = ArticleObject(article: tempArticles[0])
+        first.sourceId = "a"
+        first.timeInterval = 1497367500
+        
+        let second = ArticleObject(article: tempArticles[1])
+        second.sourceId = "a"
+        second.timeInterval = 1497371700
+        
+        let third = ArticleObject(article: tempArticles[2])
+        third.sourceId = "a"
+        third.timeInterval = 1497374700
+        
+        return [first, second, third]
     }
     
     func createMockArticleSections() -> [ArticleSection] {

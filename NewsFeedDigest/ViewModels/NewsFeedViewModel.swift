@@ -64,7 +64,9 @@ class NewsFeedViewModel: NewsFeedViewModelType {
         
         sourcesObservable
             .map { (sourceObject: SourceObject) -> ArticleSection in
-                let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id)
+                let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
+                    return $0.0.timeInterval > $0.1.timeInterval
+                }
                 let articleSection = ArticleSection(header: sourceObject.name, items: sectionItems)
                 
                 return articleSection
@@ -73,18 +75,6 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                 self.articleSections.value.append(section)
             })
             .dispose()
-    }
-
-    func sortByDate(_ articles: [NewsAPIArticle]) -> [NewsAPIArticle] {
-        return articles.sorted {
-            guard let lhsPublishedTime = $0.0.publishedAt,
-                let rhsPublishedTime = $0.1.publishedAt else { return false }
-            
-            guard let lhsDate = dateConversor.convertToDate(string: lhsPublishedTime),
-                let rhsDate = dateConversor.convertToDate(string: rhsPublishedTime) else { return false }
-            
-            return lhsDate > rhsDate
-        }
     }
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
