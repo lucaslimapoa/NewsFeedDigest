@@ -71,6 +71,10 @@ struct SourceInteractor {
         return sortedResults
     }
     
+    func fetchSource(with id: String) -> SourceObject? {
+        return realm.objects(SourceObject.self).filter("id == %@", id).first
+    }
+    
     func isFavorite(_ sourceId: SourceId) -> Observable<Results<SourceObject>> {
         return fetchSources(predicate: "id == '\(sourceId)' AND isFavorite = true")
     }

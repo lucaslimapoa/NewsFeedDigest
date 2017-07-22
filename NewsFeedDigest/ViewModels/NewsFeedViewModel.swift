@@ -24,7 +24,6 @@ protocol NewsFeedViewModelType: class {
 
 class NewsFeedViewModel: NewsFeedViewModelType {
     
-    let userStore: UserStoreType
     let dateConversor: DateConversorType
     
     let articleInteractor: ArticleInteractor
@@ -36,8 +35,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
     var articleSections = Variable<[ArticleSection]>([])
     
-    init(userStore: UserStoreType, articleInteractor: ArticleInteractor, sourceInteractor: SourceInteractor, dateConversor: DateConversor = DateConversor()) {
-        self.userStore = userStore
+    init(articleInteractor: ArticleInteractor, sourceInteractor: SourceInteractor, dateConversor: DateConversor = DateConversor()) {        
         self.articleInteractor = articleInteractor
         self.sourceInteractor = sourceInteractor
         self.dateConversor = dateConversor
@@ -78,7 +76,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     }
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
-        let source = userStore.find(sourceId: article.sourceId)
+        let source = sourceInteractor.fetchSource(with: article.sourceId)
         return NewsCellViewModel((article, source), dateConversor: dateConversor)
     }
 }

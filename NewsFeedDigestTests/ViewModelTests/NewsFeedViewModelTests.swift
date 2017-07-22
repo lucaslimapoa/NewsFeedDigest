@@ -26,7 +26,6 @@ class NewsFeedViewModelTests: XCTestCase {
         
         disposeBag = DisposeBag()
         
-        let userStore = MockUserStore()
         let mockNewsAPIClient = MockNewsAPI(key: "")
         let mockDateConversor = DateConversor(currentDate: createMockDate())
         realm = createInMemoryRealm(with: createMockSources())
@@ -36,7 +35,7 @@ class NewsFeedViewModelTests: XCTestCase {
         let sourceInteractor = SourceInteractor(realm: realm, newsAPI: mockNewsAPIClient)
         sourceInteractor.setFavorite(for: "a", isFavorite: true)        
         
-        subject = NewsFeedViewModel(userStore: userStore, articleInteractor: articleInteractor, sourceInteractor: sourceInteractor, dateConversor: mockDateConversor)
+        subject = NewsFeedViewModel(articleInteractor: articleInteractor, sourceInteractor: sourceInteractor, dateConversor: mockDateConversor)
     }
     
     override func tearDown() {
@@ -91,7 +90,7 @@ class NewsFeedViewModelTests: XCTestCase {
         let cellViewModel = subject.createCellViewModel(from: articleObject)
         
         let expectedDescription = "Mock 1\nArticle Mock 1 description"
-        let expectedInfo = "Source 1 | 3h ago"
+        let expectedInfo = "3h ago"
         
         XCTAssertEqual(expectedInfo, cellViewModel.articleInfo.string)
         XCTAssertEqual(expectedDescription, cellViewModel.articleDescription.string)

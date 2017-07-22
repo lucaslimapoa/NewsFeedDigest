@@ -15,7 +15,7 @@ struct NewsCellViewModel {
     private(set) var urlToImage: URL?
     private(set) var url: URL?
     
-    init(_ tuple: (article: ArticleObject, source: NewsAPISource?), dateConversor: DateConversorType) {
+    init(_ tuple: (article: ArticleObject, source: SourceObject?), dateConversor: DateConversorType) {
         let date: String? = dateConversor.convertToPassedTime(timeInterval: tuple.article.timeInterval)
         
         articleInfo = createInformation(source: tuple.source, publishedAt: date)
@@ -39,10 +39,14 @@ struct NewsCellViewModel {
         return attributedText
     }
     
-    func createInformation(source: NewsAPISource?, publishedAt: String?) -> NSAttributedString {
+    func createInformation(source: SourceObject?, publishedAt: String?) -> NSAttributedString {
         let sourceName = source?.name ?? ""
+        var categoryColor: UIColor = .black
         
-        let categoryColor = Colors.color(for: source?.category)
+        if let category = source?.category {
+            let sourceCategory = NewsAPISwift.Category(rawValue: category)
+            categoryColor = Colors.color(for: sourceCategory)
+        }
         
         let infoText = NSMutableAttributedString(string: sourceName, attributes: [
             NSForegroundColorAttributeName: categoryColor,
@@ -50,7 +54,9 @@ struct NewsCellViewModel {
             ])
         
         if let publishedAt = publishedAt {
-            infoText.append(NSAttributedString(string: " | \(publishedAt)", attributes: [
+            let separator = (sourceName.isEmpty) ? "" : " | "
+            
+            infoText.append(NSAttributedString(string: "\(separator)\(publishedAt)", attributes: [
                 NSForegroundColorAttributeName: UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0),
                 NSFontAttributeName: UIFont.systemFont(ofSize: 11.0)
                 ]))
