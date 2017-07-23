@@ -20,6 +20,8 @@ class NewsFeedViewController: UITableViewController {
     var viewModel: NewsFeedViewModelType!
     var refreshTrigger = PublishSubject<Void>()
     
+    var dataSource: RxTableViewSectionedReloadDataSource<ArticleSection>!
+    
     override init(style: UITableViewStyle = .grouped) {
         super.init(style: style)
     }
@@ -54,6 +56,19 @@ class NewsFeedViewController: UITableViewController {
         return 120.0
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = Bundle.main.loadNibNamed("NewsFeedSectionHeader", owner: self, options: nil)?.first as! NewsFeedSectionHeaderView    
+        
+        let headerTitle = dataSource.sectionModels[section].header
+        view.titleLabel.text = headerTitle
+        
+        return view
+    }
+    
 }
 
 private extension NewsFeedViewController {
@@ -74,7 +89,7 @@ private extension NewsFeedViewController {
             })
             .disposed(by: disposeBag)
         
-        let dataSource = createDataSource()
+        dataSource = createDataSource()
         
         viewModel.articleSections
             .asObservable()
