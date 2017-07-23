@@ -20,6 +20,14 @@ class NewsFeedViewController: UITableViewController {
     var viewModel: NewsFeedViewModelType!
     var refreshTrigger = PublishSubject<Void>()
     
+    override init(style: UITableViewStyle = .grouped) {
+        super.init(style: style)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Method not implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -91,6 +99,10 @@ private extension NewsFeedViewController {
             cell.viewModel = self.viewModel.createCellViewModel(from: item)
             
             return cell
+        }
+        
+        dataSource.titleForHeaderInSection = { dataSource, index in
+            return dataSource.sectionModels[index].header
         }
         
         return dataSource
