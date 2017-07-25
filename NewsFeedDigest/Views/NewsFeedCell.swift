@@ -43,6 +43,14 @@ class NewsFeedCell: UITableViewCell {
         return infoText
     }()
     
+    var separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(r: 224, g: 224, b: 224)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     var viewModel: NewsCellViewModel! {
         didSet {
             contentDescription.attributedText = viewModel.articleDescription
@@ -63,12 +71,21 @@ class NewsFeedCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews()
         setupCell()
+        setupSeparator()
     }
     
     private func addSubviews() {
         addSubview(articleImageView)
         addSubview(contentDescription)
         addSubview(informationText)
+        addSubview(separatorView)
+    }
+    
+    private func setupSeparator() {
+        separatorView.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        separatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1.0).isActive = true
+        separatorView.leftAnchor.constraint(equalTo: leftAnchor, constant: 26.0).isActive = true
+        separatorView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
     }
     
     func setupCell() {        

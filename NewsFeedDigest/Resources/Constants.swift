@@ -52,5 +52,6 @@ struct Fonts {
     static let cellTitleFont = UIFont.boldSystemFont(ofSize: 15.0)
     static let cellDescriptionFont = UIFont.systemFont(ofSize: 13.5)
     static let cellInformationFont = UIFont.systemFont(ofSize: 10.0)
+    static let cellPublishedAtFont = UIFont.systemFont(ofSize: 12.0)
 }
 

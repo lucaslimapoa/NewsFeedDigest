@@ -40,25 +40,12 @@ struct NewsCellViewModel {
     }
     
     func createInformation(source: SourceObject?, publishedAt: String?) -> NSAttributedString {
-        let sourceName = source?.name ?? ""
-        var categoryColor: UIColor = .black
-        
-        if let category = source?.category {
-            let sourceCategory = NewsAPISwift.Category(rawValue: category)
-            categoryColor = Colors.color(for: sourceCategory)
-        }
-        
-        let infoText = NSMutableAttributedString(string: sourceName, attributes: [
-            NSForegroundColorAttributeName: categoryColor,
-            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 12.0)
-            ])
+        let infoText = NSMutableAttributedString()
         
         if let publishedAt = publishedAt {
-            let separator = (sourceName.isEmpty) ? "" : " | "
-            
-            infoText.append(NSAttributedString(string: "\(separator)\(publishedAt)", attributes: [
+            infoText.append(NSAttributedString(string: publishedAt, attributes: [
                 NSForegroundColorAttributeName: UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0),
-                NSFontAttributeName: UIFont.systemFont(ofSize: 11.0)
+                NSFontAttributeName: Fonts.cellPublishedAtFont
                 ]))
         }
         
