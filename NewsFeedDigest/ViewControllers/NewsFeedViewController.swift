@@ -12,6 +12,7 @@ import RxCocoa
 import RxDataSources
 
 let NewsFeedCellId = "NewsFeedCellId"
+let BigNewsFeedCellId = "BigNewsFeedCellId"
 
 class NewsFeedViewController: UITableViewController {
     
@@ -34,9 +35,11 @@ class NewsFeedViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.dataSource = nil
+        tableView.separatorStyle = .none
         tableView.backgroundColor = Colors.collectionViewBackgroundColor
         
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
+        tableView.register(BigNewsFeedCell.self, forCellReuseIdentifier: BigNewsFeedCellId)
         
         tableView.contentInset.top = 10
         tableView.contentInset.bottom = 10
@@ -53,11 +56,11 @@ class NewsFeedViewController: UITableViewController {
     }
  
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120.0
+        return (indexPath.row == 0) ? 350.0 : 120.0
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50.0
+        return 40.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -109,7 +112,8 @@ private extension NewsFeedViewController {
         let dataSource = RxTableViewSectionedReloadDataSource<ArticleSection>()
         
         dataSource.configureCell = { dataSource, tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
+            let cell = (indexPath.row == 0) ?
+                tableView.dequeueReusableCell(withIdentifier: BigNewsFeedCellId, for: indexPath) as! BigNewsFeedCell : tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
             
             cell.viewModel = self.viewModel.createCellViewModel(from: item)
             

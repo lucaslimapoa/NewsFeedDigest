@@ -28,6 +28,7 @@ class NewsFeedCell: UITableViewCell {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isUserInteractionEnabled = false
         textView.isScrollEnabled = false
+        textView.backgroundColor = .clear
         
         return textView
     }()
@@ -35,9 +36,9 @@ class NewsFeedCell: UITableViewCell {
     var informationText: UILabel = {
        let infoText = UILabel()
         infoText.translatesAutoresizingMaskIntoConstraints = false
-        infoText.backgroundColor = .white
+        infoText.backgroundColor = .clear
         infoText.font = Fonts.cellInformationFont
-        infoText.textColor = Colors.subtitleText        
+        infoText.textColor = Colors.subtitleText
         
         return infoText
     }()
@@ -60,14 +61,17 @@ class NewsFeedCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSubViews()
+        addSubviews()
+        setupCell()
     }
     
-    private func setupSubViews() {
+    private func addSubviews() {
         addSubview(articleImageView)
         addSubview(contentDescription)
         addSubview(informationText)
-        
+    }
+    
+    func setupCell() {        
         articleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
         articleImageView.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
@@ -81,6 +85,6 @@ class NewsFeedCell: UITableViewCell {
         informationText.leftAnchor.constraint(equalTo: contentDescription.leftAnchor, constant: 5).isActive = true
         informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
         informationText.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        informationText.heightAnchor.constraint(equalToConstant: 15)
+        informationText.heightAnchor.constraint(equalToConstant: 15).isActive = true
     }
 }
