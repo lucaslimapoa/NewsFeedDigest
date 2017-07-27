@@ -64,8 +64,10 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .map { (sourceObject: SourceObject) -> ArticleSection in
                 let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
                     return $0.0.timeInterval > $0.1.timeInterval
-                }
-                let articleSection = ArticleSection(header: sourceObject.name, items: sectionItems)
+                }.prefix(4)
+                
+                
+                let articleSection = ArticleSection(header: sourceObject.name, items: Array(sectionItems))
                 
                 return articleSection
             }

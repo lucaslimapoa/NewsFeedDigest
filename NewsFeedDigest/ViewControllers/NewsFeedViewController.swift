@@ -35,8 +35,8 @@ class NewsFeedViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.dataSource = nil
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = Colors.collectionViewBackgroundColor
+        tableView.separatorStyle = .singleLine
+        tableView.backgroundColor = Colors.collectionViewBackgroundColor    
         
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
         tableView.register(BigNewsFeedCell.self, forCellReuseIdentifier: BigNewsFeedCellId)
@@ -60,7 +60,7 @@ class NewsFeedViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return 60.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
