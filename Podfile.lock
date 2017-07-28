@@ -3,6 +3,9 @@ PODS:
     - ObjectMapper (~> 2.2)
   - Nuke (5.1.1)
   - ObjectMapper (2.2.7)
+  - R.swift (3.3.0):
+    - R.swift.Library (~> 3.0.2)
+  - R.swift.Library (3.0.2)
   - Realm (2.8.3):
     - Realm/Headers (= 2.8.3)
   - Realm/Headers (2.8.3)
@@ -25,6 +28,7 @@ PODS:
 DEPENDENCIES:
   - NewsAPISwift (~> 0.1.1)
   - Nuke (~> 5.0)
+  - R.swift
   - RealmSwift (~> 2.8)
   - RxBlocking (~> 3.0)
   - RxCocoa (~> 3.0)
@@ -37,6 +41,8 @@ SPEC CHECKSUMS:
   NewsAPISwift: 1c13680b248e482ded9dc0ee3ddbe48e5d3851fc
   Nuke: 0a2ddb4bd13d75782964bf598a159ca2a836d826
   ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
+  R.swift: bde9704d50ff36820f49e266bc88ef545e1e9b36
+  R.swift.Library: fbdec16c9802ad104fc1ba53415dc190e6ec5c73
   Realm: 3601ef091c8c499a31101d8563b991e75546cdce
   RealmSwift: 8183818515471b01a99abdd2970f8e4fd52b6f4a
   RxBlocking: 471315e18b87c5ed4b9d0c69a57dfdbca5c01af1
@@ -46,6 +52,6 @@ SPEC CHECKSUMS:
   RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
   RxTest: 1763765fd0e2282b0eb44c9050effdd7fe7156d4
 
-PODFILE CHECKSUM: 8a08814271e119209d7e71f9b9a7835042120faa
+PODFILE CHECKSUM: 0fcc232e7d30b6520c848139dc2d28dae7926951
 
 COCOAPODS: 1.2.1

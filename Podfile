@@ -13,6 +13,7 @@ target 'NewsFeedDigest' do
   pod 'RealmSwift',    '~> 2.8'
   pod 'RxDataSources', '~> 1.0'
   pod 'RxRealm'
+  pod 'R.swift'
 
   target 'NewsFeedDigestTests' do
     inherit! :search_paths

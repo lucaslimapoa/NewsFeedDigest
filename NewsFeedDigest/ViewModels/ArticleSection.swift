@@ -11,6 +11,7 @@ import RxDataSources
 struct ArticleSection {
     var header: String
     var items: [Item]
+    var color: UIColor
 }
 
 extension ArticleSection: SectionModelType {

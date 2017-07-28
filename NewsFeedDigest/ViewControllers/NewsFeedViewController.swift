@@ -35,8 +35,8 @@ class NewsFeedViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.dataSource = nil
-        tableView.separatorStyle = .singleLine
-        tableView.backgroundColor = Colors.collectionViewBackgroundColor    
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = Colors.collectionViewBackgroundColor
         
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
         tableView.register(BigNewsFeedCell.self, forCellReuseIdentifier: BigNewsFeedCellId)
@@ -63,11 +63,39 @@ class NewsFeedViewController: UITableViewController {
         return 60.0
     }
     
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = Bundle.main.loadNibNamed("NewsFeedSectionHeader", owner: self, options: nil)?.first as! NewsFeedSectionHeaderView    
+        guard let view = R.nib.newsFeedSectionHeader.firstView(owner: self) else { return nil }
+
+        let color = dataSource.sectionModels[section].color
+        let sourceName = dataSource.sectionModels[section].header
         
-        let headerTitle = dataSource.sectionModels[section].header
-        view.titleLabel.text = headerTitle
+        view.titleLabel.textColor = color
+        view.titleLabel.text = sourceName
+        
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let view = R.nib.newsFeedSectionFooter.firstView(owner: self) else { return nil }
+        
+        let sourceName = dataSource.sectionModels[section].header.localizedUppercase
+        let color = dataSource.sectionModels[section].color
+        
+        let attributedText = NSMutableAttributedString(string: "MORE STORIES FROM ", attributes: [
+            NSFontAttributeName: Fonts.footerText,
+            NSForegroundColorAttributeName: Colors.footerText
+            ])
+        
+        attributedText.append(NSAttributedString(string: sourceName, attributes: [
+            NSFontAttributeName: Fonts.footerText,
+            NSForegroundColorAttributeName: color
+            ]))
+        
+        view.textLabel.attributedText = attributedText
         
         return view
     }
@@ -119,11 +147,7 @@ private extension NewsFeedViewController {
             
             return cell
         }
-        
-        dataSource.titleForHeaderInSection = { dataSource, index in
-            return dataSource.sectionModels[index].header
-        }
-        
+
         return dataSource
     }
     
