@@ -10,6 +10,10 @@ import UIKit
 
 class BigNewsFeedCell: NewsFeedCell {
     
+    override func setupViewModel(style: CellStyle) {
+        super.setupViewModel(style: .big)
+    }
+    
     override func setupCell() {
         articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16.0).isActive = true
         articleImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16.0).isActive = true

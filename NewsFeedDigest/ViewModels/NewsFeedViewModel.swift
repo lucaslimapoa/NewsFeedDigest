@@ -61,10 +61,14 @@ class NewsFeedViewModel: NewsFeedViewModelType {
         _ = articleInteractor.fetchArticles(observable: sourcesObservable)
         
         sourcesObservable
-            .map { (sourceObject: SourceObject) -> ArticleSection in
+            .map { (sourceObject: SourceObject) -> ArticleSection? in
                 let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
                     return $0.0.timeInterval > $0.1.timeInterval
-                }.prefix(4)                
+                }.prefix(4)
+                
+                guard sectionItems.count > 0 else {
+                    return nil
+                }
                 
                 let categoryColor = Colors.color(for: Category(rawValue: sourceObject.category))
                 let sectionItemsArray = Array(sectionItems)
@@ -72,6 +76,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                 
                 return articleSection
             }
+            .flatMap { Observable.from(optional: $0) }
             .subscribe(onNext: { section in
                 self.articleSections.value.append(section)
             })

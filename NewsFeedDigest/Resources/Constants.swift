@@ -51,8 +51,11 @@ struct Colors {
 
 struct Fonts {
     static let cellTitleFont = UIFont.boldSystemFont(ofSize: 15.0)
+    static let cellBigTitleFont = UIFont.boldSystemFont(ofSize: 18.0)
     static let cellDescriptionFont = UIFont.systemFont(ofSize: 13.5)
+    static let cellBigDescriptionFont = UIFont.systemFont(ofSize: 16.0)
     static let cellInformationFont = UIFont.systemFont(ofSize: 10.0)
+    static let cellBigInformationFont = UIFont.systemFont(ofSize: 14.0)
     static let cellPublishedAtFont = UIFont.systemFont(ofSize: 12.0)
     static let footerText = UIFont.boldSystemFont(ofSize: 14.0)
     static let headerText = UIFont.boldSystemFont(ofSize: 18.0)

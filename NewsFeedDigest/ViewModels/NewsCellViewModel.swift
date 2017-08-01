@@ -8,44 +8,82 @@
 
 import NewsAPISwift
 
+enum CellStyle {
+    case normal, big
+}
+
+fileprivate struct CellFonts {
+    
+    fileprivate var titleFont: UIFont!
+    fileprivate var descriptionFont: UIFont!
+    fileprivate var infoFont: UIFont!
+    
+    init(style: CellStyle) {
+        switch style {
+        case .normal:
+            titleFont = Fonts.cellTitleFont
+            descriptionFont = Fonts.cellDescriptionFont
+            infoFont = Fonts.cellInformationFont
+        case .big:
+            titleFont = Fonts.cellBigTitleFont
+            descriptionFont = Fonts.cellBigDescriptionFont
+            infoFont = Fonts.cellBigInformationFont
+        }
+    }
+}
+
 struct NewsCellViewModel {
     
-    private(set) var articleDescription: NSAttributedString!
-    private(set) var articleInfo: NSAttributedString!
+    private var articleTitle: String?
+    private var articleDescription: String?
+    private var articleDate: String?
+    
     private(set) var urlToImage: URL?
     private(set) var url: URL?
     
     init(_ tuple: (article: ArticleObject, source: SourceObject?), dateConversor: DateConversorType) {
-        let date: String? = dateConversor.convertToPassedTime(timeInterval: tuple.article.timeInterval)
-        
-        articleInfo = createInformation(source: tuple.source, publishedAt: date)
-        articleDescription = createDescription(title: tuple.article.title, description: tuple.article.articleDescription)
+        articleTitle = tuple.article.title
+        articleDescription = tuple.article.articleDescription
+        articleDate = dateConversor.convertToPassedTime(timeInterval: tuple.article.timeInterval)
         
         urlToImage = URL(string: tuple.article.urlToImage)
         url = URL(string: tuple.article.url)
     }
     
-    func createDescription(title: String?, description: String?) -> NSAttributedString {
+    func title(style: CellStyle) -> NSAttributedString {
+        let cellFonts = CellFonts(style: style)
+        return createDescription(title: articleTitle, description: articleDescription, cellFonts: cellFonts)
+    }
+    
+    func information(style: CellStyle) -> NSAttributedString {
+        let cellFonts = CellFonts(style: style)
+        return createInformation(publishedAt: articleDate, cellFonts: cellFonts)
+    }
+}
+
+private extension NewsCellViewModel {
+    
+    func createDescription(title: String?, description: String?, cellFonts: CellFonts) -> NSAttributedString {
         guard let title = title, let articleDescription = description else { return NSAttributedString() }
         
-        let attributedText = NSMutableAttributedString(string: "\(title)\n", attributes: [NSFontAttributeName: Fonts.cellTitleFont])
+        let attributedText = NSMutableAttributedString(string: "\(title)\n", attributes: [NSFontAttributeName: cellFonts.titleFont])
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4.0
         
         attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: NSMakeRange(0, attributedText.string.characters.count))
-        attributedText.append(NSAttributedString(string: articleDescription, attributes: [NSForegroundColorAttributeName: Colors.cellInformationText, NSFontAttributeName: Fonts.cellDescriptionFont]))
+        attributedText.append(NSAttributedString(string: articleDescription, attributes: [NSForegroundColorAttributeName: Colors.cellInformationText, NSFontAttributeName: cellFonts.descriptionFont]))
         
         return attributedText
     }
     
-    func createInformation(source: SourceObject?, publishedAt: String?) -> NSAttributedString {
+    func createInformation(publishedAt: String?, cellFonts: CellFonts) -> NSAttributedString {
         let infoText = NSMutableAttributedString()
         
         if let publishedAt = publishedAt {
             infoText.append(NSAttributedString(string: publishedAt, attributes: [
                 NSForegroundColorAttributeName: UIColor(red: 128/255, green: 130/255, blue: 137/255, alpha: 1.0),
-                NSFontAttributeName: Fonts.cellPublishedAtFont
+                NSFontAttributeName: cellFonts.infoFont
                 ]))
         }
         

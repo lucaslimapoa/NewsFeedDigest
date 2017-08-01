@@ -53,13 +53,7 @@ class NewsFeedCell: UITableViewCell {
     
     var viewModel: NewsCellViewModel! {
         didSet {
-            contentDescription.attributedText = viewModel.articleDescription
-            informationText.attributedText = viewModel.articleInfo
-            
-            articleImageView.image = nil
-            if let urlToImage = viewModel.urlToImage {
-                Nuke.loadImage(with: urlToImage, into: articleImageView)
-            }
+            setupViewModel(style: .normal)
         }
     }
     
@@ -72,6 +66,16 @@ class NewsFeedCell: UITableViewCell {
         addSubviews()
         setupCell()
         setupSeparator()
+    }
+    
+    func setupViewModel(style: CellStyle) {
+        contentDescription.attributedText = viewModel.title(style: style)
+        informationText.attributedText = viewModel.information(style: style)
+        
+        articleImageView.image = nil
+        if let urlToImage = viewModel.urlToImage {
+            Nuke.loadImage(with: urlToImage, into: articleImageView)
+        }
     }
     
     private func addSubviews() {
