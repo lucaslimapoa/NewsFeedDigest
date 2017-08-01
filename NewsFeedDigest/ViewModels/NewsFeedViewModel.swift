@@ -52,7 +52,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     }
     
     func fetchArticles() {
-        self.articleSections.value.removeAll()
+        articleSections.value.removeAll()
         
         let sourcesObservable = sourceInteractor.fetchSources(predicate: "isFavorite == true")
             .flatMap { Observable.array(from: $0) }
@@ -61,8 +61,10 @@ class NewsFeedViewModel: NewsFeedViewModelType {
         _ = articleInteractor.fetchArticles(observable: sourcesObservable)
         
         sourcesObservable
-            .map { (sourceObject: SourceObject) -> ArticleSection? in
-                let sectionItems = self.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
+            .map { [weak self] (sourceObject: SourceObject) -> ArticleSection? in
+                guard let welf = self else { return nil }
+                
+                let sectionItems = welf.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
                     return $0.0.timeInterval > $0.1.timeInterval
                 }.prefix(4)
                 
@@ -77,8 +79,9 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                 return articleSection
             }
             .flatMap { Observable.from(optional: $0) }
-            .subscribe(onNext: { section in
-                self.articleSections.value.append(section)
+            .subscribe(onNext: { [weak self] section in
+                guard let welf = self else { return }
+                welf.articleSections.value.append(section)
             })
             .dispose()
     }
