@@ -52,15 +52,23 @@ struct ArticleInteractor {
             .disposed(by: disposeBag)
     }
     
-    func fetchArticles(observable: Observable<SourceObject>, predicate: String? = nil) -> Observable<Results<ArticleObject>> {
+    func fetchArticles(observable: Observable<SourceObject>, predicate: String? = nil) {
         let fetchArticlesStream = observable
             .map { self.newsAPI.getArticles(sourceId: $0.id) }
             .merge()
             .flatMapLatest { Observable.from($0) }
         
-        add(observable: fetchArticlesStream)
+        add(observable: fetchArticlesStream)                
+    }
+    
+    func fetchArticles(predicate: String? = nil) -> Observable<Results<ArticleObject>> {
+        var results = realm.objects(ArticleObject.self)
         
-        return fetchArticles(predicate: predicate)
+        if let predicate = predicate {
+            results = results.filter(predicate)
+        }
+        
+        return Observable.collection(from: results)
     }
     
     func fetchSavedArticles() -> Observable<Results<ArticleObject>> {
@@ -72,18 +80,4 @@ struct ArticleInteractor {
         let results = realm.objects(ArticleObject.self).filter("sourceId == '\(sourceId)'")
         return results.toArray()
     }
-}
-
-private extension ArticleInteractor {
-    
-    func fetchArticles(predicate: String? = nil) -> Observable<Results<ArticleObject>> {
-        var results = realm.objects(ArticleObject.self)
-        
-        if let predicate = predicate {
-            results = results.filter(predicate)
-        }
-        
-        return Observable.collection(from: results)
-    }
-
 }

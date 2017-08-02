@@ -41,6 +41,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
         self.dateConversor = dateConversor
         
         setupListeners()
+        setupRx()
     }
     
     func setupListeners() {
@@ -51,39 +52,62 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .addDisposableTo(disposeBag)
     }
     
+    func setupRx() {
+        articleInteractor.fetchArticles()
+            .map { $0.sorted { $0.0.timeInterval > $0.1.timeInterval } }
+            .map { (articles: [ArticleObject]) -> [String: [ArticleObject]] in
+                var groups = [String: [ArticleObject]]()
+                
+                articles.forEach { article in
+                    if groups[article.sourceId] == nil {
+                        groups[article.sourceId] = [ArticleObject]()
+                    }
+                    
+                    groups[article.sourceId]?.append(article)
+                }
+                
+                return groups
+            }
+            .map { [weak self] (groups: [String: [ArticleObject]]) -> [ArticleSection]? in                
+                var sections = [ArticleSection]()
+                
+                groups.forEach { groupName, items in
+                    let sectionName = groupName.uppercased(with: Locale.current)
+                    let sectionItems = Array(items.prefix(4))
+                    var color: UIColor = .black
+                    
+                    if let sourceId = sectionItems.first?.sourceId {
+                        if let categoryString = self?.sourceInteractor.fetchSource(with: sourceId)?.category {
+                            if let category = Category(rawValue: categoryString) {
+                                color = Colors.color(for: category)
+                            }
+                        }
+                    }
+                    
+                    let articleSection = ArticleSection(header: sectionName, items: sectionItems, color: color)
+                    
+                    sections.append(articleSection)
+                }
+                
+                return sections
+            }
+            .flatMap { Observable.from(optional: $0) }
+            .filter { $0.count > 0 }
+            .subscribe(onNext: { [weak self] sections in
+                guard let welf = self else { return }
+                
+                welf.articleSections.value.removeAll()
+                welf.articleSections.value.append(contentsOf: sections)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     func fetchArticles() {
-        articleSections.value.removeAll()
-        
         let sourcesObservable = sourceInteractor.fetchSources(predicate: "isFavorite == true")
             .flatMap { Observable.array(from: $0) }
             .flatMap { Observable.from($0) }
-
-        _ = articleInteractor.fetchArticles(observable: sourcesObservable)
         
-        sourcesObservable
-            .map { [weak self] (sourceObject: SourceObject) -> ArticleSection? in
-                guard let welf = self else { return nil }
-                
-                let sectionItems = welf.articleInteractor.fetchArticles(from: sourceObject.id).sorted {
-                    return $0.0.timeInterval > $0.1.timeInterval
-                }.prefix(4)
-                
-                guard sectionItems.count > 0 else {
-                    return nil
-                }
-                
-                let categoryColor = Colors.color(for: Category(rawValue: sourceObject.category))
-                let sectionItemsArray = Array(sectionItems)
-                let articleSection = ArticleSection(header: sourceObject.name, items: sectionItemsArray, color: categoryColor)
-                
-                return articleSection
-            }
-            .flatMap { Observable.from(optional: $0) }
-            .subscribe(onNext: { [weak self] section in
-                guard let welf = self else { return }
-                welf.articleSections.value.append(section)
-            })
-            .dispose()
+        articleInteractor.fetchArticles(observable: sourcesObservable)
     }
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {

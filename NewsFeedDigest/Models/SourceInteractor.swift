@@ -71,7 +71,7 @@ struct SourceInteractor {
         return sortedResults
     }
     
-    func fetchSource(with id: String) -> SourceObject? {
+    func fetchSource(with id: SourceId) -> SourceObject? {
         return realm.objects(SourceObject.self).filter("id == %@", id).first
     }
     
