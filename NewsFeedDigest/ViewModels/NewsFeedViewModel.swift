@@ -68,7 +68,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                 
                 return groups
             }
-            .map { [weak self] (groups: [String: [ArticleObject]]) -> [ArticleSection]? in                
+            .map { [weak self] (groups: [String: [ArticleObject]]) -> [ArticleSection]? in
                 var sections = [ArticleSection]()
                 
                 groups.forEach { groupName, items in
