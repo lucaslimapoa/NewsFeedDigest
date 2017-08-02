@@ -39,7 +39,10 @@ class CategoryListCoordinator: TabBarCoordinator {
     func createListViewController(viewDataType: ViewDataType) -> ListViewController {
         let sourceListViewController = ListViewController(collectionViewLayout: UICollectionViewFlowLayout())
         
-        let viewModel = ListViewModel(sourceInteractor: SourceInteractor(realm: realm, newsAPI: newsAPI))
+        let sourceInteractor = SourceInteractor(realm: realm, newsAPI: newsAPI)
+        let articleInteractor = ArticleInteractor(newsAPI: newsAPI, realm: realm, dateConversor: DateConversor(currentDate: Date()))
+        
+        let viewModel = ListViewModel(sourceInteractor: sourceInteractor, articleInteractor: articleInteractor)
         viewModel.delegate = self        
         
         sourceListViewController.viewModel = viewModel

@@ -24,21 +24,25 @@ class ListViewModel: ListViewModelType {
     
     let disposeBag = DisposeBag()
     var sourceInteractor: SourceInteractor!
+    var articleInteractor: ArticleInteractor!
     
     let availableCategories: [NewsAPISwift.Category] = [.business, .entertainment, .gaming, .general, .music, .politics, .scienceAndNature, .sport, .technology]
     
     var selectedCategoryListener = PublishSubject<NewsAPISwift.Category>()
     var delegate: SourceListViewModelDelegate?
     
-    init(sourceInteractor: SourceInteractor) {
+    init(sourceInteractor: SourceInteractor, articleInteractor: ArticleInteractor) {
         self.sourceInteractor = sourceInteractor
+        self.articleInteractor = articleInteractor
+        
         setupListeners()
     }
     
     func setupListeners() {
         selectedCategoryListener
-            .subscribe(onNext: { category in
-                self.delegate?.sourceListViewModel(viewModel: self, didSelectCategory: category)
+            .subscribe(onNext: { [weak self] category in
+                guard let welf = self else { return }
+                welf.delegate?.sourceListViewModel(viewModel: welf, didSelectCategory: category)
             })
             .disposed(by: disposeBag)
     }
@@ -62,6 +66,6 @@ class ListViewModel: ListViewModelType {
     }
     
     func createSourceCellViewModel(with source: NewsAPISource) -> SourceCellViewModel {
-        return SourceCellViewModel(source: source, interactor: sourceInteractor)
+        return SourceCellViewModel(source: source, sourceInteractor: sourceInteractor, articleInteractor: articleInteractor)
     }
 }

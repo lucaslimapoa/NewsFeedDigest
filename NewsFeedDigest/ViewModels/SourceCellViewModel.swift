@@ -13,30 +13,30 @@ import NewsAPISwift
 struct SourceCellViewModel {
     
     private(set) var sourceDescription: NSAttributedString!
-    private(set) var interactor: SourceInteractor!
+    private(set) var sourceInteractor: SourceInteractor!
     
     private(set) var didFavorite: (() -> Void)?
     private(set) var didUnfavorite: (() -> Void)?
     
     var viewState: Observable<FavoriteViewState>?
     
-    init(source: NewsAPISource, interactor: SourceInteractor) {
-        self.interactor = interactor
+    init(source: NewsAPISource, sourceInteractor: SourceInteractor, articleInteractor: ArticleInteractor) {
+        self.sourceInteractor = sourceInteractor
         sourceDescription = createSourceDescription(source: source)
         
         if let sourceId = source.id {
-            viewState = interactor.isFavorite(sourceId)
+            viewState = sourceInteractor.isFavorite(sourceId)
                 .map { ($0.isEmpty) ?
                     FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite
             }
             
             didFavorite = {
-                interactor.setFavorite(for: sourceId, isFavorite: true)
+                sourceInteractor.setFavorite(for: sourceId, isFavorite: true)
             }
             
             didUnfavorite = {
-                interactor.setFavorite(for: sourceId, isFavorite: false)
-                
+                sourceInteractor.setFavorite(for: sourceId, isFavorite: false)
+                articleInteractor.deleteArticles(from: sourceId)
             }
         }
     }

@@ -80,4 +80,12 @@ struct ArticleInteractor {
         let results = realm.objects(ArticleObject.self).filter("sourceId == '\(sourceId)'")
         return results.toArray()
     }
+    
+    func deleteArticles(from sourceId: SourceId) {
+        let articlesToDelete = realm.objects(ArticleObject.self).filter("sourceId == %@", sourceId)
+        
+        try? realm.write {
+            realm.delete(articlesToDelete)
+        }
+    }
 }
