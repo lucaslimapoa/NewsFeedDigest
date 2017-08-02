@@ -36,6 +36,7 @@ struct SourceCellViewModel {
             
             didUnfavorite = {
                 interactor.setFavorite(for: sourceId, isFavorite: false)
+                
             }
         }
     }

@@ -59,7 +59,7 @@ class NewsFeedViewModelTests: XCTestCase {
             onError: { _ in
                 XCTFail("Should not fail")
             })
-            .disposed(by: disposeBag)
+            .dispose()
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
@@ -77,7 +77,7 @@ class NewsFeedViewModelTests: XCTestCase {
             }, onError: { _ in
                 XCTFail("This is not supposed to fail")
             })
-            .disposed(by: disposeBag)
+            .dispose()
                 
         waitForExpectations(timeout: 5.0, handler: nil)
     }
@@ -92,8 +92,8 @@ class NewsFeedViewModelTests: XCTestCase {
         let expectedDescription = "Mock 1\nArticle Mock 1 description"
         let expectedInfo = "3h ago"
         
-        XCTAssertEqual(expectedInfo, cellViewModel.articleInfo.string)
-        XCTAssertEqual(expectedDescription, cellViewModel.articleDescription.string)
+        XCTAssertEqual(expectedInfo, cellViewModel.information(style: .normal).string)
+        XCTAssertEqual(expectedDescription, cellViewModel.title(style: .normal).string)
         
         XCTAssertNil(cellViewModel.url)
         XCTAssertNil(cellViewModel.urlToImage)
@@ -128,9 +128,9 @@ class NewsFeedViewModelTests: XCTestCase {
         let mockArticles = createMockArticles()
         
         return [
-            ArticleSection(header: "Source 1", items: [ArticleObject(article: mockArticles[0])]),
-            ArticleSection(header: "Source 2", items: [ArticleObject(article: mockArticles[1])]),
-            ArticleSection(header: "Source 3", items: [ArticleObject(article: mockArticles[2])])
+            ArticleSection(header: "Source 1", items: [ArticleObject(article: mockArticles[0])], color: .black),
+            ArticleSection(header: "Source 2", items: [ArticleObject(article: mockArticles[1])], color: .black),
+            ArticleSection(header: "Source 3", items: [ArticleObject(article: mockArticles[2])], color: .black)
         ]
     }
 }
