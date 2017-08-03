@@ -61,14 +61,17 @@ struct ArticleInteractor {
         add(observable: fetchArticlesStream)                
     }
     
-    func fetchArticles(predicate: String? = nil) -> Observable<Results<ArticleObject>> {
-        var results = realm.objects(ArticleObject.self)
-        
-        if let predicate = predicate {
-            results = results.filter(predicate)
-        }
-        
-        return Observable.collection(from: results)
+    func fetchArticles(favoritesStream: Observable<[String]>) -> Observable<Results<ArticleObject>> {
+        return favoritesStream
+            .observeOn(MainScheduler.instance)
+            .map { (sources: [String]) -> Results<ArticleObject> in
+                let results = self.realm.objects(ArticleObject.self)
+                let filteredResults = results.filter("sourceId IN %@", sources)
+                
+                return filteredResults
+            }
+            .flatMap { Observable.from(optional: $0) }
+            .flatMap { Observable.collection(from: $0)}
     }
     
     func fetchSavedArticles() -> Observable<Results<ArticleObject>> {
@@ -79,13 +82,5 @@ struct ArticleInteractor {
     func fetchArticles(from sourceId: SourceId) -> [ArticleObject] {
         let results = realm.objects(ArticleObject.self).filter("sourceId == '\(sourceId)'")
         return results.toArray()
-    }
-    
-    func deleteArticles(from sourceId: SourceId) {
-        let articlesToDelete = realm.objects(ArticleObject.self).filter("sourceId == %@", sourceId)
-        
-        try? realm.write {
-            realm.delete(articlesToDelete)
-        }
     }
 }

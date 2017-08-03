@@ -55,6 +55,11 @@ struct SourceInteractor {
         return Observable.collection(from: results)
     }
     
+    func fetchFavoritesById() -> [SourceId] {
+        let results = realm.objects(SourceObject.self).filter("isFavorite == %@", true)
+        return results.toArray().map { $0.id }
+    }
+    
     func fetchSources(for category: NewsAPISwift.Category) -> Observable<Results<SourceObject>> {
         let sourcesFetcher = newsAPI.getSources(category: category)
             .flatMap { Observable.from($0) }

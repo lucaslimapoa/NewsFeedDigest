@@ -53,7 +53,12 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     }
     
     func setupRx() {
-        articleInteractor.fetchArticles()
+        let favoriteSources = sourceInteractor.fetchSources(predicate: "isFavorite == true")
+            .map { $0.toArray() }
+            .map { $0.map { $0.id } }
+            .flatMap { Observable.from(optional: $0) }
+        
+        articleInteractor.fetchArticles(favoritesStream: favoriteSources)
             .map { $0.sorted { $0.0.timeInterval > $0.1.timeInterval } }
             .map { (articles: [ArticleObject]) -> [String: [ArticleObject]] in
                 var groups = [String: [ArticleObject]]()
@@ -94,7 +99,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .flatMap { Observable.from(optional: $0) }
             .filter { $0.count > 0 }
             .subscribe(onNext: { [weak self] sections in
-                guard let welf = self else { return }
+                guard let welf = self else { return }                                
                 
                 welf.articleSections.value.removeAll()
                 welf.articleSections.value.append(contentsOf: sections)

@@ -24,6 +24,7 @@ PODS:
   - RxSwift (3.5.0)
   - RxTest (3.5.0):
     - RxSwift (~> 3.4)
+  - SwiftyBeaver (1.3.0)
 
 DEPENDENCIES:
   - NewsAPISwift (~> 0.1.1)
@@ -36,6 +37,7 @@ DEPENDENCIES:
   - RxRealm
   - RxSwift (~> 3.0)
   - RxTest (~> 3.0)
+  - SwiftyBeaver
 
 SPEC CHECKSUMS:
   NewsAPISwift: 1c13680b248e482ded9dc0ee3ddbe48e5d3851fc
@@ -51,7 +53,8 @@ SPEC CHECKSUMS:
   RxRealm: 323de579b50b5e0f4a3e087d5925021f976ffaf1
   RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
   RxTest: 1763765fd0e2282b0eb44c9050effdd7fe7156d4
+  SwiftyBeaver: d4b551ba34b4206c52cc4684ae90444b8aaa5afd
 
-PODFILE CHECKSUM: 0fcc232e7d30b6520c848139dc2d28dae7926951
+PODFILE CHECKSUM: 0c4a3b92210e1e716eed045bcfeb874a162b026f
 
 COCOAPODS: 1.2.1

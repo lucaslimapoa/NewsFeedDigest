@@ -20,7 +20,7 @@ struct SourceCellViewModel {
     
     var viewState: Observable<FavoriteViewState>?
     
-    init(source: NewsAPISource, sourceInteractor: SourceInteractor, articleInteractor: ArticleInteractor) {
+    init(source: NewsAPISource, sourceInteractor: SourceInteractor) {
         self.sourceInteractor = sourceInteractor
         sourceDescription = createSourceDescription(source: source)
         
@@ -36,7 +36,6 @@ struct SourceCellViewModel {
             
             didUnfavorite = {
                 sourceInteractor.setFavorite(for: sourceId, isFavorite: false)
-                articleInteractor.deleteArticles(from: sourceId)
             }
         }
     }

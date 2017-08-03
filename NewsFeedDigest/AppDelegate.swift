@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import SwiftyBeaver
+
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var appCoordinator: AppCoordinator!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        setupLogging()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         appCoordinator = AppCoordinator(window: window!)
@@ -47,3 +51,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+private extension AppDelegate {
+    func setupLogging() {
+        let consoleLog = ConsoleDestination()
+        consoleLog.format = "$DHH:mm:ss$d $L $M"
+        
+        log.addDestination(consoleLog)
+    }
+}

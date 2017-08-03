@@ -14,6 +14,7 @@ target 'NewsFeedDigest' do
   pod 'RxDataSources', '~> 1.0'
   pod 'RxRealm'
   pod 'R.swift'
+  pod 'SwiftyBeaver'
 
   target 'NewsFeedDigestTests' do
     inherit! :search_paths
