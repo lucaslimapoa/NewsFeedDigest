@@ -52,7 +52,6 @@ class NewsFeedViewController: UITableViewController {
         tableView.addSubview(refreshControl!)
         
         addHeader()
-        setupStatusBar()
         
         setupRx()
         refreshTrigger.onNext(())
@@ -60,16 +59,18 @@ class NewsFeedViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setStatusBar(color: .white)
         tableViewHeader.updateMessage()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setStatusBar(color: .clear)
     }
     
-    private func setupStatusBar() {
+    private func setStatusBar(color: UIColor) {
         if let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-            statusBar.backgroundColor = .white
+            statusBar.backgroundColor = color
         }
     }
     
@@ -97,7 +98,7 @@ class NewsFeedViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50.0
+        return 60.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
