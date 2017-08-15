@@ -57,7 +57,11 @@ struct Fonts {
     static let cellInformationFont = UIFont.systemFont(ofSize: 10.0)
     static let cellBigInformationFont = UIFont.systemFont(ofSize: 14.0)
     static let cellPublishedAtFont = UIFont.systemFont(ofSize: 12.0)
+    
     static let footerText = UIFont.boldSystemFont(ofSize: 14.0)
     static let headerText = UIFont.boldSystemFont(ofSize: 18.0)
+    
+    static let messageDayOfWeek = UIFont.systemFont(ofSize: 13.0)
+    static let messageMonth = UIFont.systemFont(ofSize: 20.0, weight: UIFontWeightHeavy)
 }
 

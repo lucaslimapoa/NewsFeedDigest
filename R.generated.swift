@@ -51,12 +51,14 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.nib` struct is generated, and contains static references to 2 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 3 nibs.
   struct nib {
     /// Nib `NewsFeedSectionFooter`.
     static let newsFeedSectionFooter = _R.nib._NewsFeedSectionFooter()
     /// Nib `NewsFeedSectionHeader`.
     static let newsFeedSectionHeader = _R.nib._NewsFeedSectionHeader()
+    /// Nib `NewsFeedTableViewHeader`.
+    static let newsFeedTableViewHeader = _R.nib._NewsFeedTableViewHeader()
     
     /// `UINib(name: "NewsFeedSectionFooter", in: bundle)`
     static func newsFeedSectionFooter(_: Void = ()) -> UIKit.UINib {
@@ -66,6 +68,11 @@ struct R: Rswift.Validatable {
     /// `UINib(name: "NewsFeedSectionHeader", in: bundle)`
     static func newsFeedSectionHeader(_: Void = ()) -> UIKit.UINib {
       return UIKit.UINib(resource: R.nib.newsFeedSectionHeader)
+    }
+    
+    /// `UINib(name: "NewsFeedTableViewHeader", in: bundle)`
+    static func newsFeedTableViewHeader(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.newsFeedTableViewHeader)
     }
     
     fileprivate init() {}
@@ -131,6 +138,17 @@ struct _R {
       
       func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> NewsFeedSectionHeaderView? {
         return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? NewsFeedSectionHeaderView
+      }
+      
+      fileprivate init() {}
+    }
+    
+    struct _NewsFeedTableViewHeader: Rswift.NibResourceType {
+      let bundle = R.hostingBundle
+      let name = "NewsFeedTableViewHeader"
+      
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> NewsFeedTableViewHeader? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? NewsFeedTableViewHeader
       }
       
       fileprivate init() {}

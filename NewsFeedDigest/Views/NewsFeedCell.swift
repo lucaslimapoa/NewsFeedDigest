@@ -88,7 +88,7 @@ class NewsFeedCell: UITableViewCell {
     private func setupSeparator() {
         separatorView.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         separatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1.0).isActive = true
-        separatorView.leftAnchor.constraint(equalTo: leftAnchor, constant: 26.0).isActive = true
+        separatorView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16.0).isActive = true
         separatorView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
     }
     

@@ -18,6 +18,8 @@ class NewsFeedViewController: UITableViewController {
     
     let disposeBag = DisposeBag()
     
+    var tableViewHeader: NewsFeedTableViewHeader!
+    
     var viewModel: NewsFeedViewModelType!
     var refreshTrigger = PublishSubject<Void>()
     
@@ -34,6 +36,8 @@ class NewsFeedViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        
         tableView.dataSource = nil
         tableView.separatorStyle = .none
         tableView.backgroundColor = Colors.collectionViewBackgroundColor
@@ -47,12 +51,34 @@ class NewsFeedViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl!)
         
+        addHeader()
+        
         setupRx()
         refreshTrigger.onNext(())
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableViewHeader.updateMessage()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    private func addHeader() {
+        guard let view = R.nib.newsFeedTableViewHeader.firstView(owner: self) else { return }
+        
+        let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        var headerFrame = view.frame
+        
+        if headerFrame.height != height {
+            headerFrame.size.height = height + 10
+            view.frame = headerFrame
+        }
+        
+        tableViewHeader = view
+        tableView.tableHeaderView = tableViewHeader
     }
  
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
