@@ -12,11 +12,13 @@ import NewsAPISwift
 
 protocol NewsFeedViewModelCoordinatorDelegate {
     func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject)
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectSource source: SourceObject)
 }
 
 protocol NewsFeedViewModelType: class {
     var articleSections: Variable<[ArticleSection]> { get }
     var selectedItemListener: PublishSubject<ArticleObject> { get }
+    var selectedSourceListener: PublishSubject<SourceId> { get }
     
     func fetchArticles()
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
@@ -32,6 +34,8 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     let disposeBag = DisposeBag()
     
     var selectedItemListener = PublishSubject<ArticleObject>()
+    var selectedSourceListener = PublishSubject<SourceId>()
+    
     var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
     var articleSections = Variable<[ArticleSection]>([])
     
@@ -49,7 +53,15 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .subscribe(onNext: { article in
                 self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectArticle: article)
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
+        
+        selectedSourceListener
+            .map { self.sourceInteractor.fetchSource(with: $0) }
+            .flatMap { Observable.from(optional: $0) }
+            .subscribe(onNext: { sourceObject in
+                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectSource: sourceObject)
+            })
+            .disposed(by: disposeBag)
     }
     
     func setupRx() {
@@ -87,11 +99,10 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                                 color = Colors.color(for: category)
                             }
                         }
+                        
+                        let articleSection = ArticleSection(header: sectionName, items: sectionItems, color: color, sourceId: sourceId)                        
+                        sections.append(articleSection)
                     }
-                    
-                    let articleSection = ArticleSection(header: sectionName, items: sectionItems, color: color)
-                    
-                    sections.append(articleSection)
                 }
                 
                 return sections

@@ -7,11 +7,13 @@
 //
 
 import RxDataSources
+import NewsAPISwift
 
 struct ArticleSection {
     var header: String
     var items: [Item]
     var color: UIColor
+    var sourceId: SourceId
 }
 
 extension ArticleSection: SectionModelType {

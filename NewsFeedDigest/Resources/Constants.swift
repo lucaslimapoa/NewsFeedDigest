@@ -19,6 +19,8 @@ struct Colors {
     static let favoriteTint = UIColor.red
     static let footerText = UIColor(r: 127, g: 140, b: 141)
     
+    static let separatorView = UIColor(r: 224, g: 224, b: 224)
+    
     static func color(for category: NewsAPISwift.Category?) -> UIColor {
         guard let category = category else { return UIColor.black }
         

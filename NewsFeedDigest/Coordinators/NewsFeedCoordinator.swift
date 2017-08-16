@@ -16,6 +16,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
     var rootViewController: UINavigationController
     
     var detailCoordinator: DetailCoordinator?
+    var sourceArticlesCoordinator: SourceArticlesCoordinator?
     
     let newsAPI: NewsAPIProtocol
     let realm: Realm
@@ -55,6 +56,14 @@ extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
     func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject) {
         detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
+    }
+    
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectSource source: SourceObject) {
+        let dateConversor = DateConversor(currentDate: Date())
+        let articleInteractor = ArticleInteractor(newsAPI: newsAPI, realm: realm, dateConversor: dateConversor)
+        
+        sourceArticlesCoordinator = SourceArticlesCoordinator(navigationController: rootViewController, sourceObject: source, articleInteractor: articleInteractor)
+        sourceArticlesCoordinator?.start()
     }
 }
 

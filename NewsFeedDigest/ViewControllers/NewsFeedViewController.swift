@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import NewsAPISwift
 
 let NewsFeedCellId = "NewsFeedCellId"
 let BigNewsFeedCellId = "BigNewsFeedCellId"
@@ -61,7 +62,7 @@ class NewsFeedViewController: UITableViewController {
         super.viewWillAppear(animated)
         setStatusBar(color: .white)
         tableViewHeader.updateMessage()
-    }
+    }    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -118,6 +119,7 @@ class NewsFeedViewController: UITableViewController {
         
         let sourceName = dataSource.sectionModels[section].header.localizedUppercase
         let color = dataSource.sectionModels[section].color
+        let sourceId = dataSource.sectionModels[section].sourceId
         
         let attributedText = NSMutableAttributedString(string: "MORE STORIES FROM ", attributes: [
             NSFontAttributeName: Fonts.footerText,
@@ -129,6 +131,8 @@ class NewsFeedViewController: UITableViewController {
             NSForegroundColorAttributeName: color
             ]))
         
+        view.delegate = self
+        view.sourceId = sourceId
         view.textLabel.attributedText = attributedText
         
         return view
@@ -178,6 +182,7 @@ private extension NewsFeedViewController {
                 tableView.dequeueReusableCell(withIdentifier: BigNewsFeedCellId, for: indexPath) as! BigNewsFeedCell : tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
             
             cell.viewModel = self.viewModel.createCellViewModel(from: item)
+            cell.separatorView.backgroundColor = Colors.separatorView
             
             return cell
         }
@@ -187,5 +192,11 @@ private extension NewsFeedViewController {
     
 }
 
-
+extension NewsFeedViewController: newsFeedSectionFooterViewDelegate {
+    
+    func newsFeedSectionFooterView(_ footerView: NewsFeedSectionFooterView, didSelectSource source: SourceId) {
+        viewModel.selectedSourceListener.onNext(source)
+    }
+    
+}
 

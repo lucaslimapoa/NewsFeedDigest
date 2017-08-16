@@ -45,7 +45,7 @@ class NewsFeedCell: UITableViewCell {
     
     var separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 224, g: 224, b: 224)
+        view.backgroundColor = Colors.separatorView
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
