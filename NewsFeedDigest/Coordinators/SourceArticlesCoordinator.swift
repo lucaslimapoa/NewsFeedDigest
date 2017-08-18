@@ -22,6 +22,7 @@ class SourceArticlesCoordinator: FlowCoordinator {
     }
     
     func start() {
-        
+        let viewController = SourceArticlesViewController()        
+        navigationController.pushViewController(viewController, animated: true)
     }
 }

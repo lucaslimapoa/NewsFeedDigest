@@ -51,7 +51,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.nib` struct is generated, and contains static references to 3 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 4 nibs.
   struct nib {
     /// Nib `NewsFeedSectionFooter`.
     static let newsFeedSectionFooter = _R.nib._NewsFeedSectionFooter()
@@ -59,6 +59,8 @@ struct R: Rswift.Validatable {
     static let newsFeedSectionHeader = _R.nib._NewsFeedSectionHeader()
     /// Nib `NewsFeedTableViewHeader`.
     static let newsFeedTableViewHeader = _R.nib._NewsFeedTableViewHeader()
+    /// Nib `SourceArticlesViewController`.
+    static let sourceArticlesViewController = _R.nib._SourceArticlesViewController()
     
     /// `UINib(name: "NewsFeedSectionFooter", in: bundle)`
     static func newsFeedSectionFooter(_: Void = ()) -> UIKit.UINib {
@@ -73,6 +75,11 @@ struct R: Rswift.Validatable {
     /// `UINib(name: "NewsFeedTableViewHeader", in: bundle)`
     static func newsFeedTableViewHeader(_: Void = ()) -> UIKit.UINib {
       return UIKit.UINib(resource: R.nib.newsFeedTableViewHeader)
+    }
+    
+    /// `UINib(name: "SourceArticlesViewController", in: bundle)`
+    static func sourceArticlesViewController(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.sourceArticlesViewController)
     }
     
     fileprivate init() {}
@@ -149,6 +156,17 @@ struct _R {
       
       func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> NewsFeedTableViewHeader? {
         return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? NewsFeedTableViewHeader
+      }
+      
+      fileprivate init() {}
+    }
+    
+    struct _SourceArticlesViewController: Rswift.NibResourceType {
+      let bundle = R.hostingBundle
+      let name = "SourceArticlesViewController"
+      
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> UIKit.UIView? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? UIKit.UIView
       }
       
       fileprivate init() {}
