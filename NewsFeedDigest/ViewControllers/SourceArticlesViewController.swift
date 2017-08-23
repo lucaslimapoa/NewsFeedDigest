@@ -19,9 +19,9 @@ class SourceArticlesViewController: UIViewController {
     @IBOutlet weak var descriptionTextView: UITextView!
     
     var tableViewInitialPos: CGPoint = .zero
-    
     var tableViewContentOffsetY: CGFloat = 0 {
         didSet {
+            animateViews()
             updateTableView()
         }
     }
@@ -49,6 +49,8 @@ class SourceArticlesViewController: UIViewController {
         tableViewInitialPos = tableView.frame.origin
     }
  
+    // MARK: - UITableView Behavior
+    
     private func calculateTableViewSize() -> CGSize {
         let screenHeight = view.frame.height
         let newTableViewHeight = screenHeight - tableView.frame.origin.y - tabBarHeight
@@ -61,7 +63,20 @@ class SourceArticlesViewController: UIViewController {
         tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
         tableView.frame.size = calculateTableViewSize()
     }
+    
+    // MARK: - View Animation
+    
+    private func animateViews() {
+        let fadeOutAlpha = (self.tableView.frame.origin.y - navigationBarHeight) / (tableViewInitialPos.y - navigationBarHeight)
+        
+        UIView.animate(withDuration: 0.1) {
+            self.titleLabel.alpha = fadeOutAlpha
+            self.descriptionTextView.alpha = fadeOutAlpha
+        }
+    }
 }
+
+// MARK: - UITableView DataSource and Delegate
 
 extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -82,8 +97,10 @@ extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelega
     
 }
 
+// MARK: - UIScrollViewDelegate
+
 extension SourceArticlesViewController: UIScrollViewDelegate {
- 
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         tableViewContentOffsetY = scrollView.contentOffset.y
     }
