@@ -9,34 +9,58 @@
 import UIKit
 import NewsAPISwift
 
+fileprivate let tabBarHeight: CGFloat = 49.0
+fileprivate let navigationBarHeight: CGFloat = 64.0
+
 class SourceArticlesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    @IBOutlet weak var tableViewTopViewConstraint: NSLayoutConstraint!
-    @IBOutlet weak var tableViewTopDescriptionConstraint: NSLayoutConstraint!
+    var tableViewInitialPos: CGPoint = .zero
     
-    @IBOutlet weak var descriptionBottomTableView: NSLayoutConstraint!
-    @IBOutlet weak var descriptionBottomSpacing: NSLayoutConstraint!
-    
-    var topViewSpacing: CGFloat = 0 {
+    var tableViewContentOffsetY: CGFloat = 0 {
         didSet {
-            if topViewSpacing < 0 {
-                topViewSpacing = 0                
-            }
+            updateTableView()
         }
     }
-    
-    var previousTopViewSpacing: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+//        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+    override func viewDidLayoutSubviews() {
+        tableViewInitialPos = tableView.frame.origin
+    }
+ 
+    private func calculateTableViewSize() -> CGSize {
+        let screenHeight = view.frame.height
+        let newTableViewHeight = screenHeight - tableView.frame.origin.y - tabBarHeight
+        
+        return CGSize(width: tableView.frame.width, height: newTableViewHeight)
+    }
+    
+    private func updateTableView() {
+        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, navigationBarHeight)
+        tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
+        tableView.frame.size = calculateTableViewSize()
+    }
 }
 
 extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelegate {
@@ -46,12 +70,12 @@ extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 15
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "Teste"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)        
+        cell.textLabel?.text = UUID().uuidString
         
         return cell
     }
@@ -61,29 +85,7 @@ extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelega
 extension SourceArticlesViewController: UIScrollViewDelegate {
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        previousTopViewSpacing = tableViewTopViewConstraint.constant
-        
-        let descriptionPositionY = descriptionTextView.frame.origin.y + descriptionTextView.frame.size.height
-        let tableViewPositionY = tableView.frame.origin.y
-        
-        if tableViewPositionY > descriptionPositionY + 16 {
-            tableViewTopViewConstraint.priority = 998
-            tableViewTopDescriptionConstraint.priority = 999
-            
-            descriptionBottomSpacing.priority = 998
-            descriptionBottomTableView.priority = 999
-        } else {
-            tableViewTopDescriptionConstraint.priority = 998
-            tableViewTopViewConstraint.priority = 999
-            
-            descriptionBottomSpacing.priority = 999
-            descriptionBottomTableView.priority = 998
-        }
-        
-        let contentOffsetY = scrollView.contentOffset.y
-        
-        topViewSpacing = previousTopViewSpacing - contentOffsetY
-        tableViewTopViewConstraint.constant = topViewSpacing
+        tableViewContentOffsetY = scrollView.contentOffset.y
     }
     
 }
