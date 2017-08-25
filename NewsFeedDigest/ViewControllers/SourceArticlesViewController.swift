@@ -8,15 +8,22 @@
 
 import UIKit
 import NewsAPISwift
+import RxSwift
+import RxCocoa
 
 fileprivate let tabBarHeight: CGFloat = 49.0
 fileprivate let navigationBarHeight: CGFloat = 64.0
+fileprivate let cellId = "NewsFeedCellId"
 
 class SourceArticlesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
+    
+    let dispatchToken = UUID().uuidString
+    let disposeBag = DisposeBag()
+    var viewModel: SourceArticleViewModelType!
     
     var tableViewInitialPos: CGPoint = .zero
     var tableViewContentOffsetY: CGFloat = 0 {
@@ -30,9 +37,10 @@ class SourceArticlesViewController: UIViewController {
         super.viewDidLoad()
         
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.rowHeight = 120.0
+        tableView.register(NewsFeedCell.self, forCellReuseIdentifier: cellId)
         
-//        navigationController?.navigationBar.backgroundColor = .clear
+        setupRx()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,27 +54,48 @@ class SourceArticlesViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        tableViewInitialPos = tableView.frame.origin
+        DispatchQueue.once(token: dispatchToken) {
+            self.tableViewInitialPos = tableView.frame.origin
+        }
     }
- 
-    // MARK: - UITableView Behavior
     
-    private func calculateTableViewSize() -> CGSize {
+    private func setupRx() {
+        viewModel
+            .fetchTitle()
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel
+            .fetchDescription()
+            .bind(to: descriptionTextView.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel
+            .fetchArticles()
+            .bind(to: tableView.rx.items(cellIdentifier: cellId, cellType: NewsFeedCell.self)) { _, item, cell in
+                cell.viewModel = self.viewModel.createCellViewModel(from: item)
+                cell.separatorView.backgroundColor = Colors.separatorView
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+private extension SourceArticlesViewController {
+    
+    func calculateTableViewSize() -> CGSize {
         let screenHeight = view.frame.height
         let newTableViewHeight = screenHeight - tableView.frame.origin.y - tabBarHeight
         
         return CGSize(width: tableView.frame.width, height: newTableViewHeight)
     }
     
-    private func updateTableView() {
+    func updateTableView() {
         let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, navigationBarHeight)
         tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
         tableView.frame.size = calculateTableViewSize()
     }
     
-    // MARK: - View Animation
-    
-    private func animateViews() {
+    func animateViews() {
         let fadeOutAlpha = (self.tableView.frame.origin.y - navigationBarHeight) / (tableViewInitialPos.y - navigationBarHeight)
         
         UIView.animate(withDuration: 0.1) {
@@ -76,28 +105,7 @@ class SourceArticlesViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView DataSource and Delegate
-
-extension SourceArticlesViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)        
-        cell.textLabel?.text = UUID().uuidString
-        
-        return cell
-    }
-    
-}
-
-// MARK: - UIScrollViewDelegate
+extension SourceArticlesViewController: UITableViewDelegate { }
 
 extension SourceArticlesViewController: UIScrollViewDelegate {
 

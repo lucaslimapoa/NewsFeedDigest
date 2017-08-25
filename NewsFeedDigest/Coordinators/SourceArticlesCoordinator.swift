@@ -23,6 +23,8 @@ class SourceArticlesCoordinator: FlowCoordinator {
     
     func start() {
         let viewController = SourceArticlesViewController()
+        viewController.viewModel = SourceArticleViewModel(sourceObject: source, articleInteractor: articleInteractor)
+                
         navigationController.pushViewController(viewController, animated: true)
     }
 }

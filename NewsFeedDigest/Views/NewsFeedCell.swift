@@ -94,7 +94,7 @@ class NewsFeedCell: UITableViewCell {
     
     func setupCell() {        
         articleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
+        articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16.0).isActive = true
         articleImageView.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
         articleImageView.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
         

@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SourceArticlesViewController" customModule="NewsFeedDigest" customModuleProvider="target">
             <connections>
                 <outlet property="descriptionTextView" destination="9Td-CJ-Saw" id="Scq-DQ-UTe"/>
-                <outlet property="tableView" destination="N1H-YM-1Ff" id="O9c-nG-n80"/>
+                <outlet property="tableView" destination="N1H-YM-1Ff" id="ZUg-3J-2Tt"/>
                 <outlet property="titleLabel" destination="rn2-7k-DF9" id="12G-DQ-dpw"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -39,9 +39,6 @@
                     <rect key="frame" x="0.0" y="156" width="375" height="511"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="TNz-Ye-kIh"/>
-                    </connections>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
