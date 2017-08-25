@@ -38,7 +38,12 @@ struct SourceArticleViewModel: SourceArticleViewModelType {
     }
     
     func fetchArticles() -> Observable<[ArticleObject]> {
-        let articles = articleInteractor.fetchArticles(from: sourceObject.id)
+        let articles = articleInteractor
+            .fetchArticles(from: sourceObject.id)
+            .sorted { lhs, rhs in
+                return lhs.timeInterval > rhs.timeInterval
+            }
+        
         return Observable.from(optional: articles)
     }
     
