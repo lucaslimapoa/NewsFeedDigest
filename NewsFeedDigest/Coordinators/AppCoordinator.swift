@@ -12,12 +12,12 @@ import NewsAPISwift
 
 class AppCoordinator: FlowCoordinator {
     
-    let window: UIWindow
-    let tabBarController: UITabBarController
-    let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24") 
-    let realm: Realm
+    private let window: UIWindow
+    private let tabBarController: UITabBarController
     
-    var coordinators: [TabBarCoordinator] = []
+    fileprivate let realm: Realm
+    fileprivate var coordinators: [TabBarCoordinator] = []
+    fileprivate let newsAPI = NewsAPI(key: "3d188ee285764cb196fd491913960a24")
     
     init(window: UIWindow) {
         self.window = window
@@ -36,13 +36,22 @@ class AppCoordinator: FlowCoordinator {
         tabBarController.viewControllers = coordinators.map{ $0.rootViewController }
     }
     
-    func createCoordinators() {
-        coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI))
-        coordinators.append(CategoryListCoordinator(newsAPI: newsAPI, realm: realm))
-    }
-    
     func start() {
         self.window.rootViewController = tabBarController
         self.window.makeKeyAndVisible()
+    }
+    
+    func cleanStorage() {
+        try? realm.write {
+            let articles = realm.objects(ArticleObject.self)
+            realm.delete(articles)
+        }
+    }
+}
+
+private extension AppCoordinator {
+    func createCoordinators() {
+        coordinators.append(NewsFeedCoordinator(newsAPI: newsAPI, realm: realm))
+        coordinators.append(CategoryListCoordinator(newsAPI: newsAPI, realm: realm))
     }
 }

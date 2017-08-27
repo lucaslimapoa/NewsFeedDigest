@@ -31,16 +31,17 @@ class ListViewModel: ListViewModelType {
     var delegate: SourceListViewModelDelegate?
     
     init(sourceInteractor: SourceInteractor) {
-        self.sourceInteractor = sourceInteractor
+        self.sourceInteractor = sourceInteractor        
         setupListeners()
     }
     
     func setupListeners() {
         selectedCategoryListener
-            .subscribe(onNext: { category in
-                self.delegate?.sourceListViewModel(viewModel: self, didSelectCategory: category)
+            .subscribe(onNext: { [weak self] category in
+                guard let welf = self else { return }
+                welf.delegate?.sourceListViewModel(viewModel: welf, didSelectCategory: category)
             })
-            .addDisposableTo(disposeBag)
+            .disposed(by: disposeBag)
     }
     
     func fetchAvailableCategories() -> Observable<[NewsAPISwift.Category]> {
@@ -62,62 +63,6 @@ class ListViewModel: ListViewModelType {
     }
     
     func createSourceCellViewModel(with source: NewsAPISource) -> SourceCellViewModel {
-        return SourceCellViewModel(source: source, interactor: sourceInteractor)
-    }
-}
-
-struct SourceCellViewModel {
-    
-    private(set) var sourceDescription: NSAttributedString!
-    private(set) var interactor: SourceInteractor!    
-    
-    private(set) var didFavorite: (() -> Void)?
-    private(set) var didUnfavorite: (() -> Void)?
-    
-    var viewState: Observable<FavoriteViewState>?
-    
-    init(source: NewsAPISource, interactor: SourceInteractor) {
-        self.interactor = interactor
-        sourceDescription = createSourceDescription(source: source)
-        
-        if let sourceId = source.id {
-            viewState = interactor.isFavorite(sourceId)
-                .map { ($0.isEmpty) ?
-                    FavoriteViewState.isNotFavorite : FavoriteViewState.isFavorite
-                }
-            
-            didFavorite = {
-                interactor.setFavorite(for: sourceId, isFavorite: true)
-            }
-            
-            didUnfavorite = {
-                interactor.setFavorite(for: sourceId, isFavorite: false)
-            }
-        }
-    }
-    
-    private func createSourceDescription(source: NewsAPISource) -> NSAttributedString {
-        guard let name = source.name, let description = source.sourceDescription else {
-            return NSAttributedString()
-        }
-        
-        let attributedText = NSMutableAttributedString(string: "\(name)\n", attributes: [
-            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16.0),
-            NSForegroundColorAttributeName: UIColor(r: 0, g: 92, b: 208)
-            ])
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 4.0
-        
-        let range = NSMakeRange(0, attributedText.string.characters.count)
-        
-        attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: range)
-        
-        attributedText.append(NSAttributedString(string: description, attributes: [
-            NSFontAttributeName: UIFont.systemFont(ofSize: 13.0),
-            NSForegroundColorAttributeName: UIColor(r: 78, g: 85, b: 94)
-            ]))
-        
-        return attributedText
+        return SourceCellViewModel(source: source, sourceInteractor: sourceInteractor)
     }
 }

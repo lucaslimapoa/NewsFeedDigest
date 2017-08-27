@@ -22,17 +22,17 @@ protocol DetailCoordinatorDelegate {
 class DetailCoordinator: NSObject, FlowCoordinator, SFSafariViewControllerDelegate {
     
     let navigationController: UINavigationController
-    let article: NewsAPIArticle
+    let article: ArticleObject
     
     var coordinatorDelegate: DetailCoordinatorDelegate?
     
-    init(navigationController: UINavigationController, article: NewsAPIArticle) {
+    init(navigationController: UINavigationController, article: ArticleObject) {
         self.navigationController = navigationController
         self.article = article
     }
     
     func start() {
-        if let urlToArticle = article.url {
+        if let urlToArticle = URL(string: article.url) {
             let safariViewController = SFSafariViewController(url: urlToArticle, entersReaderIfAvailable: true)            
             navigationController.present(safariViewController, animated: true, completion: nil)
         } else {

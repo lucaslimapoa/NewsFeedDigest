@@ -20,37 +20,46 @@ class DateConversorTests: XCTestCase {
     }
     
     func test_UTC0PublishedTime_ReturnsPassedTime() {
-        var publishedTime = "2017-06-13T18:00:00Z"
+        var timeInterval: Double = 1497376800
         var expectedDiff = "30m ago"
-        var actualDiff = subject.convertToPassedTime(publishedAt: publishedTime)
+        var actualDiff = subject.convertToPassedTime(timeInterval: timeInterval)
         
         XCTAssertEqual(expectedDiff, actualDiff)
         
-        publishedTime = "2017-06-13T17:45:00Z"
+        timeInterval = 1497375900
         expectedDiff = "45m ago"
-        actualDiff = subject.convertToPassedTime(publishedAt: publishedTime)
-        
+        actualDiff = subject.convertToPassedTime(timeInterval: timeInterval)
+
         XCTAssertEqual(expectedDiff, actualDiff)
         
-        publishedTime = "2017-06-13T17:30:00.132Z"
+        timeInterval = 1497375013
         expectedDiff = "59m ago"
-        actualDiff = subject.convertToPassedTime(publishedAt: publishedTime)
+        actualDiff = subject.convertToPassedTime(timeInterval: timeInterval)
         
         XCTAssertEqual(expectedDiff, actualDiff)
         
-        publishedTime = "2017-06-12T18:30:00Z"
+        timeInterval = 1497292200
         expectedDiff = "1d ago"
-        actualDiff = subject.convertToPassedTime(publishedAt: publishedTime)
+        actualDiff = subject.convertToPassedTime(timeInterval: timeInterval)
         
         XCTAssertEqual(expectedDiff, actualDiff)
     }
     
     func test_WhenCurrentTimeIsOutdated_UpdateAndReturnsPassedTime() {        
-        let publishedTime = "2017-06-13T19:30:00Z"
+        let timeInterval: Double = 1497382200
         let expectedDiff = "30m ago"
-        let actualDiff = subject.convertToPassedTime(publishedAt: publishedTime)
+        let actualDiff = subject.convertToPassedTime(timeInterval: timeInterval)
         
         XCTAssertEqual(expectedDiff, actualDiff)
+    }
+    
+    func test_ConvertToTimeInterval() {
+        let publishedTime = "2017-06-13T19:30:00Z"
+        
+        let expectedResult: Double = 1497382200
+        let actualResult = subject.convertToTimeInterval(publishedTime)
+        
+        XCTAssertEqual(expectedResult, actualResult)
     }
 }
 

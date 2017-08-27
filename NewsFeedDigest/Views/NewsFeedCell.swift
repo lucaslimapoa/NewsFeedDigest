@@ -9,9 +9,9 @@
 import UIKit
 import Nuke
 
-class NewsFeedCell: UICollectionViewCell {        
+class NewsFeedCell: UITableViewCell {
     
-    var imageView: UIImageView = {
+    var articleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 5.0
@@ -27,6 +27,8 @@ class NewsFeedCell: UICollectionViewCell {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isUserInteractionEnabled = false
+        textView.isScrollEnabled = false
+        textView.backgroundColor = .clear
         
         return textView
     }()
@@ -34,63 +36,76 @@ class NewsFeedCell: UICollectionViewCell {
     var informationText: UILabel = {
        let infoText = UILabel()
         infoText.translatesAutoresizingMaskIntoConstraints = false
-        infoText.backgroundColor = .white
+        infoText.backgroundColor = .clear
         infoText.font = Fonts.cellInformationFont
-        infoText.textColor = Colors.subtitleText        
+        infoText.textColor = Colors.subtitleText
         
         return infoText
     }()
     
+    var separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Colors.separatorView
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     var viewModel: NewsCellViewModel! {
         didSet {
-            contentDescription.attributedText = viewModel.articleDescription
-            informationText.attributedText = viewModel.articleInfo
-            
-            imageView.image = nil
-            if let urlToImage = viewModel.urlToImage {
-                Nuke.loadImage(with: urlToImage, into: imageView)
-            }
+            setupViewModel(style: .normal)
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("method not implemented")
+        fatalError("Method not implemented")
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addSubviews()
+        setupCell()
+        setupSeparator()
+    }
+    
+    func setupViewModel(style: CellStyle) {
+        contentDescription.attributedText = viewModel.title(style: style)
+        informationText.attributedText = viewModel.information(style: style)
         
-        setupCellView()
-        setupSubViews()
+        articleImageView.image = nil
+        if let urlToImage = viewModel.urlToImage {
+            Nuke.loadImage(with: urlToImage, into: articleImageView)
+        }
     }
     
-    private func setupCellView() {
-        self.layer.cornerRadius = 3.0
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = Colors.cellBorder.cgColor
-        
-        self.backgroundColor = .white
-        self.clipsToBounds = true
-    }
-    
-    private func setupSubViews() {
-        addSubview(imageView)
+    private func addSubviews() {
+        addSubview(articleImageView)
         addSubview(contentDescription)
         addSubview(informationText)
-        
-        imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8.0).isActive = true
-        imageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8.0).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 84.0).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 84.0).isActive = true
+        addSubview(separatorView)
+    }
+    
+    private func setupSeparator() {
+        separatorView.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        separatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1.0).isActive = true
+        separatorView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16.0).isActive = true
+        separatorView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+    
+    func setupCell() {        
+        articleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        articleImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16.0).isActive = true
+        articleImageView.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
+        articleImageView.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentDescription.heightAnchor.constraint(equalToConstant: 66.0).isActive = true
-        contentDescription.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 8.0).isActive = true
+        contentDescription.heightAnchor.constraint(equalToConstant: 99.0).isActive = true
+        contentDescription.leftAnchor.constraint(equalTo: articleImageView.rightAnchor, constant: 8.0).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor).isActive = true
         
         informationText.leftAnchor.constraint(equalTo: contentDescription.leftAnchor, constant: 5).isActive = true
         informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
         informationText.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        informationText.heightAnchor.constraint(equalToConstant: 15)
+        informationText.heightAnchor.constraint(equalToConstant: 15).isActive = true
     }
 }

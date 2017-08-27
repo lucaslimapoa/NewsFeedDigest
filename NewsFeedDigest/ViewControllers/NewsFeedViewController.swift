@@ -9,81 +9,194 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 import NewsAPISwift
 
 let NewsFeedCellId = "NewsFeedCellId"
+let BigNewsFeedCellId = "BigNewsFeedCellId"
 
-class NewsFeedViewController: UICollectionViewController {
-    
-    var viewModel: NewsFeedViewModelType!
+class NewsFeedViewController: UITableViewController {
     
     let disposeBag = DisposeBag()
     
-    var refreshTrigger: Observable<Void>!
-    var refreshControl: UIRefreshControl!
+    var tableViewHeader: NewsFeedTableViewHeader!
+    
+    var viewModel: NewsFeedViewModelType!
+    var refreshTrigger = PublishSubject<Void>()
+    
+    var dataSource: RxTableViewSectionedReloadDataSource<ArticleSection>!
+    
+    override init(style: UITableViewStyle = .grouped) {
+        super.init(style: style)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Method not implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView!.dataSource = nil
-        collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
-        collectionView!.register(NewsFeedCell.self, forCellWithReuseIdentifier: NewsFeedCellId)
+        navigationController?.setNavigationBarHidden(true, animated: true)
         
-        collectionView!.contentInset.top = 10
-        collectionView!.contentInset.bottom = 10
+        tableView.dataSource = nil
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = Colors.collectionViewBackgroundColor
+        
+        tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
+        tableView.register(BigNewsFeedCell.self, forCellReuseIdentifier: BigNewsFeedCellId)
+        
+        tableView.contentInset.top = 10
+        tableView.contentInset.bottom = 10
         
         refreshControl = UIRefreshControl()
-        collectionView!.addSubview(refreshControl)
+        tableView.addSubview(refreshControl!)
+        
+        addHeader()
         
         setupRx()
+        refreshTrigger.onNext(())
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setStatusBar(color: .white)
+        tableViewHeader.updateMessage()
+    }    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setStatusBar(color: .clear)
     }
     
-    func setupRx() {
-        refreshTrigger = refreshControl
+    private func setStatusBar(color: UIColor) {
+        if let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+            statusBar.backgroundColor = color
+        }
+    }
+    
+    private func addHeader() {
+        guard let view = R.nib.newsFeedTableViewHeader.firstView(owner: self) else { return }
+        
+        let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        var headerFrame = view.frame
+        
+        if headerFrame.height != height {
+            headerFrame.size.height = height + 10
+            view.frame = headerFrame
+        }
+        
+        tableViewHeader = view
+        tableView.tableHeaderView = tableViewHeader
+    }
+ 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return (indexPath.row == 0) ? 350.0 : 120.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60.0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let view = R.nib.newsFeedSectionHeader.firstView(owner: self) else { return nil }
+
+        let color = dataSource.sectionModels[section].color
+        let sourceName = dataSource.sectionModels[section].header
+        
+        view.titleLabel.textColor = color
+        view.titleLabel.text = sourceName
+        
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let view = R.nib.newsFeedSectionFooter.firstView(owner: self) else { return nil }
+        
+        let sourceName = dataSource.sectionModels[section].header.localizedUppercase
+        let color = dataSource.sectionModels[section].color
+        let sourceId = dataSource.sectionModels[section].sourceId
+        
+        let attributedText = NSMutableAttributedString(string: "MORE STORIES FROM ", attributes: [
+            NSFontAttributeName: Fonts.footerText,
+            NSForegroundColorAttributeName: Colors.footerText
+            ])
+        
+        attributedText.append(NSAttributedString(string: sourceName, attributes: [
+            NSFontAttributeName: Fonts.footerText,
+            NSForegroundColorAttributeName: color
+            ]))
+        
+        view.delegate = self
+        view.sourceId = sourceId
+        view.textLabel.attributedText = attributedText
+        
+        return view
+    }
+    
+}
+
+private extension NewsFeedViewController {
+    
+    func setupRx() {        
+        let refreshControlStream = refreshControl!
             .rx
             .controlEvent(.valueChanged)
             .map { () }
         
-        let articlesStream = Observable.just(())
-            .concat(refreshTrigger)
-            .flatMapLatest { self.viewModel.fetchArticles() }
-        
-        articlesStream
+        Observable.of(refreshControlStream, refreshTrigger.asObservable())
+            .merge()
             .do(onNext: { _ in
-                self.refreshControl.endRefreshing()
+                self.refreshControl?.endRefreshing()
             })
-            .asDriver(onErrorJustReturn: [])
-            .drive(collectionView!.rx.items) { collectionView, row, article in
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsFeedCellId, for: IndexPath(row: row, section: 0)) as! NewsFeedCell
-                cell.viewModel = self.viewModel.createCellViewModel(from: article)
-                
-                return cell
-            }
-            .addDisposableTo(disposeBag)
+            .subscribe(onNext: { _ in
+                self.viewModel.fetchArticles()
+            })
+            .disposed(by: disposeBag)
         
-        collectionView!.rx
-            .modelSelected(NewsAPIArticle.self)
+        dataSource = createDataSource()
+        
+        viewModel.articleSections
+            .asObservable()
+            .do(onNext: { _ in
+                self.refreshControl?.endRefreshing()
+            })
+            .bind(to: tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        tableView.rx
+            .modelSelected(ArticleObject.self)
             .bind(to: viewModel.selectedItemListener)
-            .addDisposableTo(disposeBag)
-    }
-}
-
-extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 20, height: 100)
+            .disposed(by: disposeBag)
     }
     
+    func createDataSource() -> RxTableViewSectionedReloadDataSource<ArticleSection> {
+        let dataSource = RxTableViewSectionedReloadDataSource<ArticleSection>()
+        
+        dataSource.configureCell = { dataSource, tableView, indexPath, item in
+            let cell = (indexPath.row == 0) ?
+                tableView.dequeueReusableCell(withIdentifier: BigNewsFeedCellId, for: indexPath) as! BigNewsFeedCell : tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
+            
+            cell.viewModel = self.viewModel.createCellViewModel(from: item)
+            cell.separatorView.backgroundColor = Colors.separatorView
+            
+            return cell
+        }
+
+        return dataSource
+    }
+    
 }
 
-
-
-
-
-
-
+extension NewsFeedViewController: newsFeedSectionFooterViewDelegate {
+    
+    func newsFeedSectionFooterView(_ footerView: NewsFeedSectionFooterView, didSelectSource source: SourceId) {
+        viewModel.selectedSourceListener.onNext(source)
+    }
+    
+}
 

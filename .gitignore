@@ -1,3 +1,4 @@
 Pods/*
 NewsFeedDigest.xcodeproj/xcuserdata/*
 NewsFeedDigest.xcworkspace/xcuserdata/*
+*.generated.swift

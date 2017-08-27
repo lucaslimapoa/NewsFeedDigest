@@ -2,45 +2,59 @@ PODS:
   - NewsAPISwift (0.1.5):
     - ObjectMapper (~> 2.2)
   - Nuke (5.1.1)
-  - ObjectMapper (2.2.7)
-  - Realm (2.8.3):
-    - Realm/Headers (= 2.8.3)
-  - Realm/Headers (2.8.3)
-  - RealmSwift (2.8.3):
-    - Realm (= 2.8.3)
-  - RxBlocking (3.5.0):
-    - RxSwift (~> 3.4)
-  - RxCocoa (3.5.0):
-    - RxSwift (~> 3.4)
+  - ObjectMapper (2.2.8)
+  - R.swift (3.3.0):
+    - R.swift.Library (~> 3.0.2)
+  - R.swift.Library (3.0.2)
+  - Realm (2.10.0):
+    - Realm/Headers (= 2.10.0)
+  - Realm/Headers (2.10.0)
+  - RealmSwift (2.10.0):
+    - Realm (= 2.10.0)
+  - RxBlocking (3.6.1):
+    - RxSwift (~> 3.6)
+  - RxCocoa (3.6.1):
+    - RxSwift (~> 3.6)
+  - RxDataSources (1.0.4):
+    - RxCocoa (~> 3.0)
+    - RxSwift (~> 3.0)
   - RxRealm (0.6.0):
     - RealmSwift (~> 2.5)
     - RxSwift (~> 3.2)
-  - RxSwift (3.5.0)
-  - RxTest (3.5.0):
-    - RxSwift (~> 3.4)
+  - RxSwift (3.6.1)
+  - RxTest (3.6.1):
+    - RxSwift (~> 3.6)
+  - SwiftyBeaver (1.4.0)
 
 DEPENDENCIES:
   - NewsAPISwift (~> 0.1.1)
   - Nuke (~> 5.0)
+  - R.swift
   - RealmSwift (~> 2.8)
   - RxBlocking (~> 3.0)
   - RxCocoa (~> 3.0)
+  - RxDataSources (~> 1.0)
   - RxRealm
   - RxSwift (~> 3.0)
   - RxTest (~> 3.0)
+  - SwiftyBeaver
 
 SPEC CHECKSUMS:
   NewsAPISwift: 1c13680b248e482ded9dc0ee3ddbe48e5d3851fc
   Nuke: 0a2ddb4bd13d75782964bf598a159ca2a836d826
-  ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
-  Realm: 3601ef091c8c499a31101d8563b991e75546cdce
-  RealmSwift: 8183818515471b01a99abdd2970f8e4fd52b6f4a
-  RxBlocking: 471315e18b87c5ed4b9d0c69a57dfdbca5c01af1
-  RxCocoa: a0a09f45d0e5b48ecb6a4a7b4b4c89c88d3f633f
+  ObjectMapper: 3d571bb5af471c779e1160828cd9ad5c4ef90958
+  R.swift: bde9704d50ff36820f49e266bc88ef545e1e9b36
+  R.swift.Library: fbdec16c9802ad104fc1ba53415dc190e6ec5c73
+  Realm: 98b3a25643cf6b3e07d2b99fb43fe0eb9c801dec
+  RealmSwift: 34073ad3a31232bbaf7c0db898c037940284cba2
+  RxBlocking: 4f4bd5732e8b952e54ae8a57739bcfb645de12bc
+  RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
+  RxDataSources: b3389acc5fe2eefb8fcd81a2b76a876ad08bc82a
   RxRealm: 323de579b50b5e0f4a3e087d5925021f976ffaf1
-  RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
-  RxTest: 1763765fd0e2282b0eb44c9050effdd7fe7156d4
+  RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
+  RxTest: 1d00348a7848c91ab5bf5d197d2378aa6b2bb356
+  SwiftyBeaver: 78d9186ce7595b4400ce01e5fd750d263e72dd7b
 
-PODFILE CHECKSUM: 2e93acb196631ab082db4ef55e0e3f291d093e3c
+PODFILE CHECKSUM: 20826ae3bd25963c23a059601fd7c7ce72923a48
 
 COCOAPODS: 1.2.1

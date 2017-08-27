@@ -7,11 +7,8 @@
 //
 
 import UIKit
+import RealmSwift
 import NewsAPISwift
-
-protocol NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle)
-}
 
 class NewsFeedCoordinator: TabBarCoordinator {
     
@@ -19,11 +16,14 @@ class NewsFeedCoordinator: TabBarCoordinator {
     var rootViewController: UINavigationController
     
     var detailCoordinator: DetailCoordinator?
+    var sourceArticlesCoordinator: SourceArticlesCoordinator?
     
     let newsAPI: NewsAPIProtocol
+    let realm: Realm
     
-    init(newsAPI: NewsAPIProtocol) {
+    init(newsAPI: NewsAPIProtocol, realm: Realm) {
         self.newsAPI = newsAPI
+        self.realm = realm
         
         tabBarItem = UITabBarItem(title: "For You", image: nil, selectedImage: nil)
         
@@ -37,12 +37,15 @@ class NewsFeedCoordinator: TabBarCoordinator {
     }
     
     private func createNewsFeedViewController() -> NewsFeedViewController {
-        let userStore = FakeUserStore()
+        let dateConversor = DateConversor(currentDate: Date())
+        let articleInteractor = ArticleInteractor(newsAPI: newsAPI, realm: realm, dateConversor: dateConversor)
+        let sourceInteractor = SourceInteractor(realm: realm, newsAPI: newsAPI)        
         
-        let viewModel = NewsFeedViewModel(userStore: userStore, newsAPIClient: newsAPI)
+        let viewModel = NewsFeedViewModel(articleInteractor: articleInteractor, sourceInteractor: sourceInteractor)
+        
         viewModel.coordinatorDelegate = self
         
-        let newsFeedViewController = NewsFeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let newsFeedViewController = NewsFeedViewController()
         newsFeedViewController.viewModel = viewModel
         
         return newsFeedViewController
@@ -50,9 +53,17 @@ class NewsFeedCoordinator: TabBarCoordinator {
 }
 
 extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
-    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: NewsAPIArticle) {
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject) {
         detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()
+    }
+    
+    func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectSource source: SourceObject) {
+        let dateConversor = DateConversor(currentDate: Date())
+        let articleInteractor = ArticleInteractor(newsAPI: newsAPI, realm: realm, dateConversor: dateConversor)
+        
+        sourceArticlesCoordinator = SourceArticlesCoordinator(navigationController: rootViewController, sourceObject: source, articleInteractor: articleInteractor)
+        sourceArticlesCoordinator?.start()
     }
 }
 
