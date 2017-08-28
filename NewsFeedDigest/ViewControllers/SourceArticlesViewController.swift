@@ -21,8 +21,11 @@ class SourceArticlesViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    let dispatchToken = UUID().uuidString
     let disposeBag = DisposeBag()
+    let tableViewDelegateOnceToken = UUID().uuidString
+    let tableViewPositionOnceToken = UUID().uuidString
+    
+    var defaultShadowImage: UIImage?
     var viewModel: SourceArticleViewModelType!
     
     var tableViewInitialPos: CGPoint = .zero
@@ -36,16 +39,20 @@ class SourceArticlesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
         tableView.rowHeight = 120.0
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: cellId)
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        
+        navigationController?.navigationBar.shadowImage = defaultShadowImage
+        navigationController?.navigationBar.shadowImage = UIImage()
         
         setupRx()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,9 +60,20 @@ class SourceArticlesViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+     
+        DispatchQueue.once(token: tableViewDelegateOnceToken) {
+            tableView.delegate = self
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
-        DispatchQueue.once(token: dispatchToken) {
-            self.tableViewInitialPos = tableView.frame.origin
+        DispatchQueue.once(token: tableViewPositionOnceToken) {
+            let positionY = descriptionTextView.frame.origin.y + descriptionTextView.frame.height + 8
+            tableViewInitialPos = CGPoint(x: tableView.frame.origin.x, y: positionY)
+            
+            tableViewContentOffsetY = 0
         }
     }
     
