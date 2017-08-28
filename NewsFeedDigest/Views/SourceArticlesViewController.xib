@@ -19,24 +19,24 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Verge" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rn2-7k-DF9">
-                    <rect key="frame" x="16" y="40" width="382" height="33.666666666666671"/>
+                    <rect key="frame" x="16" y="8" width="382" height="33.666666666666671"/>
                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="28"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9Td-CJ-Saw">
-                    <rect key="frame" x="16" y="81.666666666666686" width="382" height="66.333333333333314"/>
+                    <rect key="frame" x="16" y="49.666666666666679" width="382" height="66.333333333333314"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <string key="text">The Verge covers the intersection of technology, science, art, and culture. The best source for geeks, nerds and technology lovers</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N1H-YM-1Ff">
-                    <rect key="frame" x="0.0" y="156" width="414" height="580"/>
+                    <rect key="frame" x="0.0" y="142" width="414" height="530"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
@@ -44,12 +44,13 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="9Td-CJ-Saw" secondAttribute="trailing" constant="16" id="0CY-L7-kL8"/>
-                <constraint firstItem="rn2-7k-DF9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="40" id="CCv-7S-nD7"/>
+                <constraint firstItem="rn2-7k-DF9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="CCv-7S-nD7"/>
                 <constraint firstItem="9Td-CJ-Saw" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="IP0-1S-nr8"/>
                 <constraint firstAttribute="trailing" secondItem="rn2-7k-DF9" secondAttribute="trailing" constant="16" id="WL2-J1-5ze"/>
                 <constraint firstItem="rn2-7k-DF9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="ZAA-AW-ACV"/>
                 <constraint firstItem="9Td-CJ-Saw" firstAttribute="top" secondItem="rn2-7k-DF9" secondAttribute="bottom" constant="8" id="brK-EJ-Va2"/>
             </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <point key="canvasLocation" x="25" y="51"/>
         </view>
     </objects>

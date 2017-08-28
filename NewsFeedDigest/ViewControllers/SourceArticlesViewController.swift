@@ -42,11 +42,7 @@ class SourceArticlesViewController: UIViewController {
         tableView.rowHeight = 120.0
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: cellId)
         
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        
-        navigationController?.navigationBar.shadowImage = defaultShadowImage
-        navigationController?.navigationBar.shadowImage = UIImage()
-        
+        setupNavigatonBar()
         setupRx()
     }
     
@@ -77,9 +73,21 @@ class SourceArticlesViewController: UIViewController {
         }
     }
     
+    private func setupNavigatonBar() {
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.isTranslucent = false
+    }
+    
     private func setupRx() {
         viewModel
             .fetchTitle()
+            .do(onNext: { title in
+                let titleLabel = UILabel()
+                titleLabel.text = title
+                
+                self.navigationItem.titleView = titleLabel
+                self.navigationItem.titleView?.alpha = 0.0
+            })
             .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
         
@@ -92,7 +100,7 @@ class SourceArticlesViewController: UIViewController {
             .fetchArticles()
             .bind(to: tableView.rx.items(cellIdentifier: cellId, cellType: NewsFeedCell.self)) { _, item, cell in
                 cell.viewModel = self.viewModel.createCellViewModel(from: item)
-                cell.separatorView.backgroundColor = Colors.separatorView
+                cell.separatorView.isHidden = true
             }
             .disposed(by: disposeBag)
     }
@@ -108,17 +116,20 @@ private extension SourceArticlesViewController {
     }
     
     func updateTableView() {
-        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, navigationBarHeight)
+        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, -navigationBarHeight)
         tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
         tableView.frame.size = calculateTableViewSize()
     }
     
     func animateViews() {
-        let fadeOutAlpha = (self.tableView.frame.origin.y - navigationBarHeight) / (tableViewInitialPos.y - navigationBarHeight)
+        let fadeOutAlpha = (tableView.frame.origin.y - navigationBarHeight) / (tableViewInitialPos.y - navigationBarHeight)
+        let fadeInAlpha = 1 - fadeOutAlpha
         
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: 0.3) {
             self.titleLabel.alpha = fadeOutAlpha
             self.descriptionTextView.alpha = fadeOutAlpha
+            
+            self.navigationItem.titleView?.alpha = fadeInAlpha
         }
     }
 }
