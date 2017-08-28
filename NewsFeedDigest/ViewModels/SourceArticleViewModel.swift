@@ -11,14 +11,25 @@ import RxSwift
 import NewsAPISwift
 import RealmSwift
 
+protocol SourceArticleViewModelDelegate: class {
+    func sourceArticleViewModel(viewMode: SourceArticleViewModel, didSelectArticle article: ArticleObject)
+}
+
 protocol SourceArticleViewModelType {
+    var selectedItemListener: PublishSubject<ArticleObject> { get set }
+    
     func fetchTitle() -> Observable<String>
     func fetchDescription() -> Observable<String>
     func fetchArticles() -> Observable<[ArticleObject]>
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
 }
 
-struct SourceArticleViewModel: SourceArticleViewModelType {
+class SourceArticleViewModel: SourceArticleViewModelType {
+    
+    weak var delegate: SourceArticleViewModelDelegate?
+    
+    let disposeBag = DisposeBag()
+    var selectedItemListener = PublishSubject<ArticleObject>()
     
     private var sourceObject: SourceObject
     private var articleInteractor: ArticleInteractor
@@ -27,6 +38,17 @@ struct SourceArticleViewModel: SourceArticleViewModelType {
     init(sourceObject: SourceObject, articleInteractor: ArticleInteractor) {
         self.sourceObject = sourceObject
         self.articleInteractor = articleInteractor
+        
+        setupListeners()
+    }
+    
+    func setupListeners() {
+        selectedItemListener
+            .subscribe(onNext: { [weak self] article in
+                guard let welf = self else { return }
+                welf.delegate?.sourceArticleViewModel(viewMode: welf, didSelectArticle: article)
+            })
+            .disposed(by: disposeBag)
     }
     
     func fetchTitle() -> Observable<String> {

@@ -60,7 +60,10 @@ class SourceArticlesViewController: UIViewController {
         super.viewDidAppear(animated)
      
         DispatchQueue.once(token: tableViewDelegateOnceToken) {
-            tableView.delegate = self
+            tableView
+                .rx
+                .setDelegate(self)
+                .disposed(by: disposeBag)
         }
     }
     
@@ -103,6 +106,12 @@ class SourceArticlesViewController: UIViewController {
                 cell.separatorView.isHidden = true
             }
             .disposed(by: disposeBag)
+        
+        tableView
+            .rx
+            .modelSelected(ArticleObject.self)
+            .bind(to: viewModel.selectedItemListener)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -141,5 +150,4 @@ extension SourceArticlesViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         tableViewContentOffsetY = scrollView.contentOffset.y
     }
-    
 }

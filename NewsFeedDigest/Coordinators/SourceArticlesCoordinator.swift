@@ -15,6 +15,8 @@ class SourceArticlesCoordinator: FlowCoordinator {
     let articleInteractor: ArticleInteractor
     let navigationController: UINavigationController
     
+    var detailCoordinator: DetailCoordinator?
+    
     init(navigationController: UINavigationController, sourceObject: SourceObject, articleInteractor: ArticleInteractor) {
         self.source = sourceObject
         self.articleInteractor = articleInteractor
@@ -22,9 +24,19 @@ class SourceArticlesCoordinator: FlowCoordinator {
     }
     
     func start() {
+        let viewModel = SourceArticleViewModel(sourceObject: source, articleInteractor: articleInteractor)
+        viewModel.delegate = self
+        
         let viewController = SourceArticlesViewController()
-        viewController.viewModel = SourceArticleViewModel(sourceObject: source, articleInteractor: articleInteractor)
+        viewController.viewModel = viewModel
                 
         navigationController.pushViewController(viewController, animated: true)
+    }
+}
+
+extension SourceArticlesCoordinator: SourceArticleViewModelDelegate {
+    func sourceArticleViewModel(viewMode: SourceArticleViewModel, didSelectArticle article: ArticleObject) {
+        detailCoordinator = DetailCoordinator(navigationController: navigationController, article: article)
+        detailCoordinator?.start()
     }
 }
