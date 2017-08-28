@@ -49,6 +49,5 @@ struct SourceArticleViewModel: SourceArticleViewModelType {
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
         return NewsCellViewModel((article, sourceObject), dateConversor: dateConversor)
-    }
-    
+    }    
 }

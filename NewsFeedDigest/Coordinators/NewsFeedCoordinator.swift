@@ -43,7 +43,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
         
         let viewModel = NewsFeedViewModel(articleInteractor: articleInteractor, sourceInteractor: sourceInteractor)
         
-        viewModel.coordinatorDelegate = self
+        viewModel.delegate = self
         
         let newsFeedViewController = NewsFeedViewController()
         newsFeedViewController.viewModel = viewModel
@@ -52,7 +52,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
     }
 }
 
-extension NewsFeedCoordinator: NewsFeedViewModelCoordinatorDelegate {
+extension NewsFeedCoordinator: NewsFeedViewModelDelegate {
     func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject) {
         detailCoordinator = DetailCoordinator(navigationController: rootViewController, article: article)
         detailCoordinator?.start()

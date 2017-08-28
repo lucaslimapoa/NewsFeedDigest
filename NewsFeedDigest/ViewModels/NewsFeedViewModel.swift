@@ -10,7 +10,7 @@ import RxSwift
 import RealmSwift
 import NewsAPISwift
 
-protocol NewsFeedViewModelCoordinatorDelegate {
+protocol NewsFeedViewModelDelegate {
     func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectArticle article: ArticleObject)
     func newsFeedViewModel(viewModel: NewsFeedViewModelType, didSelectSource source: SourceObject)
 }
@@ -36,7 +36,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     var selectedItemListener = PublishSubject<ArticleObject>()
     var selectedSourceListener = PublishSubject<SourceId>()
     
-    var coordinatorDelegate: NewsFeedViewModelCoordinatorDelegate?
+    var delegate: NewsFeedViewModelDelegate?
     var articleSections = Variable<[ArticleSection]>([])
     
     init(articleInteractor: ArticleInteractor, sourceInteractor: SourceInteractor, dateConversor: DateConversor = DateConversor()) {        
@@ -51,7 +51,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
     func setupListeners() {
         selectedItemListener
             .subscribe(onNext: { article in
-                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectArticle: article)
+                self.delegate?.newsFeedViewModel(viewModel: self, didSelectArticle: article)
             })
             .disposed(by: disposeBag)
         
@@ -59,7 +59,7 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .map { self.sourceInteractor.fetchSource(with: $0) }
             .flatMap { Observable.from(optional: $0) }
             .subscribe(onNext: { sourceObject in
-                self.coordinatorDelegate?.newsFeedViewModel(viewModel: self, didSelectSource: sourceObject)
+                self.delegate?.newsFeedViewModel(viewModel: self, didSelectSource: sourceObject)
             })
             .disposed(by: disposeBag)
     }
