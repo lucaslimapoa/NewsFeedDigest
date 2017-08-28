@@ -116,13 +116,13 @@ private extension SourceArticlesViewController {
     }
     
     func updateTableView() {
-        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, -navigationBarHeight)
+        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, 0)
         tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
         tableView.frame.size = calculateTableViewSize()
     }
     
     func animateViews() {
-        let fadeOutAlpha = (tableView.frame.origin.y - navigationBarHeight) / (tableViewInitialPos.y - navigationBarHeight)
+        let fadeOutAlpha = tableView.frame.origin.y / tableViewInitialPos.y
         let fadeInAlpha = 1 - fadeOutAlpha
         
         UIView.animate(withDuration: 0.3) {
