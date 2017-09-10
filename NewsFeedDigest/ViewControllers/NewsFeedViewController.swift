@@ -40,7 +40,7 @@ class NewsFeedViewController: UITableViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
         
         tableView.dataSource = nil
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         tableView.backgroundColor = Colors.collectionViewBackgroundColor
         
         tableView.register(NewsFeedCell.self, forCellReuseIdentifier: NewsFeedCellId)
@@ -182,7 +182,6 @@ private extension NewsFeedViewController {
                 tableView.dequeueReusableCell(withIdentifier: BigNewsFeedCellId, for: indexPath) as! BigNewsFeedCell : tableView.dequeueReusableCell(withIdentifier: NewsFeedCellId, for: indexPath) as! NewsFeedCell
             
             cell.viewModel = self.viewModel.createCellViewModel(from: item)
-            cell.separatorView.backgroundColor = Colors.separatorView
             
             return cell
         }

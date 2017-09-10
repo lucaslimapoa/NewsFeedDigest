@@ -31,14 +31,12 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.image` struct is generated, and contains static references to 3 images.
+  /// This `R.image` struct is generated, and contains static references to 2 images.
   struct image {
     /// Image `ic_favorite_border`.
     static let ic_favorite_border = Rswift.ImageResource(bundle: R.hostingBundle, name: "ic_favorite_border")
     /// Image `ic_favorite`.
     static let ic_favorite = Rswift.ImageResource(bundle: R.hostingBundle, name: "ic_favorite")
-    /// Image `transparent`.
-    static let transparent = Rswift.ImageResource(bundle: R.hostingBundle, name: "transparent")
     
     /// `UIImage(named: "ic_favorite", bundle: ..., traitCollection: ...)`
     static func ic_favorite(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
@@ -48,11 +46,6 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "ic_favorite_border", bundle: ..., traitCollection: ...)`
     static func ic_favorite_border(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.ic_favorite_border, compatibleWith: traitCollection)
-    }
-    
-    /// `UIImage(named: "transparent", bundle: ..., traitCollection: ...)`
-    static func transparent(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.transparent, compatibleWith: traitCollection)
     }
     
     fileprivate init() {}

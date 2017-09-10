@@ -103,7 +103,6 @@ class SourceArticlesViewController: UIViewController {
             .fetchArticles()
             .bind(to: tableView.rx.items(cellIdentifier: cellId, cellType: NewsFeedCell.self)) { _, item, cell in
                 cell.viewModel = self.viewModel.createCellViewModel(from: item)
-                cell.separatorView.isHidden = true
             }
             .disposed(by: disposeBag)
         

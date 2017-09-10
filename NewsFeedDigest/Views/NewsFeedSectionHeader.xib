@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,27 +16,18 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Verge" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3tR-OH-ues">
-                    <rect key="frame" x="16" y="0.0" width="343" height="43"/>
+                    <rect key="frame" x="16" y="0.0" width="343" height="60"/>
                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="32"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hHD-pj-qmw">
-                    <rect key="frame" x="26" y="51" width="349" height="1"/>
-                    <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="1" id="U6n-Os-Zp7"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="hHD-pj-qmw" secondAttribute="trailing" id="Agg-Op-8Mj"/>
-                <constraint firstItem="hHD-pj-qmw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="26" id="ILB-P8-AAH"/>
-                <constraint firstItem="hHD-pj-qmw" firstAttribute="top" secondItem="3tR-OH-ues" secondAttribute="bottom" constant="8" id="OLB-7i-N56"/>
                 <constraint firstItem="3tR-OH-ues" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="SDX-gb-x9r"/>
+                <constraint firstAttribute="bottom" secondItem="3tR-OH-ues" secondAttribute="bottom" id="Udf-h4-dcp"/>
+                <constraint firstItem="3tR-OH-ues" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gkm-2A-ZTb"/>
                 <constraint firstAttribute="trailing" secondItem="3tR-OH-ues" secondAttribute="trailing" constant="16" id="o93-i9-kzw"/>
-                <constraint firstAttribute="bottom" secondItem="hHD-pj-qmw" secondAttribute="bottom" constant="8" id="vUG-Dk-esI"/>
                 <constraint firstItem="3tR-OH-ues" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="x7K-RG-pRU"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
