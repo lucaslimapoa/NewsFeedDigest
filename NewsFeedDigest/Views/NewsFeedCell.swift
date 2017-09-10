@@ -57,7 +57,6 @@ class NewsFeedCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews()
         setupCell()
-        setupSeparator()
     }
     
     func setupViewModel(style: CellStyle) {
