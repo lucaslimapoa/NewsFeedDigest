@@ -142,7 +142,13 @@ private extension SourceArticlesViewController {
     }
 }
 
-extension SourceArticlesViewController: UITableViewDelegate { }
+extension SourceArticlesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+}
 
 extension SourceArticlesViewController: UIScrollViewDelegate {
 
