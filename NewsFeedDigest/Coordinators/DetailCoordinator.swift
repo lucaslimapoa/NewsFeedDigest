@@ -21,10 +21,10 @@ protocol DetailCoordinatorDelegate {
 
 class DetailCoordinator: NSObject, FlowCoordinator, SFSafariViewControllerDelegate {
     
-    let navigationController: UINavigationController
-    let article: ArticleObject
+    private let navigationController: UINavigationController
+    private let article: ArticleObject
     
-    var coordinatorDelegate: DetailCoordinatorDelegate?
+    private var coordinatorDelegate: DetailCoordinatorDelegate?
     
     init(navigationController: UINavigationController, article: ArticleObject) {
         self.navigationController = navigationController
@@ -44,4 +44,13 @@ class DetailCoordinator: NSObject, FlowCoordinator, SFSafariViewControllerDelega
         controller.dismiss(animated: true, completion: nil)
         coordinatorDelegate?.detailCoordinatorDidFinish(self)
     }
+}
+
+extension DetailCoordinator {
+    
+    static func createPreview(url: String) -> UIViewController? {
+        guard let urlToArticle = URL(string: url) else { return nil }
+        return SFSafariViewController(url: urlToArticle, entersReaderIfAvailable: true)
+    }
+    
 }

@@ -9,7 +9,7 @@
 import UIKit
 import NewsAPISwift
 
-protocol newsFeedSectionFooterViewDelegate: class {
+protocol NewsFeedSectionFooterViewDelegate: class {
     func newsFeedSectionFooterView(_ footerView: NewsFeedSectionFooterView, didSelectSource source: SourceId)
 }
 
@@ -17,7 +17,7 @@ class NewsFeedSectionFooterView: UIView {
     @IBOutlet weak var textLabel: UILabel!
     
     var sourceId: SourceId?
-    weak var delegate: newsFeedSectionFooterViewDelegate?
+    weak var delegate: NewsFeedSectionFooterViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

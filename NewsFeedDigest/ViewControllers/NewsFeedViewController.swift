@@ -52,6 +52,10 @@ class NewsFeedViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl!)
         
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: view)
+        }
+        
         addHeader()
         
         setupRx()
@@ -191,10 +195,27 @@ private extension NewsFeedViewController {
     
 }
 
-extension NewsFeedViewController: newsFeedSectionFooterViewDelegate {
+extension NewsFeedViewController: NewsFeedSectionFooterViewDelegate {
     
     func newsFeedSectionFooterView(_ footerView: NewsFeedSectionFooterView, didSelectSource source: SourceId) {
         viewModel.selectedSourceListener.onNext(source)
+    }
+    
+}
+
+extension NewsFeedViewController: UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+        
+        let articleObject = dataSource.sectionModels[indexPath.section].items[indexPath.row]
+        let detailViewController = DetailCoordinator.createPreview(url: articleObject.url)
+        
+        return detailViewController
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        showDetailViewController(viewControllerToCommit, sender: self)
     }
     
 }
