@@ -138,6 +138,7 @@ class NewsFeedViewController: UITableViewController {
         view.delegate = self
         view.sourceId = sourceId
         view.textLabel.attributedText = attributedText
+        view.separatorView.isHidden = (dataSource.sectionModels.count - 1 == section)
         
         return view
     }

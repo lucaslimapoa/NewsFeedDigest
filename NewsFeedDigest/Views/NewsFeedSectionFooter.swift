@@ -15,6 +15,7 @@ protocol NewsFeedSectionFooterViewDelegate: class {
 
 class NewsFeedSectionFooterView: UIView {
     @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var separatorView: UIView!
     
     var sourceId: SourceId?
     weak var delegate: NewsFeedSectionFooterViewDelegate?

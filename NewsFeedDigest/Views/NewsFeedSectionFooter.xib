@@ -16,22 +16,33 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MORE STORIES FROM THE VERGE" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a9C-yB-xa0">
-                    <rect key="frame" x="16" y="0.0" width="343" height="42"/>
+                    <rect key="frame" x="16" y="8" width="343" height="22"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oRL-Ca-QOI">
+                    <rect key="frame" x="0.0" y="38" width="375" height="12"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="12" id="Uhp-uN-DeW"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="a9C-yB-xa0" secondAttribute="bottom" constant="8" id="9Ls-IL-cBE"/>
+                <constraint firstItem="oRL-Ca-QOI" firstAttribute="top" secondItem="a9C-yB-xa0" secondAttribute="bottom" constant="8" id="AMP-16-Z7I"/>
+                <constraint firstAttribute="trailing" secondItem="oRL-Ca-QOI" secondAttribute="trailing" id="VbO-wz-9wG"/>
                 <constraint firstAttribute="trailing" secondItem="a9C-yB-xa0" secondAttribute="trailing" constant="16" id="WPd-zb-YWH"/>
-                <constraint firstItem="a9C-yB-xa0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="iNh-ef-Tba"/>
+                <constraint firstAttribute="bottom" secondItem="oRL-Ca-QOI" secondAttribute="bottom" id="X9a-Vg-bTe"/>
+                <constraint firstItem="oRL-Ca-QOI" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="c6g-Kb-joB"/>
+                <constraint firstItem="a9C-yB-xa0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="iNh-ef-Tba"/>
                 <constraint firstItem="a9C-yB-xa0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="vjr-Mn-6NY"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="separatorView" destination="oRL-Ca-QOI" id="fi4-Qs-Xjg"/>
                 <outlet property="textLabel" destination="a9C-yB-xa0" id="mQo-oz-j4f"/>
             </connections>
             <point key="canvasLocation" x="24.5" y="-257"/>
