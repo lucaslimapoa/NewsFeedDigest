@@ -25,7 +25,6 @@ class SourceArticlesViewController: UIViewController {
     let tableViewDelegateOnceToken = UUID().uuidString
     let tableViewPositionOnceToken = UUID().uuidString
     
-    var defaultShadowImage: UIImage?
     var viewModel: SourceArticleViewModelType!
     
     var tableViewInitialPos: CGPoint = .zero
@@ -44,6 +43,10 @@ class SourceArticlesViewController: UIViewController {
         
         setupNavigatonBar()
         setupRx()
+        
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,4 +158,18 @@ extension SourceArticlesViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         tableViewContentOffsetY = scrollView.contentOffset.y
     }
+    
+}
+
+extension SourceArticlesViewController: UIViewControllerPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = tableView.indexPathForRow(at: location), let articleObject = viewModel.fetchArticle(indexPath: indexPath) else { return nil }
+        return DetailCoordinator.createPreview(url: articleObject.url)
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        showDetailViewController(viewControllerToCommit, sender: self)
+    }
+    
 }

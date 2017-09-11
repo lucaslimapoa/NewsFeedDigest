@@ -22,6 +22,8 @@ protocol SourceArticleViewModelType {
     func fetchDescription() -> Observable<String>
     func fetchArticles() -> Observable<[ArticleObject]>
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
+    
+    func fetchArticle(indexPath: IndexPath) -> ArticleObject?
 }
 
 class SourceArticleViewModel: SourceArticleViewModelType {
@@ -71,5 +73,15 @@ class SourceArticleViewModel: SourceArticleViewModelType {
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
         return NewsCellViewModel((article, sourceObject), dateConversor: dateConversor)
-    }    
+    }
+    
+    func fetchArticle(indexPath: IndexPath) -> ArticleObject? {
+        let articles = articleInteractor.fetchArticles(from: sourceObject.id)
+        
+        if indexPath.row < 0 || indexPath.row > articles.count {
+            return nil
+        }
+        
+        return articles[indexPath.row]
+    }
 }
