@@ -73,7 +73,7 @@ class ArticleInteractorTests: XCTestCase {
             .map { SourceObject(source: $0) }
         
         subject.fetchArticles(observable: sourcesObservable)
-        subject.fetchArticles()
+        subject.fetchArticles(favoritesStream: Observable.just([]))
             .subscribe(onNext: { results in
                 XCTAssertEqual(3, results.count)
                 testExpectation.fulfill()
