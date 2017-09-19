@@ -88,20 +88,22 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .map { [weak self] (groups: [String: [ArticleObject]]) -> [ArticleSection]? in
                 var sections = [ArticleSection]()
                 
-                groups.forEach { groupName, items in
-                    let sectionName = groupName.uppercased(with: Locale.current)
-                    let sectionItems = Array(items.prefix(4))
-                    var color: UIColor = .black
-                    
-                    if let sourceId = sectionItems.first?.sourceId {
-                        if let categoryString = self?.sourceInteractor.fetchSource(with: sourceId)?.category {
-                            if let category = Category(rawValue: categoryString) {
-                                color = Colors.color(for: category)
-                            }
-                        }
+                groups.forEach { groupId, items in
+                    if let groupName = self?.getSourceTitleFromId(groupId) {
+                        let sectionName = groupName.uppercased(with: Locale.current)
+                        let sectionItems = Array(items.prefix(4))
+                        var color: UIColor = .black
                         
-                        let articleSection = ArticleSection(header: sectionName, items: sectionItems, color: color, sourceId: sourceId)                        
-                        sections.append(articleSection)
+                        if let sourceId = sectionItems.first?.sourceId {
+                            if let categoryString = self?.sourceInteractor.fetchSource(with: sourceId)?.category {
+                                if let category = Category(rawValue: categoryString) {
+                                    color = Colors.color(for: category)
+                                }
+                            }
+                            
+                            let articleSection = ArticleSection(header: sectionName, items: sectionItems, color: color, sourceId: sourceId)
+                            sections.append(articleSection)
+                        }
                     }
                 }
                 
@@ -124,6 +126,11 @@ class NewsFeedViewModel: NewsFeedViewModelType {
             .flatMap { Observable.from($0) }
         
         articleInteractor.fetchArticles(observable: sourcesObservable)
+    }
+    
+    func getSourceTitleFromId(_ id: SourceId) -> String? {
+        let sourceObject = sourceInteractor.fetchSource(with: id)
+        return sourceObject?.name
     }
     
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel {
