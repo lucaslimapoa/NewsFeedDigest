@@ -110,7 +110,6 @@ class NewsFeedViewModel: NewsFeedViewModelType {
                 return sections
             }
             .flatMap { Observable.from(optional: $0) }
-            .filter { $0.count > 0 }
             .subscribe(onNext: { [weak self] sections in
                 guard let welf = self else { return }                                
                 

@@ -19,6 +19,7 @@ class NewsFeedViewController: UITableViewController {
     
     let disposeBag = DisposeBag()
     
+    var emptyMessageView: UIView!
     var tableViewHeader: NewsFeedTableViewHeader!
     
     var viewModel: NewsFeedViewModelType!
@@ -56,9 +57,11 @@ class NewsFeedViewController: UITableViewController {
             registerForPreviewing(with: self, sourceView: view)
         }
         
-        addHeader()
+        setupEmptySourcesMessage()
         
+        addHeader()
         setupRx()
+        
         refreshTrigger.onNext(())
     }
     
@@ -77,6 +80,18 @@ class NewsFeedViewController: UITableViewController {
         if let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
             statusBar.backgroundColor = color
         }
+    }
+    
+    func setupEmptySourcesMessage() {
+        guard let messageView = R.nib.emptySourcesMessage.firstView(owner: self) else { fatalError("Cannot open EmptysourcesMessage view") }
+        messageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        emptyMessageView = messageView
+        view.addSubview(emptyMessageView)
+        
+        emptyMessageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyMessageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        emptyMessageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
     }
     
     private func addHeader() {
@@ -167,10 +182,19 @@ private extension NewsFeedViewController {
         
         viewModel.articleSections
             .asObservable()
-            .do(onNext: { _ in
+            .do(onNext: { _ in                
                 self.refreshControl?.endRefreshing()
+                self.emptyMessageView.isHidden = true
             })
             .bind(to: tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        viewModel.articleSections
+            .asObservable()
+            .filter { $0.count == 0 }
+            .subscribe(onNext: { _ in
+                self.emptyMessageView.isHidden = false
+            })
             .disposed(by: disposeBag)
         
         tableView.rx
