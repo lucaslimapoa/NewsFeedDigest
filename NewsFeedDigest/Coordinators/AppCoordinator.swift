@@ -30,6 +30,8 @@ class AppCoordinator: FlowCoordinator {
         
         tabBarController = UITabBarController()
         tabBarController.tabBar.tintColor = Colors.appTint
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.tabBar.backgroundColor = .white
         
         createCoordinators()
         
