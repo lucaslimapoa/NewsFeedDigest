@@ -193,7 +193,6 @@ private extension NewsFeedViewController {
             .asObservable()
             .filter { $0.count == 0 }
             .subscribe(onNext: { _ in
-                self.refreshControl?.isHidden = true
                 self.emptyMessageView.isHidden = false
             })
             .disposed(by: disposeBag)

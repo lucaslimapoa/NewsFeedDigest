@@ -26,6 +26,10 @@ class ListViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.backgroundColor = .white
+        
         collectionView!.backgroundColor = Colors.collectionViewBackgroundColor
      
         collectionView!.dataSource = nil
@@ -50,6 +54,8 @@ class ListViewController: UICollectionViewController {
     }
 
     func setupCategoryRx() {
+        navigationItem.title = "Favorites"
+        
         viewModel.fetchAvailableCategories()
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items) { collectionView, row, category in
@@ -74,6 +80,8 @@ class ListViewController: UICollectionViewController {
     }
     
     func setupSourceRx(_ category: NewsAPISwift.Category) {
+        navigationItem.title = category.description
+        
         viewModel.fetchSources(for: category)
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items) { collectionView, row, source in
