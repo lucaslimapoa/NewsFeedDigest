@@ -68,7 +68,9 @@ class NewsFeedViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setStatusBar(color: .white)
+        
         tableViewHeader.updateMessage()
+        updateHeaderSize()
     }    
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -97,16 +99,13 @@ class NewsFeedViewController: UITableViewController {
     private func addHeader() {
         guard let view = R.nib.newsFeedTableViewHeader.firstView(owner: self) else { return }
         
-        let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-        var headerFrame = view.frame
-        
-        if headerFrame.height != height {
-            headerFrame.size.height = height + 10
-            view.frame = headerFrame
-        }
-        
         tableViewHeader = view
         tableView.tableHeaderView = tableViewHeader
+    }
+    
+    private func updateHeaderSize() {
+        let headerHeight = tableViewHeader.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        tableViewHeader.frame.size = CGSize(width: tableViewHeader.frame.width, height: headerHeight)
     }
  
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
