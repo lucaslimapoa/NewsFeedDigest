@@ -21,7 +21,7 @@ class BigNewsFeedCell: NewsFeedCell {
         articleImageView.heightAnchor.constraint(equalToConstant: 250.0).isActive = true
         
         contentDescription.topAnchor.constraint(equalTo: articleImageView.bottomAnchor).isActive = true
-        contentDescription.bottomAnchor.constraint(equalTo: informationText.topAnchor, constant: 8.0).isActive = true
+        contentDescription.bottomAnchor.constraint(equalTo: informationText.topAnchor).isActive = true
         contentDescription.leftAnchor.constraint(equalTo: articleImageView.leftAnchor).isActive = true
         contentDescription.rightAnchor.constraint(equalTo: articleImageView.rightAnchor).isActive = true
         

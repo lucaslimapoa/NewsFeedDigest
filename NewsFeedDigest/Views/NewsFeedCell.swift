@@ -90,5 +90,7 @@ class NewsFeedCell: UITableViewCell {
         informationText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
         informationText.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         informationText.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        
+        self.heightAnchor.constraint(equalToConstant: 120).isActive = true
     }
 }

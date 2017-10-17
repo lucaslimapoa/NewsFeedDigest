@@ -53,6 +53,9 @@ class NewsFeedViewController: UITableViewController {
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         tableView.sectionFooterHeight = UITableViewAutomaticDimension
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl!)
         
@@ -109,10 +112,6 @@ class NewsFeedViewController: UITableViewController {
     private func updateHeaderSize() {
         let headerHeight = tableViewHeader.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
         tableViewHeader.frame.size = CGSize(width: tableViewHeader.frame.width, height: headerHeight)
-    }
- 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (indexPath.row == 0) ? 350.0 : 120.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
