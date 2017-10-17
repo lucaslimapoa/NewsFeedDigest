@@ -50,6 +50,9 @@ class NewsFeedViewController: UITableViewController {
         tableView.contentInset.top = 10
         tableView.contentInset.bottom = 10
         
+        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        tableView.sectionFooterHeight = UITableViewAutomaticDimension
+        
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl!)
         
@@ -110,14 +113,6 @@ class NewsFeedViewController: UITableViewController {
  
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return (indexPath.row == 0) ? 350.0 : 120.0
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60.0
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
