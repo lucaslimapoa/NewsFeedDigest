@@ -11,7 +11,7 @@ import NewsAPISwift
 
 extension NewsAPIProtocol {
     
-    func getArticles(sourceId: SourceId, sortBy: SortBy = .top) -> Observable<[NewsAPIArticle]> {
+    func getArticles(sourceId: SourceId, sortBy: SortBy? = nil) -> Observable<[NewsAPIArticle]> {
         return Observable.create { observer in
             
             self.getArticles(sourceId: sourceId, sortBy: sortBy) { result in
