@@ -20,8 +20,6 @@ class NewsFeedViewController: UITableViewController {
     let disposeBag = DisposeBag()
     
     var emptyMessageView: UIView!
-    var tableViewHeader: NewsFeedTableViewHeader!
-    
     var viewModel: NewsFeedViewModelType!
     var refreshTrigger = PublishSubject<Void>()
     
@@ -64,8 +62,6 @@ class NewsFeedViewController: UITableViewController {
         }
         
         setupEmptySourcesMessage()
-        
-        addHeader()
         setupRx()
         
         refreshTrigger.onNext(())
@@ -74,10 +70,7 @@ class NewsFeedViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setStatusBar(color: .white)
-        
-        tableViewHeader.updateMessage()
-        updateHeaderSize()
-    }    
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -100,18 +93,6 @@ class NewsFeedViewController: UITableViewController {
         emptyMessageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyMessageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         emptyMessageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-    }
-    
-    private func addHeader() {
-        guard let view = R.nib.newsFeedTableViewHeader.firstView(owner: self) else { return }
-        
-        tableViewHeader = view
-        tableView.tableHeaderView = tableViewHeader
-    }
-    
-    private func updateHeaderSize() {
-        let headerHeight = tableViewHeader.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-        tableViewHeader.frame.size = CGSize(width: tableViewHeader.frame.width, height: headerHeight)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
