@@ -7,7 +7,7 @@ target 'NewsFeedDigest' do
   inhibit_all_warnings!
 
   # Pods for NewsFeedDigest
-  pod 'NewsAPISwift',  '~> 0.1.1'
+  pod 'NewsAPISwift',  '~> 1.0'
   pod 'RxSwift',       '~> 3.0'
   pod 'RxCocoa',       '~> 3.0'
   pod 'Nuke',          '~> 5.0'

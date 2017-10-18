@@ -385,7 +385,7 @@
 			buildConfigurationList = D48CE81D1EE8F46C00256E94 /* Build configuration list for PBXNativeTarget "NewsFeedDigest" */;
 			buildPhases = (
 				3A23100E61454903C8CAAF39 /* [CP] Check Pods Manifest.lock */,
-				D461EA631F2AC0C9007A4184 /* ShellScript */,
+				D461EA631F2AC0C9007A4184 /* Run R.Swift Generator */,
 				D48CE7FC1EE8F46C00256E94 /* Sources */,
 				D48CE7FD1EE8F46C00256E94 /* Frameworks */,
 				D48CE7FE1EE8F46C00256E94 /* Resources */,
@@ -599,18 +599,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NewsFeedDigest/Pods-NewsFeedDigest-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D461EA631F2AC0C9007A4184 /* ShellScript */ = {
+		D461EA631F2AC0C9007A4184 /* Run R.Swift Generator */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run R.Swift Generator";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$PODS_ROOT/R.swift/rswift\" \"$SRCROOT\"";
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"";
 		};
 		F498A5453EB1CCC3AEEE19A6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
