@@ -56,7 +56,7 @@ class SourceCell: UICollectionViewCell {
         contentText.rightAnchor.constraint(equalTo: rightAnchor, constant: -8.0).isActive = true
         contentText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -26.0).isActive = true
                 
-        favoriteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6).isActive = true
-        favoriteView.rightAnchor.constraint(equalTo: rightAnchor, constant: -6).isActive = true
+        favoriteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        favoriteView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
     }
 }
