@@ -19,7 +19,6 @@ protocol SourceArticleViewModelType {
     var selectedItemListener: PublishSubject<ArticleObject> { get set }
     
     func fetchTitle() -> Observable<String>
-    func fetchDescription() -> Observable<String>
     func fetchArticles() -> Observable<[ArticleObject]>
     func createCellViewModel(from article: ArticleObject) -> NewsCellViewModel
     
@@ -55,10 +54,6 @@ class SourceArticleViewModel: SourceArticleViewModelType {
     
     func fetchTitle() -> Observable<String> {
         return Observable.just(sourceObject.name)
-    }
-    
-    func fetchDescription() -> Observable<String> {
-        return Observable.just(sourceObject.sourceDescription)
     }
     
     func fetchArticles() -> Observable<[ArticleObject]> {

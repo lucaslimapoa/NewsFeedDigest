@@ -18,22 +18,9 @@ fileprivate let cellId = "NewsFeedCellId"
 class SourceArticlesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionTextView: UITextView!
     
     let disposeBag = DisposeBag()
-    let tableViewDelegateOnceToken = UUID().uuidString
-    let tableViewPositionOnceToken = UUID().uuidString
-    
     var viewModel: SourceArticleViewModelType!
-    
-    var tableViewInitialPos: CGPoint = .zero
-    var tableViewContentOffsetY: CGFloat = 0 {
-        didSet {
-            animateViews()
-            updateTableView()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,22 +48,6 @@ class SourceArticlesViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-     
-        DispatchQueue.once(token: tableViewDelegateOnceToken) {
-            tableView
-                .rx
-                .setDelegate(self)
-                .disposed(by: disposeBag)
-        }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        DispatchQueue.once(token: tableViewPositionOnceToken) {
-            let positionY = descriptionTextView.frame.origin.y + descriptionTextView.frame.height + 8
-            tableViewInitialPos = CGPoint(x: tableView.frame.origin.x, y: positionY)
-            
-            tableViewContentOffsetY = 0
-        }
     }
     
     private func setupNavigatonBar() {
@@ -87,19 +58,9 @@ class SourceArticlesViewController: UIViewController {
     private func setupRx() {
         viewModel
             .fetchTitle()
-            .do(onNext: { title in
-                let titleLabel = UILabel()
-                titleLabel.text = title
-                
-                self.navigationItem.titleView = titleLabel
-                self.navigationItem.titleView?.alpha = 0.0
+            .subscribe(onNext: { [weak self] title in
+                self?.navigationItem.title = title
             })
-            .bind(to: titleLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel
-            .fetchDescription()
-            .bind(to: descriptionTextView.rx.text)
             .disposed(by: disposeBag)
         
         viewModel
@@ -117,46 +78,10 @@ class SourceArticlesViewController: UIViewController {
     }
 }
 
-private extension SourceArticlesViewController {
-    
-    func calculateTableViewSize() -> CGSize {
-        let screenHeight = view.frame.height
-        let newTableViewHeight = screenHeight - tableView.frame.origin.y - tabBarHeight
-        
-        return CGSize(width: tableView.frame.width, height: newTableViewHeight)
-    }
-    
-    func updateTableView() {
-        let newY = max(tableViewInitialPos.y - tableViewContentOffsetY, 0)
-        tableView.frame.origin = CGPoint(x: tableViewInitialPos.x, y: newY)
-        tableView.frame.size = calculateTableViewSize()
-    }
-    
-    func animateViews() {
-        let fadeOutAlpha = tableView.frame.origin.y / tableViewInitialPos.y
-        let fadeInAlpha = 1 - fadeOutAlpha
-        
-        UIView.animate(withDuration: 0.3) {
-            self.titleLabel.alpha = fadeOutAlpha
-            self.descriptionTextView.alpha = fadeOutAlpha
-            
-            self.navigationItem.titleView?.alpha = fadeInAlpha
-        }
-    }
-}
-
 extension SourceArticlesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-}
-
-extension SourceArticlesViewController: UIScrollViewDelegate {
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        tableViewContentOffsetY = scrollView.contentOffset.y
     }
     
 }
