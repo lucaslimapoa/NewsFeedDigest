@@ -24,6 +24,8 @@ class ListViewController: UICollectionViewController {
     var viewModel: ListViewModelType!
     var viewDataType: ViewDataType!
     
+    private var activityIndicatorView: UIActivityIndicatorView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +46,7 @@ class ListViewController: UICollectionViewController {
             setupCategoryViewController()
             setupCategoryRx()
         case .source(let category):
+            configureActivityIndicator()
             setupSourceViewController()
             setupSourceRx(category)
         }
@@ -52,7 +55,20 @@ class ListViewController: UICollectionViewController {
     func setupCategoryViewController() {
         collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
     }
-
+    
+    private func configureActivityIndicator() {
+        activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicatorView!.hidesWhenStopped = true
+        activityIndicatorView!.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(activityIndicatorView!)
+        
+        activityIndicatorView!.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicatorView!.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        activityIndicatorView!.startAnimating()
+    }
+    
     func setupCategoryRx() {
         navigationItem.title = "Favorites"
         
@@ -83,6 +99,11 @@ class ListViewController: UICollectionViewController {
         navigationItem.title = category.description
         
         viewModel.fetchSources(for: category)
+            .do(onNext: { [weak self] items in
+                if items.count > 0 {
+                    self?.activityIndicatorView?.stopAnimating()
+                }
+            })
             .asDriver(onErrorJustReturn: [])
             .drive(collectionView!.rx.items) { collectionView, row, source in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SourceCellId, for: IndexPath(row: row, section: 0)) as! SourceCell
