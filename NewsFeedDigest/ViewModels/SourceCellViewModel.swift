@@ -53,7 +53,7 @@ struct SourceCellViewModel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4.0
         
-        let range = NSMakeRange(0, attributedText.string.characters.count)
+        let range = NSMakeRange(0, attributedText.string.count)
         
         attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: range)
         

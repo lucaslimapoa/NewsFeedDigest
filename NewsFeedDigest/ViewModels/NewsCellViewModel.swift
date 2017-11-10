@@ -71,7 +71,7 @@ private extension NewsCellViewModel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4.0
         
-        attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: NSMakeRange(0, attributedText.string.characters.count))
+        attributedText.addAttributes([NSParagraphStyleAttributeName: paragraphStyle], range: NSMakeRange(0, attributedText.string.count))
         attributedText.append(NSAttributedString(string: articleDescription, attributes: [NSForegroundColorAttributeName: Colors.cellInformationText, NSFontAttributeName: cellFonts.descriptionFont]))
         
         return attributedText
