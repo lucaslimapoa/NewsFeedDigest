@@ -28,7 +28,7 @@ class CategoryListCoordinator: TabBarCoordinator {
         self.newsAPI = newsAPI
         self.realm = realm
         
-        tabBarItem = UITabBarItem(title: "Favorites", image: nil, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: "Favorites", image: #imageLiteral(resourceName: "favorite-tabbar"), selectedImage: nil)
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
         

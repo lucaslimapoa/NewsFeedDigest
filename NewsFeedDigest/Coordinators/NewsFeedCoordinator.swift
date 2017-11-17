@@ -25,7 +25,7 @@ class NewsFeedCoordinator: TabBarCoordinator {
         self.newsAPI = newsAPI
         self.realm = realm
         
-        tabBarItem = UITabBarItem(title: "For You", image: nil, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: "For You", image: #imageLiteral(resourceName: "dashboard-tabbar"), selectedImage: nil)
         
         rootViewController = UINavigationController()
         rootViewController.tabBarItem = tabBarItem
